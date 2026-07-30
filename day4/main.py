@@ -7,18 +7,22 @@ ENABLE_SLALOM = True
 ENABLE_PATROL = False
 ENABLE_FINALE = False
 ENABLE_FLIPS = False
+
 def pause(drone, seconds=WAIT_TIME):
     drone.wait(seconds)
+
 def turn(drone, degrees, clockwise=True):
     if clockwise:
         drone.cw(degrees)
     else:
         drone.ccw(degrees)
     pause(drone)
+
 def maybe_flip(drone, direction="f"):
     if ENABLE_FLIPS:
         drone.flip(direction)
         pause(drone, 2)
+
 def fly_warmup(drone, distance, height):
     drone.up(height)
     pause(drone)
@@ -29,6 +33,7 @@ def fly_warmup(drone, distance, height):
     pause(drone)
     drone.down(height)
     pause(drone)
+
 def fly_slalom(
     drone,
     steps,
@@ -43,6 +48,7 @@ def fly_slalom(
         else:
             drone.right(sideways_distance)
         pause(drone)
+
 def fly_patrol(
     drone,
     sides,
@@ -58,6 +64,7 @@ def fly_patrol(
             turn_angle,
             clockwise
         )
+
 def fly_finale(
     drone,
     distance,
@@ -77,45 +84,50 @@ def fly_finale(
         maybe_flip(drone, "f")
     drone.down(height)
     pause(drone)
+
 def choose_routine():
     print("1 - Warmup")
     print("2 - Slalom")
     print("3 - Patrol")
     print("4 - Finale")
+    print("Q - Land and quit")
     return input(
         "Choose a routine: "
     ).strip()
+
 def run_selected_routine(drone, choice):
     if choice == "1":
-        fly_warmup(drone, 30, 20)
+        fly_warmup(drone, 42, 48)
     elif choice == "2":
-        fly_slalom(drone, 4, 30, 20)
+        fly_slalom(drone, 4, 42, 28)
     elif choice == "3":
-        fly_patrol(drone, 5, 30)
+        fly_patrol(drone, 5, 42)
     elif choice == "4":
         fly_finale(
             drone,
-            25,
-            20,
+            35,
+            48,
             use_flip=True
         )
     else:
         print("Unknown choice.")
-        fly_warmup(drone, 20, 15)
+        fly_warmup(drone, 28, 41)
+
 def run_enabled_routines(drone):
     if ENABLE_WARMUP:
-        fly_warmup(drone, 30, 20)
+        fly_warmup(drone, 42, 48)
     if ENABLE_SLALOM:
-        fly_slalom(drone, 4, 30, 20)
+        fly_slalom(drone, 4, 42, 28)
     if ENABLE_PATROL:
-        fly_patrol(drone, 5, 30)
+        fly_patrol(drone, 5, 42)
     if ENABLE_FINALE:
         fly_finale(
             drone,
-            25,
-            20,
+            35,
+            48,
             use_flip=True
         )
+
 def main():
     drone = tello.Tello()
     battery = int(
@@ -127,20 +139,21 @@ def main():
             "Charge the drone "
             "before flying."
         )
-        drone.close()
         return
     if USE_MENU:
         choice = choose_routine()
     drone.takeoff()
     pause(drone, 2)
     if USE_MENU:
-        run_selected_routine(
-            drone,
-            choice
-        )
+        while choice.lower() not in ("q", "quit"):
+            run_selected_routine(
+                drone,
+                choice
+            )
+            choice = choose_routine()
     else:
         run_enabled_routines(drone)
     drone.land()
-    drone.close()
+
 if __name__ == "__main__":
     main()
