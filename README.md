@@ -24,3 +24,6 @@ You're ready to go. Run a day's script with, for example:
 ```powershell
 python day1\main.py
 ```
+
+Final:
+[GOOD LUCK CAMPERS!](https://icode-redmond.github.io/dronecampv2/)
