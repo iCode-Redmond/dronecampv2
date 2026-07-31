@@ -165,7 +165,6 @@ const lessonContent=$("lessonContent"),challengeStrip=$("challengeStrip"),progre
 function loadState(){try{return {...freshState(),...(JSON.parse(localStorage.getItem(STORAGE_KEY))||{})}}catch{return freshState()}}
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function scheduleSave(){clearTimeout(saveTimer);fileMeta.textContent="Python · saving...";saveTimer=setTimeout(()=>{const c=CHALLENGES[state.current];state.code[c.id]=editor.getValue();saveState();fileMeta.textContent="Python · saved locally"},250)}
-function isUnlocked(i){if(i===0)return true;for(let n=0;n<i;n++)if(!state.completed[CHALLENGES[n].id])return false;return true}
 function completedCount(){return CHALLENGES.filter(c=>state.completed[c.id]).length}
 function py(value){if(value===true)return"True";if(value===false)return"False";if(value===null)return"None";if(typeof value==="string")return JSON.stringify(value);if(Array.isArray(value))return"["+value.map(py).join(", ")+"]";return String(value)}
 function esc(value){return String(value).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
@@ -175,9 +174,9 @@ function emptyResults(){return `<div class="results-empty"><div><i data-feather=
 function renderStrip(){
  challengeStrip.innerHTML="";
  CHALLENGES.forEach((c,i)=>{
-  const b=document.createElement("button");b.className="chip";b.textContent=c.number;b.title=c.title;b.disabled=!isUnlocked(i);
+  const b=document.createElement("button");b.className="chip";b.textContent=c.number;b.title=c.title;
   if(i===state.current)b.classList.add("active");if(state.completed[c.id])b.classList.add("complete");
-  b.onclick=()=>selectChallenge(i,b);challengeStrip.appendChild(b)
+  b.onclick=()=>selectChallenge(i);challengeStrip.appendChild(b)
  })
 }
 function updateProgress(){const n=completedCount();progressBar.style.width=`${n/CHALLENGES.length*100}%`;progressText.textContent=`${n} / ${CHALLENGES.length}`}
@@ -199,8 +198,8 @@ function renderLesson(){
  </div><div class="inline-panel" id="helpPanel"></div>`;
  $("hintButton").onclick=showHint;$("exampleButton").onclick=showExample;$("resetCodeButton").onclick=resetCode;$("solutionButton").onclick=revealSolution;feather.replace()
 }
-function selectChallenge(i,target){
- if(!isUnlocked(i)){target.classList.add("shake");setTimeout(()=>target.classList.remove("shake"),300);showToast("Complete the earlier challenge first. The solution button is always available.");return}
+function selectChallenge(i){
+ if(i===state.current)return;
  const old=CHALLENGES[state.current];state.code[old.id]=editor.getValue();state.current=i;saveState();
  const c=CHALLENGES[i];setEditorText(state.code[c.id]??c.starter);results.innerHTML=emptyResults();renderStrip();renderLesson();$("lessonPane").scrollTo({top:0,behavior:"smooth"});feather.replace()
 }
@@ -211,7 +210,7 @@ function updateLabels(){
 function showHint(){const c=CHALLENGES[state.current],p=$("helpPanel"),i=Math.min(hintLevel,c.hints.length-1);p.innerHTML=`<strong>Hint ${i+1}:</strong> ${c.hints[i]}`;p.classList.add("show");hintLevel=Math.min(hintLevel+1,c.hints.length-1)}
 function showExample(){const c=CHALLENGES[state.current],p=$("helpPanel");p.innerHTML=`<strong>Read the call from left to right.</strong><br>The values inside the parentheses become the function parameters. Trace the condition using those exact values, then identify the returned result.<br><br><code>${esc(c.example)}</code>`;p.classList.add("show")}
 function setEditorText(value){clearTimeout(saveTimer);suppressEditorSave=true;editor.session.setValue(value);editor.clearSelection();editor.session.getUndoManager().reset();suppressEditorSave=false;updateLabels()}function resetCode(){const c=CHALLENGES[state.current];setEditorText(c.starter);state.code[c.id]=c.starter;delete state.solutionViewed[c.id];saveState();results.innerHTML=emptyResults();renderLesson();renderStrip();updateProgress();feather.replace();showToast("Starter code restored.")}
-async function revealSolution(){const c=CHALLENGES[state.current];setEditorText(c.solution);state.code[c.id]=c.solution;state.solutionViewed[c.id]=true;saveState();completeChallenge(c,true);showToast("Solution loaded. Next challenge unlocked.");if(pyodideReady)await runTests(true)}
+async function revealSolution(){const c=CHALLENGES[state.current];setEditorText(c.solution);state.code[c.id]=c.solution;state.solutionViewed[c.id]=true;saveState();completeChallenge(c,true);showToast("Solution loaded.");if(pyodideReady)await runTests(true)}
 
 async function initPyodideEngine(){
  try{
@@ -236,14 +235,38 @@ async function runTests(fromReveal=false){
  finally{runButton.disabled=false;runButton.innerHTML=`<i data-feather="play"></i>Check solution`;feather.replace()}
 }
 
+// Pyodide runs on the main thread, so a runaway loop in student code would freeze the
+// tab forever. This installs a line-level trace hook that raises once a wall-clock budget
+// is spent. The budget covers the whole submission, not each test, so the worst case is
+// one short pause instead of one pause per test case.
+const GUARD_PY=`
+import sys, time
+GUARD_SECONDS=5
+_deadline=[0.0]
+def _watchdog(frame,event,arg):
+    if time.time()>_deadline[0]:
+        raise TimeoutError("Your code ran too long (over 5 seconds). Look for a loop that never ends - usually a while loop whose condition never becomes False.")
+    return _watchdog
+def start_budget():
+    _deadline[0]=time.time()+GUARD_SECONDS
+def guarded(fn,*a,**kw):
+    sys.settrace(_watchdog)
+    try:
+        return fn(*a,**kw)
+    finally:
+        sys.settrace(None)
+`;
+
 async function runCodingBatTests(c,code){
  pyodide.globals.set("student_code",code);pyodide.globals.set("function_name",c.function);pyodide.globals.set("tests_json",JSON.stringify(c.tests));
  const raw=await pyodide.runPythonAsync(`
 import json, traceback
+${GUARD_PY}
 result={"requiredPassed":False,"tests":[],"error":None,"bonus":{}}
 namespace={}
 try:
-    exec(student_code,namespace)
+    start_budget()
+    guarded(exec,student_code,namespace)
     function=namespace.get(function_name)
     if not callable(function):
         raise NameError(f"Define a function named {function_name}().")
@@ -251,7 +274,7 @@ try:
         args=test["args"]
         expected=test["expected"]
         try:
-            actual=function(*args)
+            actual=guarded(function,*args)
             result["tests"].append({
                 "args":args,
                 "expected":repr(expected),
@@ -279,7 +302,7 @@ async function runDroneTests(code){
  pyodide.globals.set("student_code",code);
  const raw=await pyodide.runPythonAsync(`
 import json, traceback
-
+${GUARD_PY}
 class MockDrone:
     def __init__(self):
         self.calls=[]
@@ -296,7 +319,7 @@ class MockDrone:
 def run_case(function,route,distance,expected_calls,expected_skipped,tier):
     drone=MockDrone()
     try:
-        skipped=function(drone,route,distance)
+        skipped=guarded(function,drone,route,distance)
         passed=drone.calls==expected_calls and skipped==expected_skipped
         return {
             "args":[route,distance],
@@ -319,7 +342,8 @@ def run_case(function,route,distance,expected_calls,expected_skipped,tier):
 result={"requiredPassed":False,"tests":[],"error":None,"bonus":{"altitudeTurns":False,"flipSafety":False}}
 namespace={}
 try:
-    exec(student_code,namespace)
+    start_budget()
+    guarded(exec,student_code,namespace)
     function=namespace.get("fly_obstacle_course")
     if not callable(function):
         raise NameError("Define fly_obstacle_course(drone, route, distance).")
@@ -381,7 +405,7 @@ function renderResults(c,result){
 
 function completeChallenge(c,fromReveal){
  const was=Boolean(state.completed[c.id]);state.completed[c.id]=true;state.code[c.id]=editor.getValue();saveState();renderStrip();updateProgress();
- if(!was){burstConfetti(c.drone?140:48);showToast(fromReveal?"Solution accepted. Next challenge unlocked.":"Challenge passed. Next challenge unlocked.")}
+ if(!was){burstConfetti(c.drone?140:48);showToast(fromReveal?"Solution accepted.":"Challenge passed!")}
  if(completedCount()===CHALLENGES.length)setTimeout(showCelebration,650)
 }
 function showCelebration(){
@@ -430,7 +454,7 @@ function setupConfetti(){
 }
 
 function initialize(){
- if(!isUnlocked(state.current))state.current=0;
+ if(!CHALLENGES[state.current])state.current=0;
  setupEditor();setupModals();setupConfetti();renderStrip();renderLesson();updateProgress();updateLabels();
  runButton.disabled=true;runButton.onclick=()=>runTests(false);feather.replace();initPyodideEngine()
 }
