@@ -1,0 +1,1027 @@
+[
+  {
+    "id": "max_span",
+    "category": "List-3",
+    "title": "Widest Match",
+    "function": "max_span",
+    "difficulty": 3,
+    "concept": "Finding first/last occurrence and comparing spans",
+    "brief": "Finds the widest distance between the first and last time any value repeats in the list.",
+    "description": "For every value that appears in the list, look at where it first shows up and where it last shows up, and measure that stretch (counting both ends). Return the largest stretch found across all values. An empty list has no values, so its answer is 0.",
+    "starter": "def max_span(nums):\n    # your code here\n    pass\n",
+    "solution": "def max_span(nums):\n    best = 0\n    for v in set(nums):\n        first = nums.index(v)\n        last = len(nums) - 1 - nums[::-1].index(v)\n        best = max(best, last - first + 1)\n    return best\n",
+    "hints": [
+      "list.index(value) finds the first spot a value appears; reversing the list and doing the same trick finds the last spot.",
+      "The span for a value is (last position - first position + 1), so track the biggest span you see across all the different values."
+    ],
+    "example": "max_span([1, 2, 1, 3]) -> 3",
+    "explainer": "For each distinct value, the code finds its first and last positions in the list and turns that into a span, then keeps only the largest span it ever sees.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            1,
+            3
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            1
+          ]
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            7,
+            1,
+            2,
+            3,
+            7,
+            7
+          ]
+        ],
+        "expected": 6
+      }
+    ]
+  },
+  {
+    "id": "fix34",
+    "category": "List-3",
+    "title": "Follow Every 3 With a 4",
+    "function": "fix34",
+    "difficulty": 3,
+    "concept": "Building a brand-new list instead of changing the original",
+    "brief": "Builds a new list where every 3 is immediately followed by a 4.",
+    "description": "Make a new list based on the given one. Copy each number over in order, but whenever you copy a 3 that isn't already followed by a 4, insert a 4 right after it. Never change the list that was passed in -- always hand back a new one.",
+    "starter": "def fix34(nums):\n    # your code here\n    pass\n",
+    "solution": "def fix34(nums):\n    result = []\n    n = len(nums)\n    for i, v in enumerate(nums):\n        result.append(v)\n        if v == 3 and (i + 1 >= n or nums[i + 1] != 4):\n            result.append(4)\n    return result\n",
+    "hints": [
+      "Build the answer in a fresh empty list and .append() to it -- don't edit the list you were given.",
+      "Right after you append a 3, check whether the next original number is already a 4 before deciding to insert one."
+    ],
+    "example": "fix34([1, 3, 1]) -> [1, 3, 4, 1]",
+    "explainer": "The function copies every number into a new result list, and each time it copies a 3 that doesn't already have a 4 right after it in the original list, it appends an extra 4 to fix that spot.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          [
+            3
+          ]
+        ],
+        "expected": [
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [
+            3,
+            4
+          ]
+        ],
+        "expected": [
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            3,
+            1
+          ]
+        ],
+        "expected": [
+          1,
+          3,
+          4,
+          1
+        ]
+      },
+      {
+        "args": [
+          [
+            3,
+            3
+          ]
+        ],
+        "expected": [
+          3,
+          4,
+          3,
+          4
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            3,
+            4,
+            3
+          ]
+        ],
+        "expected": [
+          1,
+          3,
+          4,
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fix45",
+    "category": "List-3",
+    "title": "Follow Every 4 With a 5",
+    "function": "fix45",
+    "difficulty": 3,
+    "concept": "Building a brand-new list instead of changing the original",
+    "brief": "Builds a new list where every 4 is immediately followed by a 5.",
+    "description": "Make a new list based on the given one. Copy each number over in order, but whenever you copy a 4 that isn't already followed by a 5, insert a 5 right after it. Never change the list that was passed in -- always hand back a new one.",
+    "starter": "def fix45(nums):\n    # your code here\n    pass\n",
+    "solution": "def fix45(nums):\n    result = []\n    n = len(nums)\n    for i, v in enumerate(nums):\n        result.append(v)\n        if v == 4 and (i + 1 >= n or nums[i + 1] != 5):\n            result.append(5)\n    return result\n",
+    "hints": [
+      "Build the answer in a fresh empty list and .append() to it -- don't edit the list you were given.",
+      "Right after you append a 4, check whether the next original number is already a 5 before deciding to insert one."
+    ],
+    "example": "fix45([1, 4, 1]) -> [1, 4, 5, 1]",
+    "explainer": "The function copies every number into a new result list, and each time it copies a 4 that doesn't already have a 5 right after it in the original list, it appends an extra 5 to fix that spot.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          [
+            4
+          ]
+        ],
+        "expected": [
+          4,
+          5
+        ]
+      },
+      {
+        "args": [
+          [
+            4,
+            5
+          ]
+        ],
+        "expected": [
+          4,
+          5
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            4,
+            1
+          ]
+        ],
+        "expected": [
+          1,
+          4,
+          5,
+          1
+        ]
+      },
+      {
+        "args": [
+          [
+            4,
+            4
+          ]
+        ],
+        "expected": [
+          4,
+          5,
+          4,
+          5
+        ]
+      },
+      {
+        "args": [
+          [
+            1,
+            4,
+            5,
+            4
+          ]
+        ],
+        "expected": [
+          1,
+          4,
+          5,
+          4,
+          5
+        ]
+      }
+    ]
+  },
+  {
+    "id": "can_balance",
+    "category": "List-3",
+    "title": "Balance the Seesaw",
+    "function": "can_balance",
+    "difficulty": 4,
+    "concept": "Simulating torque/balance with a pivot point",
+    "brief": "Checks whether the numbers in the list can balance like weights on a seesaw.",
+    "description": "Imagine each number in the list is a weight sitting on a plank, in order, one spot apart. Check if there's some pivot point along the plank where the twisting force from the weights on the left exactly matches the twisting force from the weights on the right (force = weight times distance from the pivot). Return True if any such balance point exists.",
+    "starter": "def can_balance(nums):\n    # your code here\n    pass\n",
+    "solution": "def can_balance(nums):\n    n = len(nums)\n    for i in range(n):\n        left = sum(nums[j] * (i - j) for j in range(i))\n        right = sum(nums[j] * (j - i) for j in range(i + 1, n))\n        if left == right:\n            return True\n    return False\n",
+    "hints": [
+      "Try every index as the pivot, one at a time, and total up the twisting force on each side of it.",
+      "The twisting force of a weight is the weight's value multiplied by how many spots away it is from the pivot."
+    ],
+    "example": "can_balance([1, 2, 1]) -> True",
+    "explainer": "For each possible pivot position, the code adds up weight-times-distance for everything to its left and everything to its right, and reports True the moment those two totals ever match.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            1
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            1
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            3,
+            1,
+            1,
+            3
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "link_word",
+    "category": "List-3",
+    "title": "Word Chain",
+    "function": "link_word",
+    "difficulty": 2,
+    "concept": "Checking a relationship between neighboring list items",
+    "brief": "Checks whether a list of words can be read as a chain, each ending letter matching the next word's start.",
+    "description": "Given a list of lowercase words, check whether they form a valid chain: the last letter of each word has to match the first letter of the very next word, all the way through the list. Return True if the whole list chains together, and False if any link is broken. A list with 0 or 1 words always chains fine.",
+    "starter": "def link_word(words):\n    # your code here\n    pass\n",
+    "solution": "def link_word(words):\n    for i in range(len(words) - 1):\n        if words[i][-1] != words[i + 1][0]:\n            return False\n    return True\n",
+    "hints": [
+      "A word's last character is word[-1], and its first character is word[0].",
+      "Loop through consecutive pairs of words and compare word[i][-1] to word[i+1][0]."
+    ],
+    "example": "link_word(['cat', 'tiger']) -> True",
+    "explainer": "The function checks each pair of neighboring words to make sure one ends where the next begins, and returns False the moment a pair breaks that pattern.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            "cat"
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            "cat",
+            "tiger"
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            "cat",
+            "dog"
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            "ant",
+            "tiger",
+            "rabbit",
+            "tape"
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            "ant",
+            "tiger",
+            "rabbit",
+            "zebra"
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "sum_heights",
+    "category": "List-3",
+    "title": "Total Flight Height",
+    "function": "sum_heights",
+    "difficulty": 1,
+    "concept": "Looping with a per-item adjustment before summing",
+    "brief": "Adds up a list of drone heights, treating any negative height as ground level (0).",
+    "description": "Add up a list of height readings from a drone. Since a drone can't actually fly below the ground, treat any negative reading as if it were 0 before adding it in.",
+    "starter": "def sum_heights(heights):\n    # your code here\n    pass\n",
+    "solution": "def sum_heights(heights):\n    return sum(max(0, h) for h in heights)\n",
+    "hints": [
+      "max(0, h) gives you h itself when h is positive, but clamps it up to 0 when h is negative.",
+      "Apply that clamp to every value before adding them all together."
+    ],
+    "example": "sum_heights([10, -3, 7]) -> 17",
+    "explainer": "max(0, h) replaces every negative reading with 0 while leaving positive readings untouched, and sum() then totals up the clamped values.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          [
+            -5
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            10,
+            -3,
+            7
+          ]
+        ],
+        "expected": 17
+      },
+      {
+        "args": [
+          [
+            -1,
+            -2,
+            -3
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            0,
+            5,
+            0
+          ]
+        ],
+        "expected": 5
+      }
+    ]
+  },
+  {
+    "id": "big_hump",
+    "category": "List-3",
+    "title": "Spot the Big Hump",
+    "function": "big_hump",
+    "difficulty": 3,
+    "concept": "Comparing an item to both of its neighbors",
+    "brief": "Checks for a number in the middle of the list that's bigger than both its neighbors added together.",
+    "description": "Look for a 'hump': a number somewhere in the middle of the list (not the first or last one) that is strictly greater than the sum of the number right before it and the number right after it. Return True if any such hump exists. Lists shorter than 3 numbers have no middle spot to check, so they're always False.",
+    "starter": "def big_hump(nums):\n    # your code here\n    pass\n",
+    "solution": "def big_hump(nums):\n    for i in range(1, len(nums) - 1):\n        if nums[i] > nums[i - 1] + nums[i + 1]:\n            return True\n    return False\n",
+    "hints": [
+      "Only indexes from 1 up to (but not including) the last one can be a hump, since they need a neighbor on both sides.",
+      "Compare nums[i] to nums[i-1] + nums[i+1], not to each neighbor separately."
+    ],
+    "example": "big_hump([1, 10, 2]) -> True",
+    "explainer": "The loop checks every interior number against the total of its two neighbors, and returns True as soon as it finds one that's bigger than that total.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            10,
+            2
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            5,
+            1,
+            1,
+            1,
+            5
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            5,
+            1,
+            1,
+            10,
+            1
+          ]
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "has_three",
+    "category": "List-3",
+    "title": "Three or More Threes",
+    "function": "has_three",
+    "difficulty": 1,
+    "concept": "Counting occurrences with list.count()",
+    "brief": "Checks whether the number 3 shows up at least three times in the list.",
+    "description": "Count how many times the number 3 appears anywhere in the list. Return True if it shows up 3 or more times, and False otherwise.",
+    "starter": "def has_three(nums):\n    # your code here\n    pass\n",
+    "solution": "def has_three(nums):\n    return nums.count(3) >= 3\n",
+    "hints": [
+      "The list method .count(value) tells you exactly how many times a value appears.",
+      "Compare that count to 3 using >=."
+    ],
+    "example": "has_three([3, 3, 3]) -> True",
+    "explainer": "nums.count(3) tallies every occurrence of 3 in the list, and the function just checks whether that tally reached at least 3.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            3,
+            3
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            3,
+            3,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            3,
+            1,
+            3,
+            2,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            4
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            3,
+            3,
+            3,
+            3,
+            3
+          ]
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "no_triples",
+    "category": "List-3",
+    "title": "No Three in a Row",
+    "function": "no_triples",
+    "difficulty": 2,
+    "concept": "Checking runs of three matching neighbors",
+    "brief": "Checks that the same value never repeats three times in a row in the list.",
+    "description": "Look through the list for any spot where the exact same value appears three times in a row, back to back. Return False if that ever happens, and True if it never does.",
+    "starter": "def no_triples(nums):\n    # your code here\n    pass\n",
+    "solution": "def no_triples(nums):\n    for i in range(len(nums) - 2):\n        if nums[i] == nums[i + 1] == nums[i + 2]:\n            return False\n    return True\n",
+    "hints": [
+      "Loop with an index so you can compare nums[i], nums[i+1], and nums[i+2] together.",
+      "Python lets you chain comparisons like a == b == c to check all three at once."
+    ],
+    "example": "no_triples([2, 2, 2, 3]) -> False",
+    "explainer": "The loop checks every window of three consecutive numbers, and returns False the moment it finds a window where all three values match; otherwise it returns True.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            1
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            2,
+            2,
+            2,
+            3
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            3,
+            2,
+            2,
+            2
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            1,
+            2,
+            1
+          ]
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "sum_digits_list",
+    "category": "List-3",
+    "title": "Sum of All Digits",
+    "function": "sum_digits_list",
+    "difficulty": 2,
+    "concept": "Combining loops over a list and over a number's digits",
+    "brief": "Adds up every individual digit of every number in the list.",
+    "description": "Given a list of whole numbers (which might be negative), break each one down into its digits and add every single digit from every number together into one grand total. A negative sign doesn't count as a digit.",
+    "starter": "def sum_digits_list(nums):\n    # your code here\n    pass\n",
+    "solution": "def sum_digits_list(nums):\n    total = 0\n    for n in nums:\n        for ch in str(abs(n)):\n            total += int(ch)\n    return total\n",
+    "hints": [
+      "Turn each number into a string with str(abs(n)) so you can loop over its characters as digits.",
+      "int(ch) turns a single digit character back into a number you can add to your running total."
+    ],
+    "example": "sum_digits_list([12, 34]) -> 10",
+    "explainer": "Each number is converted to its absolute value and then to a string so its digit characters can be looped over, and int() turns each character back into a number to add to the total.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          [
+            12
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            12,
+            34
+          ]
+        ],
+        "expected": 10
+      },
+      {
+        "args": [
+          [
+            -19,
+            1
+          ]
+        ],
+        "expected": 11
+      },
+      {
+        "args": [
+          [
+            100,
+            0,
+            9
+          ]
+        ],
+        "expected": 10
+      }
+    ]
+  },
+  {
+    "id": "scores_increasing",
+    "category": "List-3",
+    "title": "Scores Never Drop",
+    "function": "scores_increasing",
+    "difficulty": 2,
+    "concept": "Checking neighboring pairs for an ordering rule",
+    "brief": "Checks that each score in the list is never lower than the one right before it.",
+    "description": "Look through a list of scores in order. Return True if every score is greater than or equal to the one before it (ties are fine, it just can never go down). Return False if you ever find a score that drops below the previous one.",
+    "starter": "def scores_increasing(nums):\n    # your code here\n    pass\n",
+    "solution": "def scores_increasing(nums):\n    for i in range(len(nums) - 1):\n        if nums[i + 1] < nums[i]:\n            return False\n    return True\n",
+    "hints": [
+      "Compare each score to the one right after it using an index loop.",
+      "A drop happens when the next score is smaller than the current one -- equal scores are not a drop."
+    ],
+    "example": "scores_increasing([1, 2, 2, 3]) -> True",
+    "explainer": "The loop compares each neighboring pair of scores, and returns False the instant the next score is smaller than the current one; surviving every comparison means the scores never dropped.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            2,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            3,
+            2,
+            1
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            2
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "scores_100",
+    "category": "List-3",
+    "title": "Reaching 100",
+    "function": "scores_100",
+    "difficulty": 2,
+    "concept": "Combining a membership check with a neighboring-pair check",
+    "brief": "Checks whether the list has a 100 in it, or two scores next to each other that add up to 100.",
+    "description": "Check a list of scores for either of two things: a single score that is exactly 100, or two scores sitting right next to each other that add up to exactly 100. Return True if either case is found anywhere in the list.",
+    "starter": "def scores_100(nums):\n    # your code here\n    pass\n",
+    "solution": "def scores_100(nums):\n    if 100 in nums:\n        return True\n    for i in range(len(nums) - 1):\n        if nums[i] + nums[i + 1] == 100:\n            return True\n    return False\n",
+    "hints": [
+      "First check with `in` whether 100 appears anywhere by itself.",
+      "Then loop through neighboring pairs and check whether nums[i] + nums[i+1] equals 100."
+    ],
+    "example": "scores_100([40, 60, 1]) -> True",
+    "explainer": "The function first checks for a lone 100 anywhere in the list, and if that fails, it checks every neighboring pair to see whether the two scores add up to exactly 100.",
+    "tests": [
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            100
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            50,
+            50
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            40,
+            60,
+            1
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            40,
+            60
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            10,
+            20,
+            30
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "sum_average",
+    "category": "List-3",
+    "title": "Average of the List",
+    "function": "sum_average",
+    "difficulty": 1,
+    "concept": "Combining sum() and len() with true division",
+    "brief": "Returns the average of all the numbers in a non-empty list, as a decimal.",
+    "description": "Given a list with at least one number, return the average of all its numbers. The result should always come back as a decimal (float), even when the numbers divide evenly.",
+    "starter": "def sum_average(nums):\n    # your code here\n    pass\n",
+    "solution": "def sum_average(nums):\n    return sum(nums) / len(nums)\n",
+    "hints": [
+      "sum(nums) adds everything up, and len(nums) tells you how many numbers there are.",
+      "In Python, a single slash / always gives you a decimal answer, even for whole-number results."
+    ],
+    "example": "sum_average([1, 2, 3, 4]) -> 2.5",
+    "explainer": "sum(nums) totals the list and len(nums) counts how many values it has, and dividing the total by the count with / produces the decimal average.",
+    "tests": [
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 5.0
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": 2.5
+      },
+      {
+        "args": [
+          [
+            2,
+            2,
+            2
+          ]
+        ],
+        "expected": 2.0
+      },
+      {
+        "args": [
+          [
+            1,
+            2
+          ]
+        ],
+        "expected": 1.5
+      },
+      {
+        "args": [
+          [
+            -1,
+            1
+          ]
+        ],
+        "expected": 0.0
+      },
+      {
+        "args": [
+          [
+            10,
+            20,
+            30,
+            41
+          ]
+        ],
+        "expected": 25.25
+      }
+    ]
+  }
+]

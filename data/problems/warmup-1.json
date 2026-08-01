@@ -1,0 +1,841 @@
+[
+ {
+  "id": "sleep_in",
+  "category": "Warmup-1",
+  "title": "Sleep In",
+  "function": "sleep_in",
+  "difficulty": 1,
+  "concept": "Boolean logic: not + or",
+  "brief": "Tells you whether someone gets to sleep in.",
+  "description": "You get to sleep in on any day that isn't a weekday, and also on vacation days no matter what. Given whether it's a weekday and whether it's vacation, figure out if sleeping in is allowed.",
+  "starter": "def sleep_in(weekday, vacation):\n    # your code here\n    pass\n",
+  "solution": "def sleep_in(weekday, vacation):\n    return (not weekday) or vacation\n",
+  "hints": [
+   "Think about when sleeping in is NOT allowed, then flip it.",
+   "You can combine 'not weekday' with 'or vacation' in one return line."
+  ],
+  "example": "sleep_in(False, False)  ->  True",
+  "explainer": "Sleeping in fails only when it's a weekday and not vacation, so the opposite of that condition covers every other case.",
+  "tests": [
+   {
+    "args": [
+     false,
+     false
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     true,
+     false
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     false,
+     true
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     true,
+     true
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     true,
+     false
+    ],
+    "expected": false
+   }
+  ]
+ },
+ {
+  "id": "monkey_trouble",
+  "category": "Warmup-1",
+  "title": "Monkey Trouble",
+  "function": "monkey_trouble",
+  "difficulty": 1,
+  "concept": "Boolean logic: equality",
+  "brief": "Checks if two monkeys are both smiling or both not smiling.",
+  "description": "Two monkeys get into trouble together only when they match: either both are smiling or neither one is. Given each monkey's smile status, decide if there's trouble.",
+  "starter": "def monkey_trouble(a_smile, b_smile):\n    # your code here\n    pass\n",
+  "solution": "def monkey_trouble(a_smile, b_smile):\n    return a_smile == b_smile\n",
+  "hints": [
+   "There's no need for if/else here.",
+   "Compare the two booleans directly with ==."
+  ],
+  "example": "monkey_trouble(True, True)  ->  True",
+  "explainer": "Two booleans are equal exactly when they match, which is exactly the trouble condition described.",
+  "tests": [
+   {
+    "args": [
+     true,
+     true
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     false,
+     false
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     true,
+     false
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     false,
+     true
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     true,
+     true
+    ],
+    "expected": true
+   }
+  ]
+ },
+ {
+  "id": "sum_double",
+  "category": "Warmup-1",
+  "title": "Sum Double",
+  "function": "sum_double",
+  "difficulty": 1,
+  "concept": "Conditionals with numbers",
+  "brief": "Adds two numbers, but doubles the result if they're equal.",
+  "description": "Normally you just add the two numbers together. But if the two numbers happen to be the same, return double their sum instead.",
+  "starter": "def sum_double(a, b):\n    # your code here\n    pass\n",
+  "solution": "def sum_double(a, b):\n    total = a + b\n    if a == b:\n        return total * 2\n    return total\n",
+  "hints": [
+   "Start by computing a + b, then check if a equals b.",
+   "Doubling the sum when a == b is the same as multiplying by 2."
+  ],
+  "example": "sum_double(2, 2)  ->  8",
+  "explainer": "When a equals b the sum is doubled with * 2; otherwise the plain sum is returned unchanged.",
+  "tests": [
+   {
+    "args": [
+     1,
+     2
+    ],
+    "expected": 3
+   },
+   {
+    "args": [
+     3,
+     3
+    ],
+    "expected": 12
+   },
+   {
+    "args": [
+     0,
+     0
+    ],
+    "expected": 0
+   },
+   {
+    "args": [
+     -1,
+     -1
+    ],
+    "expected": -4
+   },
+   {
+    "args": [
+     5,
+     -5
+    ],
+    "expected": 0
+   },
+   {
+    "args": [
+     0,
+     1
+    ],
+    "expected": 1
+   }
+  ]
+ },
+ {
+  "id": "diff21",
+  "category": "Warmup-1",
+  "title": "Diff 21",
+  "function": "diff21",
+  "difficulty": 2,
+  "concept": "Conditionals with numbers",
+  "brief": "Finds how far a number is from 21, with a penalty for going over.",
+  "description": "Return how far the number n is from 21. If n is 21 or under, just return the plain difference. If n is over 21, return double the amount it went over by.",
+  "starter": "def diff21(n):\n    # your code here\n    pass\n",
+  "solution": "def diff21(n):\n    if n <= 21:\n        return 21 - n\n    return (n - 21) * 2\n",
+  "hints": [
+   "Split this into two cases with an if/else on n <= 21.",
+   "For the 'over 21' case, compute n - 21 first, then double it."
+  ],
+  "example": "diff21(25)  ->  8",
+  "explainer": "For n <= 21 the plain gap 21 - n is returned; for n > 21 the overshoot n - 21 is doubled as a penalty.",
+  "tests": [
+   {
+    "args": [
+     21
+    ],
+    "expected": 0
+   },
+   {
+    "args": [
+     22
+    ],
+    "expected": 2
+   },
+   {
+    "args": [
+     0
+    ],
+    "expected": 21
+   },
+   {
+    "args": [
+     25
+    ],
+    "expected": 8
+   },
+   {
+    "args": [
+     -5
+    ],
+    "expected": 26
+   },
+   {
+    "args": [
+     100
+    ],
+    "expected": 158
+   }
+  ]
+ },
+ {
+  "id": "parrot_trouble",
+  "category": "Warmup-1",
+  "title": "Parrot Trouble",
+  "function": "parrot_trouble",
+  "difficulty": 2,
+  "concept": "Boolean logic combined with ranges",
+  "brief": "Decides if a talking parrot is causing trouble based on the time.",
+  "description": "A parrot causes trouble if it's talking and the hour is either before 7 (too early) or 20 or later (too late). Given whether it's talking and the current hour (0-23), figure out if there's trouble.",
+  "starter": "def parrot_trouble(talking, hour):\n    # your code here\n    pass\n",
+  "solution": "def parrot_trouble(talking, hour):\n    return talking and (hour < 7 or hour >= 20)\n",
+  "hints": [
+   "There are two conditions on hour to combine with 'or' first.",
+   "The parrot only matters if talking is True, so 'and' that whole hour check."
+  ],
+  "example": "parrot_trouble(True, 22)  ->  True",
+  "explainer": "The hour check covers 'too early' and 'too late', and the result only counts when talking is also True.",
+  "tests": [
+   {
+    "args": [
+     true,
+     6
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     true,
+     7
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     true,
+     19
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     true,
+     20
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     false,
+     5
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     true,
+     0
+    ],
+    "expected": true
+   }
+  ]
+ },
+ {
+  "id": "makes10",
+  "category": "Warmup-1",
+  "title": "Makes 10",
+  "function": "makes10",
+  "difficulty": 1,
+  "concept": "Boolean logic with multiple conditions",
+  "brief": "Checks if either number is 10, or if they add up to 10.",
+  "description": "Given two whole numbers, return True if either one of them is 10, or if adding them together makes 10.",
+  "starter": "def makes10(a, b):\n    # your code here\n    pass\n",
+  "solution": "def makes10(a, b):\n    return a == 10 or b == 10 or a + b == 10\n",
+  "hints": [
+   "You need to check three separate conditions, joined with 'or'.",
+   "Don't forget the case where neither number is 10 by itself, but together they add to 10."
+  ],
+  "example": "makes10(6, 4)  ->  True",
+  "explainer": "Any one of the three 'or' conditions being true is enough to make the whole expression True.",
+  "tests": [
+   {
+    "args": [
+     9,
+     10
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     6,
+     4
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     1,
+     2
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     10,
+     10
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     0,
+     10
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     -1,
+     11
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     0,
+     0
+    ],
+    "expected": false
+   }
+  ]
+ },
+ {
+  "id": "near_hundred",
+  "category": "Warmup-1",
+  "title": "Near Hundred",
+  "function": "near_hundred",
+  "difficulty": 2,
+  "concept": "Boolean logic with abs()",
+  "brief": "Checks if a number is close to 100 or close to 200.",
+  "description": "A number counts as 'near' 100 or 200 if it's within 10 in either direction. Given a number, return True if it lands close to either landmark.",
+  "starter": "def near_hundred(n):\n    # your code here\n    pass\n",
+  "solution": "def near_hundred(n):\n    return abs(100 - n) <= 10 or abs(200 - n) <= 10\n",
+  "hints": [
+   "The built-in abs() function gives you distance without worrying about sign.",
+   "Check distance from 100 and distance from 200, joined with 'or'."
+  ],
+  "example": "near_hundred(93)  ->  True",
+  "explainer": "abs(100 - n) measures the gap to 100 and abs(200 - n) measures the gap to 200; being within 10 of either one satisfies the 'or'.",
+  "tests": [
+   {
+    "args": [
+     100
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     90
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     89
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     209
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     210
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     211
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     0
+    ],
+    "expected": false
+   }
+  ]
+ },
+ {
+  "id": "pos_neg",
+  "category": "Warmup-1",
+  "title": "Pos Neg",
+  "function": "pos_neg",
+  "difficulty": 3,
+  "concept": "Boolean logic with sign checks",
+  "brief": "Checks if two numbers have opposite signs, or both negative if asked.",
+  "description": "Given two numbers and a negative flag, normally return True when one number is positive and the other is negative. But if the negative flag is True, only return True when both numbers are negative.",
+  "starter": "def pos_neg(a, b, negative):\n    # your code here\n    pass\n",
+  "solution": "def pos_neg(a, b, negative):\n    if negative:\n        return a < 0 and b < 0\n    return (a < 0 and b > 0) or (a > 0 and b < 0)\n",
+  "hints": [
+   "Handle the 'negative' flag as its own branch first.",
+   "Zero is neither positive nor negative, so it should never satisfy either branch."
+  ],
+  "example": "pos_neg(-4, -5, True)  ->  True",
+  "explainer": "When negative is True the function demands both numbers be strictly below zero; otherwise it checks that exactly one side is negative and the other positive.",
+  "tests": [
+   {
+    "args": [
+     1,
+     -1,
+     false
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     -1,
+     1,
+     false
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     -4,
+     -5,
+     true
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     -4,
+     -5,
+     false
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     4,
+     5,
+     false
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     0,
+     -1,
+     false
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     0,
+     0,
+     true
+    ],
+    "expected": false
+   }
+  ]
+ },
+ {
+  "id": "not_string",
+  "category": "Warmup-1",
+  "title": "Not String",
+  "function": "not_string",
+  "difficulty": 1,
+  "concept": "String prefixes",
+  "brief": "Adds 'not ' to the front of a string, unless it's already there.",
+  "description": "Given a string, return a new string that starts with 'not '. If the string already starts with 'not ', just return it unchanged.",
+  "starter": "def not_string(str):\n    # your code here\n    pass\n",
+  "solution": "def not_string(str):\n    if str.startswith('not '):\n        return str\n    return 'not ' + str\n",
+  "hints": [
+   "The .startswith() method checks a prefix for you.",
+   "Only add the prefix in the case where startswith('not ') is False."
+  ],
+  "example": "not_string('candy')  ->  'not candy'",
+  "explainer": "startswith('not ') detects the exact 4-character prefix including the space, so 'not' alone (no trailing space) still gets the prefix added.",
+  "tests": [
+   {
+    "args": [
+     "candy"
+    ],
+    "expected": "not candy"
+   },
+   {
+    "args": [
+     "not bad"
+    ],
+    "expected": "not bad"
+   },
+   {
+    "args": [
+     ""
+    ],
+    "expected": "not "
+   },
+   {
+    "args": [
+     "not"
+    ],
+    "expected": "not not"
+   },
+   {
+    "args": [
+     "not "
+    ],
+    "expected": "not "
+   },
+   {
+    "args": [
+     "Not bad"
+    ],
+    "expected": "not Not bad"
+   }
+  ]
+ },
+ {
+  "id": "missing_char",
+  "category": "Warmup-1",
+  "title": "Missing Char",
+  "function": "missing_char",
+  "difficulty": 2,
+  "concept": "String slicing",
+  "brief": "Removes the character at a given position from a string.",
+  "description": "Given a string and an index n, return the string with the character at position n taken out.",
+  "starter": "def missing_char(str, n):\n    # your code here\n    pass\n",
+  "solution": "def missing_char(str, n):\n    return str[:n] + str[n + 1:]\n",
+  "hints": [
+   "Slice the string into the part before n and the part after n.",
+   "str[n+1:] skips over the character you want removed."
+  ],
+  "example": "missing_char('kitten', 1)  ->  'ktten'",
+  "explainer": "str[:n] keeps everything before index n and str[n+1:] keeps everything after it, so the character exactly at n is dropped.",
+  "tests": [
+   {
+    "args": [
+     "kitten",
+     1
+    ],
+    "expected": "ktten"
+   },
+   {
+    "args": [
+     "kitten",
+     0
+    ],
+    "expected": "itten"
+   },
+   {
+    "args": [
+     "kitten",
+     5
+    ],
+    "expected": "kitte"
+   },
+   {
+    "args": [
+     "he",
+     0
+    ],
+    "expected": "e"
+   },
+   {
+    "args": [
+     "he",
+     1
+    ],
+    "expected": "h"
+   },
+   {
+    "args": [
+     "a",
+     0
+    ],
+    "expected": ""
+   }
+  ]
+ },
+ {
+  "id": "front_back",
+  "category": "Warmup-1",
+  "title": "Front Back",
+  "function": "front_back",
+  "difficulty": 2,
+  "concept": "String slicing and swapping",
+  "brief": "Swaps the first and last characters of a string.",
+  "description": "Given a string, swap its first and last characters and return the result. An empty string or a single character should come back unchanged.",
+  "starter": "def front_back(str):\n    # your code here\n    pass\n",
+  "solution": "def front_back(str):\n    if len(str) <= 1:\n        return str\n    return str[-1] + str[1:-1] + str[0]\n",
+  "hints": [
+   "Handle the length-0-or-1 case separately so you don't slice weirdly.",
+   "The middle part, str[1:-1], stays exactly where it is."
+  ],
+  "example": "front_back('code')  ->  'eodc'",
+  "explainer": "Only the first and last letters trade places; str[1:-1] grabs everything in between and keeps its order.",
+  "tests": [
+   {
+    "args": [
+     "code"
+    ],
+    "expected": "eodc"
+   },
+   {
+    "args": [
+     "a"
+    ],
+    "expected": "a"
+   },
+   {
+    "args": [
+     ""
+    ],
+    "expected": ""
+   },
+   {
+    "args": [
+     "ab"
+    ],
+    "expected": "ba"
+   },
+   {
+    "args": [
+     "abc"
+    ],
+    "expected": "cba"
+   }
+  ]
+ },
+ {
+  "id": "front3",
+  "category": "Warmup-1",
+  "title": "Front 3",
+  "function": "front3",
+  "difficulty": 1,
+  "concept": "String slicing and repetition",
+  "brief": "Repeats the first 3 characters of a string 3 times.",
+  "description": "Take the first 3 characters of a string (or the whole string if it's shorter than 3) and repeat that chunk 3 times.",
+  "starter": "def front3(str):\n    # your code here\n    pass\n",
+  "solution": "def front3(str):\n    return str[:3] * 3\n",
+  "hints": [
+   "Python slicing never errors even if the string is shorter than 3.",
+   "Multiplying a string by 3 repeats it 3 times."
+  ],
+  "example": "front3('Java')  ->  'JavJavJav'",
+  "explainer": "str[:3] safely grabs up to 3 characters no matter the string's length, and * 3 repeats that chunk.",
+  "tests": [
+   {
+    "args": [
+     "Java"
+    ],
+    "expected": "JavJavJav"
+   },
+   {
+    "args": [
+     "Chocolate"
+    ],
+    "expected": "ChoChoCho"
+   },
+   {
+    "args": [
+     "abc"
+    ],
+    "expected": "abcabcabc"
+   },
+   {
+    "args": [
+     "ab"
+    ],
+    "expected": "ababab"
+   },
+   {
+    "args": [
+     ""
+    ],
+    "expected": ""
+   },
+   {
+    "args": [
+     "x"
+    ],
+    "expected": "xxx"
+   }
+  ]
+ },
+ {
+  "id": "back_around",
+  "category": "Warmup-1",
+  "title": "Back Around",
+  "function": "back_around",
+  "difficulty": 2,
+  "concept": "String slicing",
+  "brief": "Moves the last character of a string to the front.",
+  "description": "Given a non-empty string, take its last character and move it to the very front, shifting everything else over by one.",
+  "starter": "def back_around(str):\n    # your code here\n    pass\n",
+  "solution": "def back_around(str):\n    return str[-1] + str[:-1]\n",
+  "hints": [
+   "str[-1] grabs just the last character.",
+   "str[:-1] grabs everything except that last character."
+  ],
+  "example": "back_around('cat')  ->  'tca'",
+  "explainer": "The last character is pulled out with str[-1] and placed in front of the remaining str[:-1] slice.",
+  "tests": [
+   {
+    "args": [
+     "cat"
+    ],
+    "expected": "tca"
+   },
+   {
+    "args": [
+     "Hello"
+    ],
+    "expected": "oHell"
+   },
+   {
+    "args": [
+     "a"
+    ],
+    "expected": "a"
+   },
+   {
+    "args": [
+     "ab"
+    ],
+    "expected": "ba"
+   },
+   {
+    "args": [
+     "code"
+    ],
+    "expected": "ecod"
+   },
+   {
+    "args": [
+     "12345"
+    ],
+    "expected": "51234"
+   }
+  ]
+ },
+ {
+  "id": "or35",
+  "category": "Warmup-1",
+  "title": "Or 35",
+  "function": "or35",
+  "difficulty": 1,
+  "concept": "Modulo arithmetic",
+  "brief": "Checks whether a number divides evenly by 3 or by 5.",
+  "description": "Given a number, return True if it's evenly divisible by 3 or by 5 (or both).",
+  "starter": "def or35(n):\n    # your code here\n    pass\n",
+  "solution": "def or35(n):\n    return n % 3 == 0 or n % 5 == 0\n",
+  "hints": [
+   "The % operator gives you the remainder after division.",
+   "A remainder of 0 means it divides evenly."
+  ],
+  "example": "or35(15)  ->  True",
+  "explainer": "n % 3 == 0 catches multiples of 3 and n % 5 == 0 catches multiples of 5; the 'or' covers both.",
+  "tests": [
+   {
+    "args": [
+     3
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     5
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     7
+    ],
+    "expected": false
+   },
+   {
+    "args": [
+     0
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     15
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     -3
+    ],
+    "expected": true
+   },
+   {
+    "args": [
+     1
+    ],
+    "expected": false
+   }
+  ]
+ }
+]

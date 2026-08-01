@@ -1,0 +1,611 @@
+[
+  {
+    "id": "double_char",
+    "category": "String-2",
+    "title": "Double Every Letter",
+    "function": "double_char",
+    "difficulty": 2,
+    "concept": "Looping over characters and building a new string",
+    "brief": "Builds a new string where every character from the input shows up twice in a row.",
+    "description": "Walk through the given text one character at a time and write each one down twice before moving to the next. Spaces and punctuation get doubled too, not just letters.",
+    "starter": "def double_char(s):\n    # your code here\n    pass\n",
+    "solution": "def double_char(s):\n    return \"\".join(ch * 2 for ch in s)\n",
+    "hints": [
+      "Think about looping over each character in the string one at a time.",
+      "You can build the answer piece by piece using += or a list you join at the end."
+    ],
+    "example": "double_char(\"Hi\")  ->  \"HHii\"",
+    "explainer": "Each character gets multiplied by 2 (which repeats it) and the results are joined together in order, so the output is exactly twice as long as the input.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "Hi"
+        ],
+        "expected": "HHii"
+      },
+      {
+        "args": [
+          "The"
+        ],
+        "expected": "TThhee"
+      },
+      {
+        "args": [
+          "aaa"
+        ],
+        "expected": "aaaaaa"
+      },
+      {
+        "args": [
+          "a b"
+        ],
+        "expected": "aa  bb"
+      },
+      {
+        "args": [
+          "Zz!"
+        ],
+        "expected": "ZZzz!!"
+      }
+    ]
+  },
+  {
+    "id": "count_hi",
+    "category": "String-2",
+    "title": "Count the Hi's",
+    "function": "count_hi",
+    "difficulty": 2,
+    "concept": "Finding a substring pattern inside text",
+    "brief": "Counts how many times the letters 'hi' show up together in the string.",
+    "description": "Search the given text for the two-letter combo 'hi' and report how many separate times it appears. Overlapping copies like the two 'hi's inside 'hihi' both count.",
+    "starter": "def count_hi(s):\n    # your code here\n    pass\n",
+    "solution": "def count_hi(s):\n    return s.count(\"hi\")\n",
+    "hints": [
+      "Python strings have a built-in way to count how many times a smaller string shows up.",
+      "Try str.count on the text you're given."
+    ],
+    "example": "count_hi(\"abc hi ho\")  ->  1",
+    "explainer": "Python's count method scans the string left to right looking for 'hi' and tallies each non-overlapping match it finds, which is exactly what we want here.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "abc hi ho"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "hihi"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "hihihi"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "xhixhix"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "hi"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "no match here"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "cat_dog",
+    "category": "String-2",
+    "title": "Cats and Dogs",
+    "function": "cat_dog",
+    "difficulty": 2,
+    "concept": "Comparing counts of two different substrings",
+    "brief": "Tells you whether 'cat' and 'dog' appear the same number of times in the text.",
+    "description": "Count how many times the word 'cat' shows up in the string, then count how many times 'dog' shows up. Return True only when those two totals match, even if that total is zero.",
+    "starter": "def cat_dog(s):\n    # your code here\n    pass\n",
+    "solution": "def cat_dog(s):\n    return s.count(\"cat\") == s.count(\"dog\")\n",
+    "hints": [
+      "You need two separate counts, one for 'cat' and one for 'dog'.",
+      "Compare the two counts with == once you have them."
+    ],
+    "example": "cat_dog(\"catdog\")  ->  True",
+    "explainer": "str.count gives us the number of times each word appears, and comparing those two numbers with == tells us whether they're balanced.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "catdog"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "catcat"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "1cat1cat_dog"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "catcatdogdog"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "dogcatdog"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "count_code",
+    "category": "String-2",
+    "title": "Count the Code Pattern",
+    "function": "count_code",
+    "difficulty": 3,
+    "concept": "Matching a fixed pattern with one wildcard letter",
+    "brief": "Counts how many 4-letter chunks in the string look like 'co', any letter, then 'e'.",
+    "description": "Slide a window of 4 letters across the string. Every time that window starts with 'c', then 'o', then any single letter, then ends with 'e', count it as one match. So 'code', 'cove', and 'coze' all count.",
+    "starter": "def count_code(s):\n    # your code here\n    pass\n",
+    "solution": "def count_code(s):\n    n = 0\n    for i in range(len(s) - 3):\n        if s[i] == 'c' and s[i+1] == 'o' and s[i+3] == 'e':\n            n += 1\n    return n\n",
+    "hints": [
+      "Loop over starting positions and look at a window of 4 letters at a time: s[i], s[i+1], s[i+2], s[i+3].",
+      "You only need to check that position i is 'c', position i+1 is 'o', and position i+3 is 'e' -- position i+2 can be anything."
+    ],
+    "example": "count_code(\"aaacodebbb\")  ->  1",
+    "explainer": "Checking positions i, i+1, and i+3 (while skipping i+2 entirely) lets any letter sit in the third spot, so patterns like 'code' and 'coze' both get counted as matches.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aaacodebbb"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "codexxcode"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "cozexxcope"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "codecode"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "co"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aaaaa"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "end_other",
+    "category": "String-2",
+    "title": "Ends the Same Way",
+    "function": "end_other",
+    "difficulty": 3,
+    "concept": "Case-insensitive comparison with endswith",
+    "brief": "Checks whether one of the two strings ends with the other, ignoring uppercase or lowercase.",
+    "description": "Compare the endings of the two strings without worrying about capital letters. Return True if the first string finishes with the second one, or if the second string finishes with the first one.",
+    "starter": "def end_other(a, b):\n    # your code here\n    pass\n",
+    "solution": "def end_other(a, b):\n    a2, b2 = a.lower(), b.lower()\n    return a2.endswith(b2) or b2.endswith(a2)\n",
+    "hints": [
+      "Lowercase both strings first so capital letters don't cause mismatches.",
+      "Python strings have an endswith method -- try it in both directions."
+    ],
+    "example": "end_other(\"Hiabc\", \"abc\")  ->  True",
+    "explainer": "Lowercasing both strings removes any case differences, and checking endswith in both directions covers the case where either string could be the shorter one.",
+    "tests": [
+      {
+        "args": [
+          "",
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "Hiabc",
+          "abc"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "AbC",
+          "HiaBc"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abc",
+          "abcd"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "hello",
+          "lo"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "1",
+          "1"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abc",
+          "xyz"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "xyz_there",
+    "category": "String-2",
+    "title": "Spot the XYZ",
+    "function": "xyz_there",
+    "difficulty": 3,
+    "concept": "Substring search with an exception rule based on the previous character",
+    "brief": "Looks for 'xyz' in the string, but a copy right after a period doesn't count.",
+    "description": "Search the text for the letters 'xyz' appearing together. A match right at the start of the string always counts, but if 'xyz' comes immediately after a period, skip that one -- it doesn't count as a match.",
+    "starter": "def xyz_there(s):\n    # your code here\n    pass\n",
+    "solution": "def xyz_there(s):\n    for i in range(len(s) - 2):\n        if s[i:i+3] == \"xyz\" and (i == 0 or s[i-1] != '.'):\n            return True\n    return False\n",
+    "hints": [
+      "Slide a 3-letter window through the string checking for 'xyz'.",
+      "Before accepting a match, look at the character right before it -- if it's a period and the match isn't at index 0, skip it."
+    ],
+    "example": "xyz_there(\"abc.xyz\")  ->  False",
+    "explainer": "The loop checks every 3-letter window for 'xyz', but a found match is only accepted when it's at the very start of the string or the character right before it is not a period.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "abcxyz"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abc.xyz"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "xyz.abc"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          ".abcxyz"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abc.xyzxyz"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "xy z"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "bob_there",
+    "category": "String-2",
+    "title": "B, Something, B",
+    "function": "bob_there",
+    "difficulty": 3,
+    "concept": "Checking a fixed-gap pattern between two matching characters",
+    "brief": "Checks whether the string has a 'b', then exactly one other character, then another 'b'.",
+    "description": "Look through the string for the pattern of a 'b', followed by any single character, followed by another 'b'. It doesn't matter what the middle character is, as long as there's exactly one of it between the two b's.",
+    "starter": "def bob_there(s):\n    # your code here\n    pass\n",
+    "solution": "def bob_there(s):\n    for i in range(len(s) - 2):\n        if s[i] == 'b' and s[i+2] == 'b':\n            return True\n    return False\n",
+    "hints": [
+      "Loop over starting positions i and compare s[i] with s[i+2].",
+      "The middle character s[i+1] doesn't matter at all -- don't check it."
+    ],
+    "example": "bob_there(\"bab\")  ->  True",
+    "explainer": "For every starting position we only compare the character at i with the one two spots later at i+2, so whatever sits in between is ignored on purpose.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "bab"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "b"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "bb"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "bcb"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abcbcb"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "axbxbxc"
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "x_y_balance",
+    "category": "String-2",
+    "title": "X Then Y Balance",
+    "function": "x_y_balance",
+    "difficulty": 4,
+    "concept": "Using the last position of a character to check what comes after it",
+    "brief": "Checks that if there's any 'x' in the string, a 'y' shows up somewhere after the last one.",
+    "description": "Find where the very last 'x' sits in the string. If there is no 'x' at all, the string is automatically balanced. Otherwise, look at everything after that last 'x' and make sure a 'y' appears somewhere in there.",
+    "starter": "def x_y_balance(s):\n    # your code here\n    pass\n",
+    "solution": "def x_y_balance(s):\n    last_x = s.rfind('x')\n    if last_x == -1:\n        return True\n    return 'y' in s[last_x+1:]\n",
+    "hints": [
+      "str.rfind gives you the index of the last occurrence of a character, or -1 if it's missing.",
+      "Slice the string starting right after that last x, then check whether 'y' is in that slice."
+    ],
+    "example": "x_y_balance(\"xxy\")  ->  True",
+    "explainer": "rfind locates the last x, and everything after that point gets checked for a y; if there's no x to begin with, the string is trivially balanced.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "xxy"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "xyx"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "xyxxxxyyyy"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "yyyyx"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "y"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "xy"
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "mix_string",
+    "category": "String-2",
+    "title": "Mix Two Strings",
+    "function": "mix_string",
+    "difficulty": 3,
+    "concept": "Interleaving characters from two strings",
+    "brief": "Weaves two strings together one character at a time, starting with the first string.",
+    "description": "Build a new string by alternating characters: first character of the first string, first character of the second string, second character of the first string, and so on. When one string runs out of characters, tack on whatever is left of the other one.",
+    "starter": "def mix_string(a, b):\n    # your code here\n    pass\n",
+    "solution": "def mix_string(a, b):\n    out = []\n    for i in range(max(len(a), len(b))):\n        if i < len(a):\n            out.append(a[i])\n        if i < len(b):\n            out.append(b[i])\n    return \"\".join(out)\n",
+    "hints": [
+      "Loop using an index from 0 up to the length of the longer string.",
+      "At each index, add a's character if it exists, then add b's character if it exists."
+    ],
+    "example": "mix_string(\"abc\", \"xyz\")  ->  \"axbycz\"",
+    "explainer": "Looping up to the longer string's length and checking each string's length before grabbing a character means shorter strings simply stop contributing once they run out, without an error.",
+    "tests": [
+      {
+        "args": [
+          "",
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "abc",
+          "xyz"
+        ],
+        "expected": "axbycz"
+      },
+      {
+        "args": [
+          "abc",
+          "xy"
+        ],
+        "expected": "axbyc"
+      },
+      {
+        "args": [
+          "a",
+          "xyz"
+        ],
+        "expected": "axyz"
+      },
+      {
+        "args": [
+          "",
+          "xyz"
+        ],
+        "expected": "xyz"
+      },
+      {
+        "args": [
+          "abc",
+          ""
+        ],
+        "expected": "abc"
+      }
+    ]
+  },
+  {
+    "id": "get_sandwich",
+    "category": "String-2",
+    "title": "Get the Sandwich Filling",
+    "function": "get_sandwich",
+    "difficulty": 4,
+    "concept": "Using find and rfind together to grab text between two markers",
+    "brief": "Returns whatever text sits between the first and last appearance of the word 'bread'.",
+    "description": "Find the first place 'bread' appears in the string and the last place it appears. If there are at least two separate slices of bread, return everything sitting between them, like the filling of a sandwich. If there's only one slice of bread (or none), return an empty string.",
+    "starter": "def get_sandwich(s):\n    # your code here\n    pass\n",
+    "solution": "def get_sandwich(s):\n    first = s.find(\"bread\")\n    last = s.rfind(\"bread\")\n    if first == -1 or first == last:\n        return \"\"\n    return s[first+5:last]\n",
+    "hints": [
+      "str.find gets the first match and str.rfind gets the last match of a substring.",
+      "If those two positions are the same (or missing), there's no filling to return."
+    ],
+    "example": "get_sandwich(\"breadjambread\")  ->  \"jam\"",
+    "explainer": "find and rfind locate the two slices of bread, and slicing from just after the first one to the start of the last one grabs exactly the filling in between.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "breadjambread"
+        ],
+        "expected": "jam"
+      },
+      {
+        "args": [
+          "xxbreadyy"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "breadbread"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "breadbreadjambread"
+        ],
+        "expected": "breadjam"
+      },
+      {
+        "args": [
+          "nobreadhere"
+        ],
+        "expected": ""
+      }
+    ]
+  }
+]

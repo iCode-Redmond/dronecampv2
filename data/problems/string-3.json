@@ -1,0 +1,667 @@
+[
+  {
+    "id": "count_yz",
+    "category": "String-3",
+    "title": "Count the Y's and Z's",
+    "function": "count_yz",
+    "difficulty": 2,
+    "concept": "Case-insensitive character counting",
+    "brief": "Counts how many letters in the string are a 'y' or a 'z', in either uppercase or lowercase.",
+    "description": "Look at every character in the string one at a time. Whenever it is a 'y'/'Y' or a 'z'/'Z', add one to your running total, no matter which case it's written in.",
+    "starter": "def count_yz(s):\n    # your code here\n    pass\n",
+    "solution": "def count_yz(s):\n    return sum(1 for ch in s if ch.lower() in ('y', 'z'))\n",
+    "hints": [
+      "Lowercase each character before comparing it so 'Y' and 'y' are treated the same way.",
+      "A sum() over a generator that yields 1 for each matching character works nicely here."
+    ],
+    "example": "count_yz(\"Yellow Haze\")  ->  2",
+    "explainer": "Lowercasing each character before comparing means both 'Y' and 'y' (and 'Z'/'z') are counted the same way, so case never changes the total.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "Yellow Haze"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "zzZZyyYY"
+        ],
+        "expected": 8
+      },
+      {
+        "args": [
+          "no matches"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "yz"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "YZyz"
+        ],
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "id": "without_string",
+    "category": "String-3",
+    "title": "Remove a String",
+    "function": "without_string",
+    "difficulty": 4,
+    "concept": "Case-insensitive substring removal while keeping original casing",
+    "brief": "Returns a copy of the base string with every copy of the second string removed, ignoring case.",
+    "description": "Scan through the base string looking for the remove string, matching letters without caring about uppercase or lowercase. Every time you find a match, skip over it entirely instead of copying it to the result. Whatever text is left over keeps its original capitalization.",
+    "starter": "def without_string(base, remove):\n    # your code here\n    pass\n",
+    "solution": "def without_string(base, remove):\n    if remove == \"\":\n        return base\n    lower_base = base.lower()\n    lower_remove = remove.lower()\n    n = len(remove)\n    result = []\n    i = 0\n    while i < len(base):\n        if lower_base[i:i+n] == lower_remove:\n            i += n\n        else:\n            result.append(base[i])\n            i += 1\n    return \"\".join(result)\n",
+    "hints": [
+      "Compare lowercase versions of both strings to decide where matches are, but build the answer from the original (non-lowered) characters.",
+      "Walk through the base string with an index; when you find a match, jump the index forward by the length of the remove string instead of copying those characters."
+    ],
+    "example": "without_string(\"aXaYaXa\", \"xa\")  ->  \"aYa\"",
+    "explainer": "Lowercased copies of both strings are used only to detect matches; whenever one is found the index jumps past it entirely, so only the untouched original characters end up in the result.",
+    "tests": [
+      {
+        "args": [
+          "",
+          "x"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "aXaYaXa",
+          "xa"
+        ],
+        "expected": "aYa"
+      },
+      {
+        "args": [
+          "xxx",
+          "xx"
+        ],
+        "expected": "x"
+      },
+      {
+        "args": [
+          "Hello There",
+          "there"
+        ],
+        "expected": "Hello "
+      },
+      {
+        "args": [
+          "catcatcat",
+          "cat"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "abc",
+          "xyz"
+        ],
+        "expected": "abc"
+      }
+    ]
+  },
+  {
+    "id": "equal_is_not",
+    "category": "String-3",
+    "title": "Is Equals Not",
+    "function": "equal_is_not",
+    "difficulty": 2,
+    "concept": "Comparing counts of two different words in text",
+    "brief": "Checks whether the word 'is' and the word 'not' show up the same number of times in the string.",
+    "description": "Count how many times 'is' appears anywhere in the string, then count how many times 'not' appears. Return True only when those two totals are equal to each other.",
+    "starter": "def equal_is_not(s):\n    # your code here\n    pass\n",
+    "solution": "def equal_is_not(s):\n    return s.count(\"is\") == s.count(\"not\")\n",
+    "hints": [
+      "You just need two counts and a comparison -- no loops required.",
+      "str.count works for both 'is' and 'not' the same way it worked for 'cat' and 'dog' earlier."
+    ],
+    "example": "equal_is_not(\"this is not\")  ->  False",
+    "explainer": "str.count tallies the non-overlapping occurrences of each word, and comparing those two numbers with == tells us whether the string is balanced between them.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "this is not"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "is not is not"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "isisis notnotnot"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "this island"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "not not"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "cont_tea",
+    "category": "String-3",
+    "title": "Contains Tea (as its Own Word)",
+    "function": "cont_tea",
+    "difficulty": 4,
+    "concept": "Substring search with a word-boundary check on both sides",
+    "brief": "Checks whether 'tea' appears as its own standalone word, not buried inside a longer word.",
+    "description": "Search for the letters 'tea' inside the string. A match only counts if the letters right before and right after it are not letters themselves (so the very start or end of the string, spaces, and punctuation are all fine neighbors). That way 'tea' counts inside 'a cup of tea!' but not inside 'steady' or 'teacup'.",
+    "starter": "def cont_tea(s):\n    # your code here\n    pass\n",
+    "solution": "def cont_tea(s):\n    for i in range(len(s) - 2):\n        if s[i:i+3] == \"tea\":\n            left_ok = (i == 0) or (not s[i-1].isalpha())\n            right_ok = (i + 3 == len(s)) or (not s[i+3].isalpha())\n            if left_ok and right_ok:\n                return True\n    return False\n",
+    "hints": [
+      "First find every spot where the 3 letters 'tea' occur, the same way you searched for 'xyz' earlier.",
+      "For each match, check the character just before and just after it with str.isalpha() -- if either neighbor is a letter, that match doesn't count."
+    ],
+    "example": "cont_tea(\"teacup\")  ->  False",
+    "explainer": "isalpha() tells us whether a neighboring character is a letter; requiring both neighbors to be non-letters (or off the edge of the string) is what makes 'tea' count only when it stands alone as a word.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "a cup of tea!"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "teacup"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "steady"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "tea"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "hot tea, cold tea"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "ateax"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "count_triple",
+    "category": "String-3",
+    "title": "Count Triples",
+    "function": "count_triple",
+    "difficulty": 4,
+    "concept": "Non-overlapping runs of three identical characters",
+    "brief": "Counts how many separate groups of 3-in-a-row identical characters appear in the string.",
+    "description": "Walk through the string looking for any character that repeats 3 times in a row, like 'xxx' or 'ddd'. Count each such group once, and once you count one, keep looking for the next group starting right after it instead of re-using any of those same characters.",
+    "starter": "def count_triple(s):\n    # your code here\n    pass\n",
+    "solution": "def count_triple(s):\n    count = 0\n    i = 0\n    while i <= len(s) - 3:\n        if s[i] == s[i+1] == s[i+2]:\n            count += 1\n            i += 3\n        else:\n            i += 1\n    return count\n",
+    "hints": [
+      "Use a while loop with an index you control yourself, since you need to sometimes jump forward by 3 instead of 1.",
+      "When s[i], s[i+1], and s[i+2] are all the same character, count it and skip past all three; otherwise just move one step forward."
+    ],
+    "example": "count_triple(\"xxxabyyyycd\")  ->  2",
+    "explainer": "Jumping the index forward by 3 after a match (instead of just 1) stops a single long run like 'yyyy' from being counted more than once.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "xxxabyyyycd"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "xxxxx"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "abcXXXabc"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "aabbcc"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aaaaaaaaa"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "ab"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "sum_digits",
+    "category": "String-3",
+    "title": "Sum the Digits",
+    "function": "sum_digits",
+    "difficulty": 2,
+    "concept": "Filtering characters and converting text digits to numbers",
+    "brief": "Adds up every digit character found anywhere in the string, ignoring letters and symbols.",
+    "description": "Look through the string one character at a time. Whenever a character is a digit from 0-9, turn it into a real number and add it to a running total. Skip every character that isn't a digit.",
+    "starter": "def sum_digits(s):\n    # your code here\n    pass\n",
+    "solution": "def sum_digits(s):\n    return sum(int(c) for c in s if c.isdigit())\n",
+    "hints": [
+      "str.isdigit() tells you whether a single character is a digit.",
+      "int() turns a digit character like '7' into the number 7 so you can add it up."
+    ],
+    "example": "sum_digits(\"aa1bc2d3\")  ->  6",
+    "explainer": "isdigit filters out anything that isn't a digit character, and int() converts each surviving digit into a real number before sum() adds them all together.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aa1bc2d3"
+        ],
+        "expected": 6
+      },
+      {
+        "args": [
+          "hello"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "007"
+        ],
+        "expected": 7
+      },
+      {
+        "args": [
+          "1a2b3c4d5"
+        ],
+        "expected": 15
+      },
+      {
+        "args": [
+          "99"
+        ],
+        "expected": 18
+      }
+    ]
+  },
+  {
+    "id": "same_ends",
+    "category": "String-3",
+    "title": "Matching Ends",
+    "function": "same_ends",
+    "difficulty": 3,
+    "concept": "Slicing a fixed-length prefix and suffix and comparing them",
+    "brief": "Checks whether the first n characters of the string exactly match the last n characters.",
+    "description": "Given a string and a number n, look at the first n characters and the last n characters of the string. Return True if those two chunks are exactly the same, letter for letter, and False otherwise.",
+    "starter": "def same_ends(s, n):\n    # your code here\n    pass\n",
+    "solution": "def same_ends(s, n):\n    if n == 0:\n        return True\n    return s[:n] == s[len(s)-n:]\n",
+    "hints": [
+      "Slicing s[:n] gets the first n characters, and s[len(s)-n:] gets the last n characters.",
+      "Think about what should happen when n is 0 -- both slices end up empty, so they're automatically equal."
+    ],
+    "example": "same_ends(\"abXYab\", 2)  ->  True",
+    "explainer": "Comparing the front slice s[:n] to the back slice s[len(s)-n:] directly answers the question, and when n is 0 both slices are empty strings which are always equal.",
+    "tests": [
+      {
+        "args": [
+          "",
+          0
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abXYab",
+          2
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abXYba",
+          2
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "abc",
+          3
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "abcabc",
+          0
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "hello",
+          1
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "ab",
+          2
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "mirror_ends",
+    "category": "String-3",
+    "title": "Mirror at the Ends",
+    "function": "mirror_ends",
+    "difficulty": 5,
+    "concept": "Finding the longest matching mirrored prefix and suffix",
+    "brief": "Finds the longest chunk at the start of the string whose reverse also appears at the end.",
+    "description": "Look at the beginning of the string and imagine a piece of it, some number of characters long. If reversing that piece produces exactly the characters found at the very end of the string, that's a mirror match. Return the longest such matching piece from the start of the string; if nothing matches, return an empty string.",
+    "starter": "def mirror_ends(s):\n    # your code here\n    pass\n",
+    "solution": "def mirror_ends(s):\n    n = len(s)\n    for L in range(n, -1, -1):\n        suffix = s[n-L:] if L > 0 else \"\"\n        if suffix[::-1] == s[:L]:\n            return s[:L]\n    return \"\"\n",
+    "hints": [
+      "Try every possible length L from the full length of the string down to 0, and stop at the first one that works.",
+      "For a given length L, reverse the last L characters of the string and compare that to the first L characters."
+    ],
+    "example": "mirror_ends(\"abXYZba\")  ->  \"ab\"",
+    "explainer": "Checking lengths from longest to shortest and stopping at the first success guarantees we return the longest possible mirrored piece, and reversing the trailing slice before comparing is what tests the mirror condition.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "abXYZba"
+        ],
+        "expected": "ab"
+      },
+      {
+        "args": [
+          "abca"
+        ],
+        "expected": "a"
+      },
+      {
+        "args": [
+          "aba"
+        ],
+        "expected": "aba"
+      },
+      {
+        "args": [
+          "ThisIsIt"
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "1221"
+        ],
+        "expected": "1221"
+      },
+      {
+        "args": [
+          "xy"
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "max_block",
+    "category": "String-3",
+    "title": "Longest Block",
+    "function": "max_block",
+    "difficulty": 3,
+    "concept": "Tracking the longest run of a repeated character",
+    "brief": "Finds the length of the longest run of the same character repeated in a row.",
+    "description": "Scan through the string and keep track of how long the current streak of identical characters is. Whenever the next character differs from the one before it, the streak resets to 1. Return the longest streak you ever saw.",
+    "starter": "def max_block(s):\n    # your code here\n    pass\n",
+    "solution": "def max_block(s):\n    if not s:\n        return 0\n    best = 1\n    cur = 1\n    for i in range(1, len(s)):\n        if s[i] == s[i-1]:\n            cur += 1\n        else:\n            cur = 1\n        best = max(best, cur)\n    return best\n",
+    "hints": [
+      "Keep two numbers as you loop: the current streak length and the best streak seen so far.",
+      "Compare each character to the one right before it to decide whether to extend or reset the current streak."
+    ],
+    "example": "max_block(\"abbCCCd\")  ->  3",
+    "explainer": "Comparing each character to its neighbor lets us grow the current streak counter or reset it to 1, and keeping a running best means we always end up with the longest streak found anywhere in the string.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "abbCCCd"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "hoopla"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "a"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "aaaa"
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          "abcabc"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "aabbbaaaa"
+        ],
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "id": "sum_numbers",
+    "category": "String-3",
+    "title": "Sum the Numbers",
+    "function": "sum_numbers",
+    "difficulty": 4,
+    "concept": "Grouping consecutive digit characters into whole numbers before adding",
+    "brief": "Adds up whole numbers found in the string, where a number is one or more digits in a row.",
+    "description": "Scan through the string collecting runs of digit characters as you go. Every time a run of digits ends (because a non-digit shows up or the string ends), turn that whole run into a number and add it to your total. So '123' inside the text counts as one hundred twenty-three, not as 1 + 2 + 3.",
+    "starter": "def sum_numbers(s):\n    # your code here\n    pass\n",
+    "solution": "def sum_numbers(s):\n    total = 0\n    cur = \"\"\n    for ch in s + \"#\":\n        if ch.isdigit():\n            cur += ch\n        else:\n            if cur:\n                total += int(cur)\n                cur = \"\"\n    return total\n",
+    "hints": [
+      "Build up a small string of digits as you scan, and only convert it to a number once you hit a non-digit character.",
+      "Adding a harmless extra character (like '#') to the very end of the string before looping makes sure a number that runs right up to the end still gets counted."
+    ],
+    "example": "sum_numbers(\"abc123xyz\")  ->  123",
+    "explainer": "Digits are collected into a small buffer string until a non-digit breaks the run, at which point the buffer is converted with int() and added to the total; appending a non-digit sentinel at the end makes sure a trailing run of digits still gets flushed.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "abc123xyz"
+        ],
+        "expected": 123
+      },
+      {
+        "args": [
+          "aa11b33"
+        ],
+        "expected": 44
+      },
+      {
+        "args": [
+          "7 11"
+        ],
+        "expected": 18
+      },
+      {
+        "args": [
+          "catdog"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "1a2b3c4d5"
+        ],
+        "expected": 15
+      },
+      {
+        "args": [
+          "007"
+        ],
+        "expected": 7
+      }
+    ]
+  },
+  {
+    "id": "not_replace",
+    "category": "String-3",
+    "title": "Not So Fast",
+    "function": "not_replace",
+    "difficulty": 3,
+    "concept": "Rewriting only whole-word matches inside a sentence",
+    "brief": "Rewrites the sentence so any word that is exactly 'is' becomes 'is not', leaving other words alone.",
+    "description": "Split the sentence into words using spaces. Whenever a word is exactly the two letters 'is' by itself, replace it with 'is not'. Words that merely contain 'is', like 'this' or 'island', are left completely unchanged.",
+    "starter": "def not_replace(s):\n    # your code here\n    pass\n",
+    "solution": "def not_replace(s):\n    words = s.split(\" \")\n    return \" \".join(\"is not\" if w == \"is\" else w for w in words)\n",
+    "hints": [
+      "Split the sentence on spaces to get a list of individual words.",
+      "Check each word for being exactly equal to 'is' (not just containing 'is') before replacing it."
+    ],
+    "example": "not_replace(\"This is a test\")  ->  \"This is not a test\"",
+    "explainer": "Splitting on spaces and comparing each whole word to 'is' (rather than searching for 'is' as a substring) is what keeps words like 'this' from being touched.",
+    "tests": [
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "This is a test"
+        ],
+        "expected": "This is not a test"
+      },
+      {
+        "args": [
+          "this is an island"
+        ],
+        "expected": "this is not an island"
+      },
+      {
+        "args": [
+          "is is is"
+        ],
+        "expected": "is not is not is not"
+      },
+      {
+        "args": [
+          "nothing changes here"
+        ],
+        "expected": "nothing changes here"
+      },
+      {
+        "args": [
+          "is"
+        ],
+        "expected": "is not"
+      }
+    ]
+  }
+]

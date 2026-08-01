@@ -1,0 +1,1878 @@
+[
+  {
+    "id": "add_ints_capped",
+    "category": "Warmup-1",
+    "title": "Capped Sum",
+    "function": "add_ints_capped",
+    "difficulty": 2,
+    "concept": "Arithmetic with a cap",
+    "brief": "Adds two numbers but never returns more than 20.",
+    "description": "Add the two numbers together. If the total is more than 20, return 20 instead of the real total.",
+    "starter": "def add_ints_capped(a, b):\n    # your code here\n    pass\n",
+    "solution": "def add_ints_capped(a, b):\n    s = a + b\n    if s > 20:\n        return 20\n    return s\n",
+    "hints": [
+      "Add the numbers first, then check the size.",
+      "Use an if to compare the sum to 20."
+    ],
+    "example": "add_ints_capped(5, 8)  ->  13",
+    "explainer": "The two numbers are added normally, and only replaced with 20 when the sum goes over that limit.",
+    "tests": [
+      {
+        "args": [
+          5,
+          8
+        ],
+        "expected": 13
+      },
+      {
+        "args": [
+          15,
+          10
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          0,
+          0
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          20,
+          0
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          -5,
+          3
+        ],
+        "expected": -2
+      },
+      {
+        "args": [
+          10,
+          10
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          1,
+          1
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  {
+    "id": "sub_no_negative",
+    "category": "Warmup-1",
+    "title": "No Negative Subtraction",
+    "function": "sub_no_negative",
+    "difficulty": 2,
+    "concept": "Arithmetic with a floor",
+    "brief": "Subtracts two numbers but never returns a value below 0.",
+    "description": "Subtract b from a. If the result would be less than 0, return 0 instead.",
+    "starter": "def sub_no_negative(a, b):\n    # your code here\n    pass\n",
+    "solution": "def sub_no_negative(a, b):\n    d = a - b\n    if d < 0:\n        return 0\n    return d\n",
+    "hints": [
+      "Compute a - b first.",
+      "Compare that result to 0 before returning."
+    ],
+    "example": "sub_no_negative(3, 10)  ->  0",
+    "explainer": "The subtraction happens normally, but a negative result is replaced with 0.",
+    "tests": [
+      {
+        "args": [
+          3,
+          10
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          10,
+          3
+        ],
+        "expected": 7
+      },
+      {
+        "args": [
+          5,
+          5
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          0,
+          0
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          -2,
+          -5
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          7,
+          0
+        ],
+        "expected": 7
+      },
+      {
+        "args": [
+          0,
+          7
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "is_even_num",
+    "category": "Warmup-1",
+    "title": "Is Even",
+    "function": "is_even_num",
+    "difficulty": 1,
+    "concept": "Boolean from arithmetic",
+    "brief": "Tells whether a whole number is even.",
+    "description": "Return True if the given number is even, and False if it is odd.",
+    "starter": "def is_even_num(n):\n    # your code here\n    pass\n",
+    "solution": "def is_even_num(n):\n    return n % 2 == 0\n",
+    "hints": [
+      "Use the % operator to find the remainder after dividing by 2.",
+      "A number is even when n % 2 equals 0."
+    ],
+    "example": "is_even_num(4)  ->  True",
+    "explainer": "The remainder of n divided by 2 is 0 exactly when n is even.",
+    "tests": [
+      {
+        "args": [
+          4
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          7
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          -2
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          -3
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          100
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          1
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "both_positive",
+    "category": "Warmup-1",
+    "title": "Both Positive",
+    "function": "both_positive",
+    "difficulty": 1,
+    "concept": "Boolean and",
+    "brief": "Tells whether two numbers are both greater than zero.",
+    "description": "Return True only if both a and b are greater than 0. Otherwise return False.",
+    "starter": "def both_positive(a, b):\n    # your code here\n    pass\n",
+    "solution": "def both_positive(a, b):\n    return a > 0 and b > 0\n",
+    "hints": [
+      "Check each number separately with >.",
+      "Combine the two checks with and."
+    ],
+    "example": "both_positive(3, 5)  ->  True",
+    "explainer": "Both comparisons must be true at the same time for the and to produce True.",
+    "tests": [
+      {
+        "args": [
+          3,
+          5
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          -1,
+          5
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          5,
+          -1
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          -1,
+          -1
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          0,
+          5
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          5,
+          0
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          1,
+          1
+        ],
+        "expected": true
+      }
+    ]
+  },
+  {
+    "id": "diff_parity",
+    "category": "Warmup-1",
+    "title": "Different Parity",
+    "function": "diff_parity",
+    "difficulty": 2,
+    "concept": "Boolean comparison of remainders",
+    "brief": "Tells whether two numbers have different even/odd parity.",
+    "description": "Return True if one of the two numbers is even and the other is odd. Return False if they are both even or both odd.",
+    "starter": "def diff_parity(a, b):\n    # your code here\n    pass\n",
+    "solution": "def diff_parity(a, b):\n    return (a % 2) != (b % 2)\n",
+    "hints": [
+      "Find each number's remainder when divided by 2.",
+      "Compare the two remainders with != or compare the results of a%2==0 for each."
+    ],
+    "example": "diff_parity(3, 4)  ->  True",
+    "explainer": "Each number's parity is found with % 2, and the two parities are compared for inequality.",
+    "tests": [
+      {
+        "args": [
+          3,
+          4
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          4,
+          3
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          2,
+          4
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          3,
+          5
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          0,
+          1
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          -1,
+          2
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          -2,
+          -4
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "shout_word",
+    "category": "Warmup-1",
+    "title": "Shout Word",
+    "function": "shout_word",
+    "difficulty": 1,
+    "concept": "String uppercase and concatenation",
+    "brief": "Turns a word into a shouted version with exclamation marks.",
+    "description": "Return the given word in all uppercase letters, followed by three exclamation marks.",
+    "starter": "def shout_word(word):\n    # your code here\n    pass\n",
+    "solution": "def shout_word(word):\n    return word.upper() + \"!!!\"\n",
+    "hints": [
+      "Use the .upper() string method.",
+      "Add the string '!!!' after the uppercased word."
+    ],
+    "example": "shout_word('go')  ->  'GO!!!'",
+    "explainer": "The .upper() method capitalizes every letter, and the exclamation marks are appended with +.",
+    "tests": [
+      {
+        "args": [
+          "go"
+        ],
+        "expected": "GO!!!"
+      },
+      {
+        "args": [
+          "Hello"
+        ],
+        "expected": "HELLO!!!"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": "!!!"
+      },
+      {
+        "args": [
+          "a"
+        ],
+        "expected": "A!!!"
+      },
+      {
+        "args": [
+          "ALREADY"
+        ],
+        "expected": "ALREADY!!!"
+      },
+      {
+        "args": [
+          "fun run"
+        ],
+        "expected": "FUN RUN!!!"
+      },
+      {
+        "args": [
+          "1two"
+        ],
+        "expected": "1TWO!!!"
+      }
+    ]
+  },
+  {
+    "id": "first_letter_match",
+    "category": "Warmup-1",
+    "title": "First Letter Match",
+    "function": "first_letter_match",
+    "difficulty": 2,
+    "concept": "Boolean check on string indexing",
+    "brief": "Tells whether a word starts with a given letter.",
+    "description": "Return True if word is not empty and its first character equals letter. Return False otherwise, including when word is empty.",
+    "starter": "def first_letter_match(word, letter):\n    # your code here\n    pass\n",
+    "solution": "def first_letter_match(word, letter):\n    return len(word) > 0 and word[0] == letter\n",
+    "hints": [
+      "Check the length of word before indexing into it.",
+      "Combine the empty check and the character comparison with and."
+    ],
+    "example": "first_letter_match('cat', 'c')  ->  True",
+    "explainer": "The length check protects against indexing an empty string, and then the first character is compared to letter.",
+    "tests": [
+      {
+        "args": [
+          "cat",
+          "c"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "cat",
+          "d"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "",
+          "c"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "Cat",
+          "c"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "c",
+          "c"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "dog",
+          "d"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "x",
+          "y"
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "double_first_char",
+    "category": "Warmup-1",
+    "title": "Double First Char",
+    "function": "double_first_char",
+    "difficulty": 2,
+    "concept": "String slicing with an empty-string guard",
+    "brief": "Repeats the first character of a word twice, or returns an empty string if there is no first character.",
+    "description": "If word is empty, return an empty string. Otherwise return its first character repeated twice.",
+    "starter": "def double_first_char(word):\n    # your code here\n    pass\n",
+    "solution": "def double_first_char(word):\n    if len(word) == 0:\n        return \"\"\n    return word[0] * 2\n",
+    "hints": [
+      "Check len(word) == 0 first.",
+      "Use word[0] * 2 to repeat the first character."
+    ],
+    "example": "double_first_char('go')  ->  'gg'",
+    "explainer": "The empty case is handled first, and otherwise the first character is duplicated with string multiplication.",
+    "tests": [
+      {
+        "args": [
+          "go"
+        ],
+        "expected": "gg"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "a"
+        ],
+        "expected": "aa"
+      },
+      {
+        "args": [
+          "Hello"
+        ],
+        "expected": "HH"
+      },
+      {
+        "args": [
+          "z"
+        ],
+        "expected": "zz"
+      },
+      {
+        "args": [
+          "12"
+        ],
+        "expected": "11"
+      },
+      {
+        "args": [
+          " a"
+        ],
+        "expected": "  "
+      }
+    ]
+  },
+  {
+    "id": "grade_band",
+    "category": "Logic-2",
+    "title": "Grade Band",
+    "function": "grade_band",
+    "difficulty": 3,
+    "concept": "Multi-branch numeric ranges",
+    "brief": "Converts a numeric score into a letter grade.",
+    "description": "Given a score from 0 to 100, return 'A' for 90 or above, 'B' for 80-89, 'C' for 70-79, 'D' for 60-69, and 'F' for anything below 60.",
+    "starter": "def grade_band(score):\n    # your code here\n    pass\n",
+    "solution": "def grade_band(score):\n    if score >= 90:\n        return \"A\"\n    elif score >= 80:\n        return \"B\"\n    elif score >= 70:\n        return \"C\"\n    elif score >= 60:\n        return \"D\"\n    else:\n        return \"F\"\n",
+    "hints": [
+      "Check the highest range first with the biggest cutoff.",
+      "Use elif to fall through the ranges in order from high to low."
+    ],
+    "example": "grade_band(85)  ->  'B'",
+    "explainer": "Each elif checks a lower cutoff than the one before it, so the score lands in the first range it satisfies.",
+    "tests": [
+      {
+        "args": [
+          95
+        ],
+        "expected": "A"
+      },
+      {
+        "args": [
+          85
+        ],
+        "expected": "B"
+      },
+      {
+        "args": [
+          75
+        ],
+        "expected": "C"
+      },
+      {
+        "args": [
+          65
+        ],
+        "expected": "D"
+      },
+      {
+        "args": [
+          50
+        ],
+        "expected": "F"
+      },
+      {
+        "args": [
+          90
+        ],
+        "expected": "A"
+      },
+      {
+        "args": [
+          59
+        ],
+        "expected": "F"
+      },
+      {
+        "args": [
+          100
+        ],
+        "expected": "A"
+      },
+      {
+        "args": [
+          0
+        ],
+        "expected": "F"
+      }
+    ]
+  },
+  {
+    "id": "shipping_cost",
+    "category": "Logic-2",
+    "title": "Shipping Cost",
+    "function": "shipping_cost",
+    "difficulty": 4,
+    "concept": "Multi-branch numeric tiers with a multiplier",
+    "brief": "Calculates a shipping price based on package weight, doubled for express delivery.",
+    "description": "Given a weight in pounds and whether the shipment is express, find the base cost: 5 if weight is 1 or less, 10 if weight is up to 5, 20 if weight is up to 20, and 35 for anything heavier. If express is True, double that cost.",
+    "starter": "def shipping_cost(weight, express):\n    # your code here\n    pass\n",
+    "solution": "def shipping_cost(weight, express):\n    if weight <= 1:\n        cost = 5\n    elif weight <= 5:\n        cost = 10\n    elif weight <= 20:\n        cost = 20\n    else:\n        cost = 35\n    if express:\n        cost = cost * 2\n    return cost\n",
+    "hints": [
+      "Find the base cost first using if/elif on weight.",
+      "Multiply the base cost by 2 only if express is True."
+    ],
+    "example": "shipping_cost(3, False)  ->  10",
+    "explainer": "The weight is checked against increasing cutoffs to pick a base cost, and express shipments simply double that value.",
+    "tests": [
+      {
+        "args": [
+          1,
+          false
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          3,
+          false
+        ],
+        "expected": 10
+      },
+      {
+        "args": [
+          15,
+          false
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          25,
+          false
+        ],
+        "expected": 35
+      },
+      {
+        "args": [
+          3,
+          true
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          25,
+          true
+        ],
+        "expected": 70
+      },
+      {
+        "args": [
+          0.5,
+          false
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          20,
+          true
+        ],
+        "expected": 40
+      }
+    ]
+  },
+  {
+    "id": "temp_category",
+    "category": "Logic-2",
+    "title": "Temperature Category",
+    "function": "temp_category",
+    "difficulty": 3,
+    "concept": "Multi-branch numeric ranges",
+    "brief": "Labels a Fahrenheit temperature as cold, mild, or hot.",
+    "description": "Given a temperature in Fahrenheit, return 'cold' if it is below 32, 'hot' if it is 80 or above, and 'mild' otherwise.",
+    "starter": "def temp_category(temp):\n    # your code here\n    pass\n",
+    "solution": "def temp_category(temp):\n    if temp < 32:\n        return \"cold\"\n    elif temp < 80:\n        return \"mild\"\n    else:\n        return \"hot\"\n",
+    "hints": [
+      "Check the below-freezing case first.",
+      "Check the hot case next, and let mild be everything left over with else."
+    ],
+    "example": "temp_category(50)  ->  'mild'",
+    "explainer": "The two extreme ranges are checked explicitly, and anything left over falls into the mild else branch.",
+    "tests": [
+      {
+        "args": [
+          20
+        ],
+        "expected": "cold"
+      },
+      {
+        "args": [
+          50
+        ],
+        "expected": "mild"
+      },
+      {
+        "args": [
+          80
+        ],
+        "expected": "hot"
+      },
+      {
+        "args": [
+          95
+        ],
+        "expected": "hot"
+      },
+      {
+        "args": [
+          32
+        ],
+        "expected": "mild"
+      },
+      {
+        "args": [
+          31
+        ],
+        "expected": "cold"
+      },
+      {
+        "args": [
+          79
+        ],
+        "expected": "mild"
+      },
+      {
+        "args": [
+          -10
+        ],
+        "expected": "cold"
+      }
+    ]
+  },
+  {
+    "id": "ticket_price",
+    "category": "Logic-2",
+    "title": "Ticket Price",
+    "function": "ticket_price",
+    "difficulty": 4,
+    "concept": "Multi-branch numeric rule with an adjustment",
+    "brief": "Computes a movie ticket price based on age, with a member discount.",
+    "description": "Given an age and whether the buyer is a member, find the base price: 5 for ages under 12, 6 for ages 65 and up, and 10 for everyone else. If is_member is True, subtract 2 from that price, but never return less than 0.",
+    "starter": "def ticket_price(age, is_member):\n    # your code here\n    pass\n",
+    "solution": "def ticket_price(age, is_member):\n    if age < 12:\n        price = 5\n    elif age >= 65:\n        price = 6\n    else:\n        price = 10\n    if is_member:\n        price = price - 2\n    if price < 0:\n        price = 0\n    return price\n",
+    "hints": [
+      "Work out the base price first using if/elif/else on age.",
+      "Apply the member discount after, and clamp the result at 0."
+    ],
+    "example": "ticket_price(30, False)  ->  10",
+    "explainer": "The base price depends on the age bracket, the member discount is applied afterward, and a final check prevents a negative price.",
+    "tests": [
+      {
+        "args": [
+          8,
+          false
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          70,
+          false
+        ],
+        "expected": 6
+      },
+      {
+        "args": [
+          30,
+          false
+        ],
+        "expected": 10
+      },
+      {
+        "args": [
+          8,
+          true
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          70,
+          true
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          30,
+          true
+        ],
+        "expected": 8
+      },
+      {
+        "args": [
+          11,
+          false
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          12,
+          false
+        ],
+        "expected": 10
+      }
+    ]
+  },
+  {
+    "id": "speed_fine",
+    "category": "Logic-2",
+    "title": "Speed Fine",
+    "function": "speed_fine",
+    "difficulty": 4,
+    "concept": "Multi-branch numeric rule based on a difference",
+    "brief": "Determines a traffic fine amount based on how far over the speed limit a driver was going.",
+    "description": "Given a driver's speed and the posted limit, return 0 if speed is at or below the limit, 50 if speed is up to 10 over the limit, 100 if speed is up to 20 over the limit, and 200 if speed is more than 20 over the limit.",
+    "starter": "def speed_fine(speed, limit):\n    # your code here\n    pass\n",
+    "solution": "def speed_fine(speed, limit):\n    over = speed - limit\n    if over <= 0:\n        return 0\n    elif over <= 10:\n        return 50\n    elif over <= 20:\n        return 100\n    else:\n        return 200\n",
+    "hints": [
+      "First compute how much over the limit the driver was.",
+      "Then use if/elif on that difference to pick the fine."
+    ],
+    "example": "speed_fine(65, 55)  ->  50",
+    "explainer": "The difference between speed and limit is computed once, then compared against the three cutoffs in order.",
+    "tests": [
+      {
+        "args": [
+          50,
+          55
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          65,
+          55
+        ],
+        "expected": 50
+      },
+      {
+        "args": [
+          70,
+          55
+        ],
+        "expected": 100
+      },
+      {
+        "args": [
+          80,
+          55
+        ],
+        "expected": 200
+      },
+      {
+        "args": [
+          55,
+          55
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          56,
+          55
+        ],
+        "expected": 50
+      },
+      {
+        "args": [
+          66,
+          55
+        ],
+        "expected": 100
+      },
+      {
+        "args": [
+          76,
+          55
+        ],
+        "expected": 200
+      }
+    ]
+  },
+  {
+    "id": "exam_result",
+    "category": "Logic-2",
+    "title": "Exam Result",
+    "function": "exam_result",
+    "difficulty": 3,
+    "concept": "Multi-branch rule combining two conditions",
+    "brief": "Decides whether a student passes, gets a warning, or fails based on score and attendance.",
+    "description": "Given a score and an attendance percentage, return 'pass' if score is 60 or above and attendance is 75 or above. Return 'warning' if score is 60 or above but attendance is below 75. Otherwise return 'fail'.",
+    "starter": "def exam_result(score, attendance):\n    # your code here\n    pass\n",
+    "solution": "def exam_result(score, attendance):\n    if score >= 60 and attendance >= 75:\n        return \"pass\"\n    elif score >= 60 and attendance < 75:\n        return \"warning\"\n    else:\n        return \"fail\"\n",
+    "hints": [
+      "Combine the score and attendance checks with and for the pass case.",
+      "Check the warning case next, and let fail be the final else."
+    ],
+    "example": "exam_result(70, 80)  ->  'pass'",
+    "explainer": "The pass case requires both conditions, the warning case requires a good score with weak attendance, and everything else fails.",
+    "tests": [
+      {
+        "args": [
+          70,
+          80
+        ],
+        "expected": "pass"
+      },
+      {
+        "args": [
+          70,
+          50
+        ],
+        "expected": "warning"
+      },
+      {
+        "args": [
+          40,
+          80
+        ],
+        "expected": "fail"
+      },
+      {
+        "args": [
+          40,
+          50
+        ],
+        "expected": "fail"
+      },
+      {
+        "args": [
+          60,
+          75
+        ],
+        "expected": "pass"
+      },
+      {
+        "args": [
+          59,
+          100
+        ],
+        "expected": "fail"
+      },
+      {
+        "args": [
+          100,
+          74
+        ],
+        "expected": "warning"
+      },
+      {
+        "args": [
+          60,
+          74
+        ],
+        "expected": "warning"
+      }
+    ]
+  },
+  {
+    "id": "count_letter",
+    "category": "String-2",
+    "title": "Count Letter",
+    "function": "count_letter",
+    "difficulty": 3,
+    "concept": "Scanning a string and counting matches",
+    "brief": "Counts how many times a specific character appears in a string.",
+    "description": "Given a string and a single character, return the number of times that character appears in the string.",
+    "starter": "def count_letter(s, ch):\n    # your code here\n    pass\n",
+    "solution": "def count_letter(s, ch):\n    count = 0\n    for c in s:\n        if c == ch:\n            count += 1\n    return count\n",
+    "hints": [
+      "Loop over every character in the string.",
+      "Keep a counter that increases each time the character matches ch."
+    ],
+    "example": "count_letter('banana', 'a')  ->  3",
+    "explainer": "Each character in the string is compared to ch, and a running counter tracks the matches.",
+    "tests": [
+      {
+        "args": [
+          "banana",
+          "a"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "banana",
+          "z"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "",
+          "a"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aaaa",
+          "a"
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          "Hello",
+          "l"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "Hello",
+          "L"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "mississippi",
+          "s"
+        ],
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "id": "count_vowels",
+    "category": "String-2",
+    "title": "Count Vowels",
+    "function": "count_vowels",
+    "difficulty": 3,
+    "concept": "Scanning a string and counting membership matches",
+    "brief": "Counts how many vowel letters appear in a string, ignoring case.",
+    "description": "Given a string, return the number of vowels (a, e, i, o, u) it contains. Treat uppercase and lowercase vowels the same way.",
+    "starter": "def count_vowels(s):\n    # your code here\n    pass\n",
+    "solution": "def count_vowels(s):\n    count = 0\n    for c in s.lower():\n        if c in \"aeiou\":\n            count += 1\n    return count\n",
+    "hints": [
+      "Lowercase the string first so case does not matter.",
+      "Loop over the characters and check membership in the string 'aeiou'."
+    ],
+    "example": "count_vowels('Hello')  ->  2",
+    "explainer": "Lowercasing the string first means the membership check against 'aeiou' catches both cases of each vowel.",
+    "tests": [
+      {
+        "args": [
+          "Hello"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "AEIOU"
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          "xyz"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "Camping Trip"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "aAeEiIoOuU"
+        ],
+        "expected": 10
+      },
+      {
+        "args": [
+          "bcdfg"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "count_upper",
+    "category": "String-2",
+    "title": "Count Uppercase",
+    "function": "count_upper",
+    "difficulty": 3,
+    "concept": "Scanning a string and counting character properties",
+    "brief": "Counts how many uppercase letters appear in a string.",
+    "description": "Given a string, return the number of uppercase letters it contains.",
+    "starter": "def count_upper(s):\n    # your code here\n    pass\n",
+    "solution": "def count_upper(s):\n    count = 0\n    for c in s:\n        if c.isupper():\n            count += 1\n    return count\n",
+    "hints": [
+      "Loop over each character in the string.",
+      "Use the .isupper() method to test each character."
+    ],
+    "example": "count_upper('CampFire')  ->  2",
+    "explainer": "Each character's .isupper() result is checked, and matches are added to a running total.",
+    "tests": [
+      {
+        "args": [
+          "CampFire"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "camp"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "CAMP"
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "123ABC"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "A"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "a"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "count_digit_chars",
+    "category": "String-2",
+    "title": "Count Digit Characters",
+    "function": "count_digit_chars",
+    "difficulty": 3,
+    "concept": "Scanning a string and counting character properties",
+    "brief": "Counts how many digit characters appear in a string.",
+    "description": "Given a string, return the number of characters in it that are digits (0-9).",
+    "starter": "def count_digit_chars(s):\n    # your code here\n    pass\n",
+    "solution": "def count_digit_chars(s):\n    count = 0\n    for c in s:\n        if c.isdigit():\n            count += 1\n    return count\n",
+    "hints": [
+      "Loop over each character in the string.",
+      "Use the .isdigit() method to test each character."
+    ],
+    "example": "count_digit_chars('Room 42B')  ->  2",
+    "explainer": "Each character's .isdigit() result is checked, and matches are added to a running total.",
+    "tests": [
+      {
+        "args": [
+          "Room 42B"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "12345"
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          "abcdef"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "a1b2c3"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "007"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "No digits here!"
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "count_double_letters",
+    "category": "String-2",
+    "title": "Count Double Letters",
+    "function": "count_double_letters",
+    "difficulty": 3,
+    "concept": "Scanning adjacent characters in a string",
+    "brief": "Counts how many positions in a string have the same letter repeated right next to itself.",
+    "description": "Given a string, return the number of positions where a character is immediately followed by the same character (for example 'll' in 'hello' counts once).",
+    "starter": "def count_double_letters(s):\n    # your code here\n    pass\n",
+    "solution": "def count_double_letters(s):\n    count = 0\n    for i in range(len(s) - 1):\n        if s[i] == s[i + 1]:\n            count += 1\n    return count\n",
+    "hints": [
+      "Loop through the indexes from 0 up to (but not including) the last one.",
+      "Compare each character to the one right after it."
+    ],
+    "example": "count_double_letters('hello')  ->  1",
+    "explainer": "The loop compares each character to its neighbor, counting every adjacent pair that matches.",
+    "tests": [
+      {
+        "args": [
+          "hello"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "mississippi"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aa"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "aaa"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "abcdef"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "bookkeeper"
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": "count_substring_occurrences",
+    "category": "String-2",
+    "title": "Count Substring Occurrences",
+    "function": "count_substring_occurrences",
+    "difficulty": 3,
+    "concept": "Scanning a string for a repeated pattern",
+    "brief": "Counts how many non-overlapping times a smaller string appears inside a bigger one.",
+    "description": "Given a string s and a smaller string sub, return how many non-overlapping times sub appears inside s. If sub is an empty string, return 0.",
+    "starter": "def count_substring_occurrences(s, sub):\n    # your code here\n    pass\n",
+    "solution": "def count_substring_occurrences(s, sub):\n    if sub == \"\":\n        return 0\n    count = 0\n    i = 0\n    while i <= len(s) - len(sub):\n        if s[i:i + len(sub)] == sub:\n            count += 1\n            i += len(sub)\n        else:\n            i += 1\n    return count\n",
+    "hints": [
+      "Slide a window of length len(sub) across s and compare it to sub.",
+      "When you find a match, skip ahead by len(sub) so matches don't overlap."
+    ],
+    "example": "count_substring_occurrences('abcabcabc', 'abc')  ->  3",
+    "explainer": "The window slides one character at a time, and jumps forward by the substring's length whenever it finds a match so overlapping copies are not double-counted.",
+    "tests": [
+      {
+        "args": [
+          "abcabcabc",
+          "abc"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "aaaa",
+          "aa"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "hello",
+          "z"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "",
+          "a"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "banana",
+          "an"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "test",
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "abababab",
+          "ab"
+        ],
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "id": "sum_positive",
+    "category": "List-2",
+    "title": "Sum Positive",
+    "function": "sum_positive",
+    "difficulty": 3,
+    "concept": "Scanning a list and accumulating a total",
+    "brief": "Adds up only the positive numbers in a list.",
+    "description": "Given a list of integers, return the sum of just the numbers that are greater than 0. Negative numbers and zeros do not count toward the total.",
+    "starter": "def sum_positive(nums):\n    # your code here\n    pass\n",
+    "solution": "def sum_positive(nums):\n    total = 0\n    for n in nums:\n        if n > 0:\n            total += n\n    return total\n",
+    "hints": [
+      "Loop through the list and check each number's sign.",
+      "Keep a running total that only increases for positive numbers."
+    ],
+    "example": "sum_positive([3, -1, 4, -2])  ->  7",
+    "explainer": "The loop skips any number that is not greater than 0 and adds the rest into a running total.",
+    "tests": [
+      {
+        "args": [
+          [
+            3,
+            -1,
+            4,
+            -2
+          ]
+        ],
+        "expected": 7
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            -1,
+            -2,
+            -3
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            5,
+            5,
+            5
+          ]
+        ],
+        "expected": 15
+      },
+      {
+        "args": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            1
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            -1
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "count_negatives",
+    "category": "List-2",
+    "title": "Count Negatives",
+    "function": "count_negatives",
+    "difficulty": 3,
+    "concept": "Scanning a list and counting matches",
+    "brief": "Counts how many numbers in a list are less than zero.",
+    "description": "Given a list of integers, return the count of numbers in the list that are less than 0.",
+    "starter": "def count_negatives(nums):\n    # your code here\n    pass\n",
+    "solution": "def count_negatives(nums):\n    count = 0\n    for n in nums:\n        if n < 0:\n            count += 1\n    return count\n",
+    "hints": [
+      "Loop through the list and check each number's sign.",
+      "Keep a counter that increases for every negative number."
+    ],
+    "example": "count_negatives([1, -2, 3, -4])  ->  2",
+    "explainer": "Each number is checked against 0, and a running counter tracks how many were negative.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            -2,
+            3,
+            -4
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            -1,
+            -2,
+            -3
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            -5
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "max_in_list",
+    "category": "List-2",
+    "title": "Max In List",
+    "function": "max_in_list",
+    "difficulty": 3,
+    "concept": "Scanning a list to track the largest value",
+    "brief": "Finds the largest number in a non-empty list.",
+    "description": "Given a non-empty list of integers, return the largest value in the list.",
+    "starter": "def max_in_list(nums):\n    # your code here\n    pass\n",
+    "solution": "def max_in_list(nums):\n    biggest = nums[0]\n    for n in nums:\n        if n > biggest:\n            biggest = n\n    return biggest\n",
+    "hints": [
+      "Start by assuming the first number is the biggest.",
+      "Loop through the rest and update your answer whenever you find something bigger."
+    ],
+    "example": "max_in_list([3, 7, 2])  ->  7",
+    "explainer": "The running 'biggest so far' value starts at the first element and is replaced whenever a larger number is seen.",
+    "tests": [
+      {
+        "args": [
+          [
+            3,
+            7,
+            2
+          ]
+        ],
+        "expected": 7
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          [
+            -1,
+            -5,
+            -2
+          ]
+        ],
+        "expected": -1
+      },
+      {
+        "args": [
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            10,
+            20,
+            5,
+            20
+          ]
+        ],
+        "expected": 20
+      },
+      {
+        "args": [
+          [
+            -100,
+            0,
+            100
+          ]
+        ],
+        "expected": 100
+      },
+      {
+        "args": [
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "count_above_average",
+    "category": "List-2",
+    "title": "Count Above Average",
+    "function": "count_above_average",
+    "difficulty": 3,
+    "concept": "Scanning a list twice: once to compute, once to compare",
+    "brief": "Counts how many numbers in a list are above the list's own average.",
+    "description": "Given a list of integers, compute the average of all the numbers, then return how many numbers in the list are strictly greater than that average. Return 0 for an empty list.",
+    "starter": "def count_above_average(nums):\n    # your code here\n    pass\n",
+    "solution": "def count_above_average(nums):\n    if len(nums) == 0:\n        return 0\n    avg = sum(nums) / len(nums)\n    count = 0\n    for n in nums:\n        if n > avg:\n            count += 1\n    return count\n",
+    "hints": [
+      "Compute the average first with sum(nums) / len(nums).",
+      "Then loop through the list again, counting values greater than the average."
+    ],
+    "example": "count_above_average([1, 2, 3, 4])  ->  2",
+    "explainer": "The average is calculated once, and then a second pass counts how many entries are strictly greater than it.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            5,
+            5,
+            5
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            1,
+            1,
+            1,
+            100
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            -1,
+            -2,
+            -3,
+            6
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            10
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            2,
+            4,
+            6,
+            8
+          ]
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  {
+    "id": "longest_streak_positive",
+    "category": "List-2",
+    "title": "Longest Streak Positive",
+    "function": "longest_streak_positive",
+    "difficulty": 3,
+    "concept": "Scanning a list and tracking a running streak",
+    "brief": "Finds the length of the longest run of consecutive positive numbers in a list.",
+    "description": "Given a list of integers, return the length of the longest run of consecutive numbers that are all greater than 0. A number that is 0 or negative breaks the run.",
+    "starter": "def longest_streak_positive(nums):\n    # your code here\n    pass\n",
+    "solution": "def longest_streak_positive(nums):\n    best = 0\n    current = 0\n    for n in nums:\n        if n > 0:\n            current += 1\n            if current > best:\n                best = current\n        else:\n            current = 0\n    return best\n",
+    "hints": [
+      "Keep a counter for the current streak and a separate counter for the best streak seen so far.",
+      "Reset the current streak to 0 whenever you see a number that is not positive."
+    ],
+    "example": "longest_streak_positive([1, 2, -1, 3, 4, 5])  ->  3",
+    "explainer": "The current streak grows while numbers stay positive and resets to 0 on a non-positive number, while the best streak keeps the highest value ever reached.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            -1,
+            3,
+            4,
+            5
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            -1,
+            -2,
+            -3
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          [
+            0,
+            1,
+            0,
+            1,
+            1
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            5
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            -5
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "first_even_index",
+    "category": "List-2",
+    "title": "First Even Index",
+    "function": "first_even_index",
+    "difficulty": 3,
+    "concept": "Scanning a list and returning a position",
+    "brief": "Finds the index of the first even number in a list.",
+    "description": "Given a list of integers, return the index of the first number that is even. If there is no even number in the list, return -1.",
+    "starter": "def first_even_index(nums):\n    # your code here\n    pass\n",
+    "solution": "def first_even_index(nums):\n    for i in range(len(nums)):\n        if nums[i] % 2 == 0:\n            return i\n    return -1\n",
+    "hints": [
+      "Loop through the list using its indexes.",
+      "Return the index as soon as you find a number divisible by 2, otherwise return -1 after the loop."
+    ],
+    "example": "first_even_index([1, 3, 4, 5])  ->  2",
+    "explainer": "The loop checks each number in order and returns its index the moment an even one is found, falling back to -1 if none exists.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            3,
+            4,
+            5
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            2,
+            4,
+            6
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            1,
+            3,
+            5
+          ]
+        ],
+        "expected": -1
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": -1
+      },
+      {
+        "args": [
+          [
+            0,
+            1,
+            2
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            7
+          ]
+        ],
+        "expected": -1
+      },
+      {
+        "args": [
+          [
+            8
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  }
+]

@@ -1,0 +1,195 @@
+[
+  {
+    "id": "make_bricks",
+    "category": "Logic-2",
+    "title": "Brick Wall Budget",
+    "function": "make_bricks",
+    "difficulty": 3,
+    "concept": "Greedy math with remainders",
+    "brief": "Decides if a wall of an exact length can be built from small 1-unit bricks and big 5-unit bricks.",
+    "description": "You are building a wall that must be exactly goal units long. You have small one-unit bricks and big five-unit bricks. Figure out whether you can lay bricks end to end, using any mix of the two sizes you have on hand, to reach exactly that length. Return True if it can be done and False if it cannot.",
+    "starter": "def make_bricks(small, big, goal):\n    # your code here\n    pass\n",
+    "solution": "def make_bricks(small, big, goal):\n    use_big = min(big, goal // 5)\n    remainder = goal - use_big * 5\n    return remainder <= small\n",
+    "hints": [
+      "Use as many big bricks as you can first, since that covers the most ground fastest, then see what length is left over.",
+      "Whatever length is left after the big bricks must be coverable by your small bricks, one unit each."
+    ],
+    "example": "make_bricks(3, 1, 8) -> True",
+    "explainer": "The solution spends as many big bricks as possible (but never more than you have or more than fits in goal), then checks if the leftover length can be filled one unit at a time by the small bricks.",
+    "tests": [
+      {"args": [3, 1, 8], "expected": true},
+      {"args": [3, 1, 9], "expected": false},
+      {"args": [3, 2, 10], "expected": true},
+      {"args": [100, 0, 100], "expected": true},
+      {"args": [0, 0, 0], "expected": true},
+      {"args": [0, 0, 1], "expected": false},
+      {"args": [0, 3, 15], "expected": true},
+      {"args": [0, 3, 16], "expected": false}
+    ]
+  },
+  {
+    "id": "lone_sum",
+    "category": "Logic-2",
+    "title": "Lonely Numbers Only",
+    "function": "lone_sum",
+    "difficulty": 2,
+    "concept": "Conditional logic with three values",
+    "brief": "Adds three numbers together, but drops any number that has a twin among the three.",
+    "description": "You get three whole numbers, a, b, and c. Normally you would just add all three, but if any two of them are equal to each other, both of those matching numbers get left out of the total. Only numbers that have no match among the other two count toward the sum.",
+    "starter": "def lone_sum(a, b, c):\n    # your code here\n    pass\n",
+    "solution": "def lone_sum(a, b, c):\n    if a == b == c:\n        return 0\n    if a == b:\n        return c\n    if a == c:\n        return b\n    if b == c:\n        return a\n    return a + b + c\n",
+    "hints": [
+      "Check the case where all three are equal first, since that means every number has a match and nothing counts.",
+      "There are three possible pairs that could match: a-b, a-c, and b-c. Handle each one."
+    ],
+    "example": "lone_sum(1, 2, 3) -> 6",
+    "explainer": "The solution checks the all-three-equal case first, then each possible matching pair, returning only the value that has no partner; if no pair matches, everything is added.",
+    "tests": [
+      {"args": [1, 2, 3], "expected": 6},
+      {"args": [3, 2, 3], "expected": 2},
+      {"args": [3, 3, 3], "expected": 0},
+      {"args": [1, 1, 2], "expected": 2},
+      {"args": [2, 1, 1], "expected": 2},
+      {"args": [1, 2, 1], "expected": 2},
+      {"args": [0, 0, 0], "expected": 0},
+      {"args": [-1, -1, 5], "expected": 5}
+    ]
+  },
+  {
+    "id": "lucky_sum",
+    "category": "Logic-2",
+    "title": "Unlucky Thirteen Stops the Count",
+    "function": "lucky_sum",
+    "difficulty": 3,
+    "concept": "Early stopping based on a special value",
+    "brief": "Adds up three numbers left to right, but stops counting as soon as a 13 is seen.",
+    "description": "You get three whole numbers, a, b, and c. Add them left to right, but the number 13 is considered unlucky: as soon as you reach a 13, stop, and do not add that 13 or anything after it. If a is 13, the total is 0 before anything gets added at all.",
+    "starter": "def lucky_sum(a, b, c):\n    # your code here\n    pass\n",
+    "solution": "def lucky_sum(a, b, c):\n    if a == 13:\n        return 0\n    if b == 13:\n        return a\n    if c == 13:\n        return a + b\n    return a + b + c\n",
+    "hints": [
+      "Check a first: if it is 13, nothing at all should be counted.",
+      "Work through a, then b, then c in order, stopping the instant you spot a 13."
+    ],
+    "example": "lucky_sum(1, 2, 13) -> 3",
+    "explainer": "The checks happen in left-to-right order, so whichever number first equals 13 cuts off the sum right there, and everything found strictly before it still counts.",
+    "tests": [
+      {"args": [1, 2, 3], "expected": 6},
+      {"args": [1, 2, 13], "expected": 3},
+      {"args": [1, 13, 3], "expected": 1},
+      {"args": [13, 2, 3], "expected": 0},
+      {"args": [13, 13, 13], "expected": 0},
+      {"args": [1, 2, 14], "expected": 17},
+      {"args": [12, 13, 13], "expected": 12}
+    ]
+  },
+  {
+    "id": "no_teen_sum",
+    "category": "Logic-2",
+    "title": "Skip the Teens",
+    "function": "no_teen_sum",
+    "difficulty": 3,
+    "concept": "Helper logic applied to multiple values",
+    "brief": "Adds three numbers together after zeroing out most numbers from 13 to 19.",
+    "description": "You get three whole numbers, a, b, and c. Before adding them up, replace any number from 13 through 19 with 0, except for 15 and 16, which are allowed to keep their real value. Then return the sum of the three adjusted numbers.",
+    "starter": "def no_teen_sum(a, b, c):\n    # your code here\n    pass\n",
+    "solution": "def no_teen_sum(a, b, c):\n    def fix_teen(n):\n        if 13 <= n <= 19 and n != 15 and n != 16:\n            return 0\n        return n\n    return fix_teen(a) + fix_teen(b) + fix_teen(c)\n",
+    "hints": [
+      "It helps to write a small helper that fixes one number, then call it three times.",
+      "Remember that 15 and 16 are the two exceptions inside the 13-19 range and should not be zeroed."
+    ],
+    "example": "no_teen_sum(2, 13, 1) -> 3",
+    "explainer": "A helper checks whether a number falls in the 13-19 range and is not 15 or 16, zeroing it out if so; the three fixed values are then added together.",
+    "tests": [
+      {"args": [1, 2, 3], "expected": 6},
+      {"args": [2, 13, 1], "expected": 3},
+      {"args": [2, 1, 14], "expected": 3},
+      {"args": [2, 1, 15], "expected": 18},
+      {"args": [2, 1, 16], "expected": 19},
+      {"args": [2, 1, 17], "expected": 3},
+      {"args": [2, 1, 18], "expected": 3},
+      {"args": [2, 1, 19], "expected": 3},
+      {"args": [2, 1, 20], "expected": 23}
+    ]
+  },
+  {
+    "id": "round_sum",
+    "category": "Logic-2",
+    "title": "Round Then Add",
+    "function": "round_sum",
+    "difficulty": 3,
+    "concept": "Rounding logic applied to multiple values",
+    "brief": "Rounds each of three numbers to the nearest multiple of ten, then adds the rounded results.",
+    "description": "You get three whole numbers. Round each one to the closest multiple of ten first, where a number ending in 5 or higher rounds up. Then add up all three rounded numbers and return that total.",
+    "starter": "def round_sum(a, b, c):\n    # your code here\n    pass\n",
+    "solution": "def round_sum(a, b, c):\n    def round10(n):\n        r = n % 10\n        if r >= 5:\n            return n + (10 - r)\n        return n - r\n    return round10(a) + round10(b) + round10(c)\n",
+    "hints": [
+      "Write a small helper that rounds one number, then use it three times.",
+      "The remainder after dividing by 10 tells you which way to round: 5 or more rounds up, less than 5 rounds down."
+    ],
+    "example": "round_sum(16, 17, 18) -> 60",
+    "explainer": "A helper finds the remainder when dividing by 10 and rounds up or down based on that remainder, and the three rounded values are then summed.",
+    "tests": [
+      {"args": [16, 17, 18], "expected": 60},
+      {"args": [12, 10, 10], "expected": 30},
+      {"args": [15, 15, 15], "expected": 60},
+      {"args": [4, 4, 4], "expected": 0},
+      {"args": [0, 0, 0], "expected": 0},
+      {"args": [25, 25, 25], "expected": 90},
+      {"args": [-4, -4, -4], "expected": 0}
+    ]
+  },
+  {
+    "id": "close_far",
+    "category": "Logic-2",
+    "title": "One Close, One Far",
+    "function": "close_far",
+    "difficulty": 4,
+    "concept": "Combining distance checks with boolean logic",
+    "brief": "Checks that one of two numbers sits very near a target while the other sits well away from it.",
+    "description": "You get three whole numbers, a, b, and c, where a is the number everyone else is measured against. A number counts as close to a if it is at most 1 away, and it counts as far if it is more than 2 away. Return True only when exactly one of b or c is close to a while the other one is far from a.",
+    "starter": "def close_far(a, b, c):\n    # your code here\n    pass\n",
+    "solution": "def close_far(a, b, c):\n    close_b = abs(a - b) <= 1\n    close_c = abs(a - c) <= 1\n    far_b = abs(a - b) > 2\n    far_c = abs(a - c) > 2\n    return (close_b and far_c) or (close_c and far_b)\n",
+    "hints": [
+      "abs(a - b) gives you the distance between a and b, no matter which one is bigger.",
+      "There are two winning patterns: b close and c far, or c close and b far. A gap of exactly 2 counts as neither close nor far."
+    ],
+    "example": "close_far(1, 2, 10) -> True",
+    "explainer": "The solution measures both distances and labels each as close, far, or neither, then checks the two valid combinations where one side is close and the other is far.",
+    "tests": [
+      {"args": [1, 2, 10], "expected": true},
+      {"args": [1, 2, 3], "expected": false},
+      {"args": [1, 5, 2], "expected": true},
+      {"args": [1, 2, -10], "expected": true},
+      {"args": [0, 2, 10], "expected": false},
+      {"args": [3, 4, 9], "expected": true},
+      {"args": [3, 1, 3], "expected": false}
+    ]
+  },
+  {
+    "id": "make_chocolate",
+    "category": "Logic-2",
+    "title": "Chocolate Bar Change",
+    "function": "make_chocolate",
+    "difficulty": 3,
+    "concept": "Greedy math with a failure case",
+    "brief": "Figures out how many small chocolate squares are needed after using as many big bars as possible, or -1 if it cannot be done.",
+    "description": "You are handing out exactly goal squares worth of chocolate. You have small bars worth 1 square each and big bars worth 5 squares each. Use as many big bars as you can without going over the goal, then return how many small squares are needed to finish reaching the goal exactly. If you do not have enough small squares to make up the difference, return -1 instead.",
+    "starter": "def make_chocolate(small, big, goal):\n    # your code here\n    pass\n",
+    "solution": "def make_chocolate(small, big, goal):\n    use_big = min(big, goal // 5)\n    remainder = goal - use_big * 5\n    if remainder <= small:\n        return remainder\n    return -1\n",
+    "hints": [
+      "Spend as many big bars as you can first, limited by both how many you own and how many fit under the goal.",
+      "Whatever is left over after the big bars must come entirely from small squares, or it is impossible."
+    ],
+    "example": "make_chocolate(4, 1, 9) -> 4",
+    "explainer": "The solution uses the largest possible number of big bars first, then checks whether the small squares on hand can cover the remaining amount, returning -1 when they cannot.",
+    "tests": [
+      {"args": [4, 1, 9], "expected": 4},
+      {"args": [4, 1, 10], "expected": -1},
+      {"args": [4, 1, 5], "expected": 0},
+      {"args": [4, 0, 7], "expected": -1},
+      {"args": [10, 2, 16], "expected": 6},
+      {"args": [0, 0, 0], "expected": 0},
+      {"args": [0, 1, 4], "expected": -1}
+    ]
+  }
+]

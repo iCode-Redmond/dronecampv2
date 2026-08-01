@@ -1,0 +1,595 @@
+[
+  {
+    "id": "string_times",
+    "category": "Warmup-2",
+    "title": "String Times",
+    "function": "string_times",
+    "difficulty": 1,
+    "concept": "String repetition",
+    "brief": "Glues a word onto itself n times in a row.",
+    "description": "Write a function that takes a word and a count, and builds one long string by repeating the word that many times with nothing in between. If the count is 0, the result is just an empty string.",
+    "starter": "def string_times(str, n):\n    # your code here\n    pass\n",
+    "solution": "def string_times(str, n):\n    return str * n\n",
+    "hints": [
+      "Python can multiply a string by a whole number.",
+      "str * n glues n copies of str together with nothing between them."
+    ],
+    "example": "string_times('Hi', 2)  ->  'HiHi'",
+    "explainer": "Multiplying a string by an integer in Python repeats that string that many times, which is exactly what this problem wants. Multiplying by 0 correctly gives back an empty string.",
+    "tests": [
+      {
+        "args": [
+          "Hi",
+          2
+        ],
+        "expected": "HiHi"
+      },
+      {
+        "args": [
+          "Hi",
+          3
+        ],
+        "expected": "HiHiHi"
+      },
+      {
+        "args": [
+          "Hi",
+          1
+        ],
+        "expected": "Hi"
+      },
+      {
+        "args": [
+          "Hi",
+          0
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "",
+          4
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "Az",
+          4
+        ],
+        "expected": "AzAzAzAz"
+      }
+    ]
+  },
+  {
+    "id": "front_times",
+    "category": "Warmup-2",
+    "title": "Front Times",
+    "function": "front_times",
+    "difficulty": 2,
+    "concept": "Slicing plus repetition",
+    "brief": "Repeats only the first three letters of a word, n times.",
+    "description": "Write a function that grabs up to the first three characters of a word (the whole word if it's shorter than three letters) and repeats that chunk n times back to back.",
+    "starter": "def front_times(str, n):\n    # your code here\n    pass\n",
+    "solution": "def front_times(str, n):\n    front3 = str[:3]\n    return front3 * n\n",
+    "hints": [
+      "Slicing with str[:3] grabs the first three characters, or fewer if the string is shorter.",
+      "Once you have that small chunk, multiply it by n the same way you would repeat a whole string."
+    ],
+    "example": "front_times('Chocolate', 2)  ->  'ChoCho'",
+    "explainer": "str[:3] safely returns the first three characters even when the string has fewer than three, and multiplying that chunk by n repeats it the requested number of times.",
+    "tests": [
+      {
+        "args": [
+          "Chocolate",
+          2
+        ],
+        "expected": "ChoCho"
+      },
+      {
+        "args": [
+          "Chocolate",
+          3
+        ],
+        "expected": "ChoChoCho"
+      },
+      {
+        "args": [
+          "Abc",
+          3
+        ],
+        "expected": "AbcAbcAbc"
+      },
+      {
+        "args": [
+          "Ab",
+          4
+        ],
+        "expected": "AbAbAbAb"
+      },
+      {
+        "args": [
+          "",
+          4
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "Abc",
+          0
+        ],
+        "expected": ""
+      }
+    ]
+  },
+  {
+    "id": "string_bits",
+    "category": "Warmup-2",
+    "title": "String Bits",
+    "function": "string_bits",
+    "difficulty": 2,
+    "concept": "Step slicing",
+    "brief": "Keeps only every other character, starting with the first.",
+    "description": "Write a function that builds a new string using just the 1st, 3rd, 5th, and so on characters of the original string, skipping every second one.",
+    "starter": "def string_bits(str):\n    # your code here\n    pass\n",
+    "solution": "def string_bits(str):\n    return str[::2]\n",
+    "hints": [
+      "Slicing supports a 'step' value: str[start:stop:step].",
+      "A step of 2 means 'take a character, then skip one, then take the next.'"
+    ],
+    "example": "string_bits('Hello')  ->  'Hlo'",
+    "explainer": "The slice str[::2] walks through the string two characters at a time starting at index 0, which naturally keeps every other letter.",
+    "tests": [
+      {
+        "args": [
+          "Hello"
+        ],
+        "expected": "Hlo"
+      },
+      {
+        "args": [
+          "Hi"
+        ],
+        "expected": "H"
+      },
+      {
+        "args": [
+          "Heeololeo"
+        ],
+        "expected": "Hello"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "x"
+        ],
+        "expected": "x"
+      },
+      {
+        "args": [
+          "abcdef"
+        ],
+        "expected": "ace"
+      }
+    ]
+  },
+  {
+    "id": "string_splosion",
+    "category": "Warmup-2",
+    "title": "String Splosion",
+    "function": "string_splosion",
+    "difficulty": 3,
+    "concept": "Loops with growing slices",
+    "brief": "Builds a string out of every growing prefix of the input.",
+    "description": "Write a function that takes a word and mashes together every prefix of it, starting from an empty prefix and growing one letter at a time until the whole word is included.",
+    "starter": "def string_splosion(str):\n    # your code here\n    pass\n",
+    "solution": "def string_splosion(str):\n    result = \"\"\n    for i in range(len(str) + 1):\n        result += str[:i]\n    return result\n",
+    "hints": [
+      "Loop a variable i from 0 up to and including the length of the string.",
+      "On each pass, add str[:i] onto a result string you're building up."
+    ],
+    "example": "string_splosion('Code')  ->  'CCoCodCode'",
+    "explainer": "As i climbs from 0 to len(str), str[:i] grows one letter at a time, so appending each of those growing prefixes builds the exploded pattern.",
+    "tests": [
+      {
+        "args": [
+          "Code"
+        ],
+        "expected": "CCoCodCode"
+      },
+      {
+        "args": [
+          "abc"
+        ],
+        "expected": "aababc"
+      },
+      {
+        "args": [
+          "ab"
+        ],
+        "expected": "aab"
+      },
+      {
+        "args": [
+          "x"
+        ],
+        "expected": "x"
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": ""
+      },
+      {
+        "args": [
+          "fade"
+        ],
+        "expected": "ffafadfade"
+      }
+    ]
+  },
+  {
+    "id": "last2",
+    "category": "Warmup-2",
+    "title": "Last 2",
+    "function": "last2",
+    "difficulty": 3,
+    "concept": "Substring counting",
+    "brief": "Counts how many times the string's last two letters show up earlier as a pair.",
+    "description": "Write a function that looks at the final two characters of a string, then counts how many other places in the string that same two-letter pair also appears, checking every position from the start.",
+    "starter": "def last2(str):\n    # your code here\n    pass\n",
+    "solution": "def last2(str):\n    if len(str) < 2:\n        return 0\n    last = str[-2:]\n    count = 0\n    for i in range(len(str) - 2):\n        if str[i:i + 2] == last:\n            count += 1\n    return count\n",
+    "hints": [
+      "str[-2:] grabs the last two characters of the string.",
+      "Slide a two-character window across the string with str[i:i+2] and compare it to that ending pair, but stop before you reach the ending pair itself."
+    ],
+    "example": "last2('hixxhi')  ->  1",
+    "explainer": "The loop only checks positions before the final pair so it doesn't count the ending pair against itself, and it compares every earlier two-character window to that ending pair to tally the matches.",
+    "tests": [
+      {
+        "args": [
+          "hixxhi"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "xaxxaxaxx"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "axkaxxax"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "h"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "aaaa"
+        ],
+        "expected": 2
+      }
+    ]
+  },
+  {
+    "id": "array_count9",
+    "category": "Warmup-2",
+    "title": "Array Count 9",
+    "function": "array_count9",
+    "difficulty": 1,
+    "concept": "Counting matches in a list",
+    "brief": "Counts how many times the number 9 shows up in a list.",
+    "description": "Write a function that scans a list of whole numbers and tells you how many of them are exactly 9.",
+    "starter": "def array_count9(nums):\n    # your code here\n    pass\n",
+    "solution": "def array_count9(nums):\n    return nums.count(9)\n",
+    "hints": [
+      "Lists have a built-in method for counting how many times a value appears.",
+      "Try nums.count(9)."
+    ],
+    "example": "array_count9([1, 2, 9])  ->  1",
+    "explainer": "The list method count(9) walks the whole list and returns exactly how many elements equal 9, which is the answer this problem wants.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            9
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            1,
+            9,
+            9
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            1,
+            9,
+            9,
+            3,
+            9
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          [
+            9,
+            9,
+            9,
+            9
+          ]
+        ],
+        "expected": 4
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": "array_front9",
+    "category": "Warmup-2",
+    "title": "Array Front 9",
+    "function": "array_front9",
+    "difficulty": 2,
+    "concept": "Slicing a list before searching it",
+    "brief": "Checks whether a 9 appears anywhere in the first four slots of a list.",
+    "description": "Write a function that only looks at the first four numbers of a list (or the whole list if it's shorter than that) and reports whether a 9 is hiding among them.",
+    "starter": "def array_front9(nums):\n    # your code here\n    pass\n",
+    "solution": "def array_front9(nums):\n    return 9 in nums[:4]\n",
+    "hints": [
+      "Slicing a list with nums[:4] is safe even when the list has fewer than four items.",
+      "The 'in' keyword checks whether a value exists inside a list."
+    ],
+    "example": "array_front9([1, 2, 9, 3, 4])  ->  True",
+    "explainer": "nums[:4] limits the search to just the first four elements (or fewer, if the list is short), and the in operator reports whether 9 is one of them.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            2,
+            9,
+            3,
+            4
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4,
+            9
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            9
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            9
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "array123",
+    "category": "Warmup-2",
+    "title": "Array 1 2 3",
+    "function": "array123",
+    "difficulty": 3,
+    "concept": "Searching for a pattern of consecutive values",
+    "brief": "Checks whether 1, 2, 3 show up in that order, next to each other, anywhere in a list.",
+    "description": "Write a function that scans a list of numbers looking for three neighbors in a row that read exactly 1, then 2, then 3. It doesn't matter where in the list that run happens, as long as the three values are side by side and in that order.",
+    "starter": "def array123(nums):\n    # your code here\n    pass\n",
+    "solution": "def array123(nums):\n    for i in range(len(nums) - 2):\n        if nums[i:i + 3] == [1, 2, 3]:\n            return True\n    return False\n",
+    "hints": [
+      "Slide a window of 3 elements across the list with nums[i:i+3].",
+      "Compare that 3-element slice to the list [1, 2, 3] and stop as soon as you find a match."
+    ],
+    "example": "array123([1, 1, 2, 3])  ->  True",
+    "explainer": "Sliding a three-item window across the list and comparing each window to [1, 2, 3] finds any spot where those three values sit next to each other in order.",
+    "tests": [
+      {
+        "args": [
+          [
+            1,
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            1,
+            2,
+            3
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            3,
+            1,
+            2
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            1,
+            2,
+            4
+          ]
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          []
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          [
+            1,
+            2
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": "string_match",
+    "category": "Warmup-2",
+    "title": "String Match",
+    "function": "string_match",
+    "difficulty": 3,
+    "concept": "Comparing aligned substrings",
+    "brief": "Counts how many two-letter chunks line up between two strings at the same position.",
+    "description": "Write a function that compares two strings position by position, looking at two-character chunks that start at the same index in each string. Count how many of those aligned chunks are identical.",
+    "starter": "def string_match(a, b):\n    # your code here\n    pass\n",
+    "solution": "def string_match(a, b):\n    count = 0\n    for i in range(min(len(a), len(b)) - 1):\n        if a[i:i + 2] == b[i:i + 2]:\n            count += 1\n    return count\n",
+    "hints": [
+      "You only need to check indexes that exist in both strings, up to one before the shorter string's length.",
+      "At each index i, compare a[i:i+2] to b[i:i+2]."
+    ],
+    "example": "string_match('abc', 'abc')  ->  2",
+    "explainer": "The loop only runs up to one less than the shorter string's length so every two-character slice stays in bounds, and it tallies each index where both strings agree for two letters in a row.",
+    "tests": [
+      {
+        "args": [
+          "xxcaazz",
+          "xxbaaz"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "abc",
+          "abc"
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          "abc",
+          "axc"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "he",
+          "hello"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "",
+          "abc"
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          "a",
+          "a"
+        ],
+        "expected": 0
+      }
+    ]
+  }
+]
