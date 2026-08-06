@@ -1,0 +1,161 @@
+from easytello import tello
+
+MIN_BATTERY = 40
+WAIT_TIME = 1
+USE_MENU = True
+ENABLE_WARMUP = True
+ENABLE_SLALOM = True
+ENABLE_PATROL = False
+ENABLE_FINALE = False
+ENABLE_FLIPS = False
+
+def pause(drone, seconds=WAIT_TIME):
+    drone.wait(seconds)
+
+def turn(drone, degrees, clockwise=True):
+    if clockwise:
+        drone.cw(degrees)
+    else:
+        drone.ccw(degrees)
+    pause(drone)
+
+def maybe_flip(drone, direction="f"):
+    if ENABLE_FLIPS:
+        drone.flip(direction)
+        pause(drone, 2)
+
+def fly_warmup(drone, distance, height):
+    drone.up(height)
+    pause(drone)
+    drone.forward(distance)
+    pause(drone)
+    turn(drone, 90)
+    drone.back(distance)
+    pause(drone)
+    drone.down(height)
+    pause(drone)
+
+def fly_slalom(
+    drone,
+    steps,
+    forward_distance,
+    sideways_distance
+):
+    for step in range(steps):
+        drone.forward(forward_distance)
+        pause(drone)
+        if step % 2 == 0:
+            drone.left(sideways_distance)
+        else:
+            drone.right(sideways_distance)
+        pause(drone)
+
+def fly_patrol(
+    drone,
+    sides,
+    distance,
+    clockwise=True
+):
+    turn_angle = 360 // sides
+    for side in range(sides):
+        drone.forward(distance)
+        pause(drone)
+        turn(
+            drone,
+            turn_angle,
+            clockwise
+        )
+
+def fly_finale(
+    drone,
+    distance,
+    height,
+    use_flip
+):
+    drone.up(height)
+    pause(drone)
+    for step in range(4):
+        drone.forward(distance)
+        turn(
+            drone,
+            90,
+            clockwise=(step % 2 == 0)
+        )
+    if use_flip:
+        maybe_flip(drone, "f")
+    drone.down(height)
+    pause(drone)
+
+def choose_routine():
+    print("1 - Warmup")
+    print("2 - Slalom")
+    print("3 - Patrol")
+    print("4 - Finale")
+    print("Q - Land and quit")
+    return input(
+        "Choose a routine: "
+    ).strip()
+
+def run_selected_routine(drone, choice):
+    if choice == "1":
+        fly_warmup(drone, 42, 48)
+    elif choice == "2":
+        fly_slalom(drone, 4, 42, 28)
+    elif choice == "3":
+        fly_patrol(drone, 5, 42)
+    elif choice == "4":
+        fly_finale(
+            drone,
+            35,
+            48,
+            use_flip=True
+        )
+    else:
+        print("Unknown choice.")
+        fly_warmup(drone, 28, 41)
+
+def run_enabled_routines(drone):
+    if ENABLE_WARMUP:
+        fly_warmup(drone, 42, 48)
+    if ENABLE_SLALOM:
+        fly_slalom(drone, 4, 42, 28)
+    if ENABLE_PATROL:
+        fly_patrol(drone, 5, 42)
+    if ENABLE_FINALE:
+        fly_finale(
+            drone,
+            35,
+            48,
+            use_flip=True
+        )
+
+def main():
+    drone = tello.Tello()
+    battery = int(
+        drone.get_battery()
+    )
+    print(f"Battery: {battery}%")
+    if battery < MIN_BATTERY:
+        print(
+            "Charge the drone "
+            "before flying."
+        )
+        return
+    if USE_MENU:
+        choice = choose_routine()
+    drone.takeoff()
+    pause(drone, 2)
+    if USE_MENU:
+        while choice.lower() not in ("q", "quit"):
+            run_selected_routine(
+                drone,
+                choice
+            )
+            choice = choose_routine()
+    else:
+        run_enabled_routines(drone)
+    drone.land()
+
+if __name__ == "__main__":
+    main()
+
