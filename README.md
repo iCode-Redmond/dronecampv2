@@ -24,3 +24,12 @@ You're ready to go. Run a day's script with, for example:
 ```powershell
 python day1\main.py
 ```
+
+## Practice Python in the browser
+
+169 problems, nothing to install:
+**https://icode-redmond.github.io/python-problem-bank/**
+(source: [python-problem-bank](https://github.com/iCode-Redmond/python-problem-bank))
+
+Final:
+[GOOD LUCK CAMPERS!](https://icode-redmond.github.io/dronecampv2/)

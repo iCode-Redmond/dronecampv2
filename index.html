@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Drone Camp starter files, daily guides, and the Python practice site.">
+<title>Drone Camp | iCode Redmond</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#f6ead3;--paper:#fff8e9;--ink:#141414;--muted:#6e675e;--magenta:#c3195d;
+ --orange:#ef5b2a;--yellow:#f0b90b;--blue:#2879b8;--green:#26845b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Open Sans",Arial,sans-serif;
+ background:linear-gradient(90deg,rgba(20,20,20,.025) 1px,transparent 1px),
+ linear-gradient(rgba(20,20,20,.025) 1px,transparent 1px),var(--cream);background-size:24px 24px}
+.topbar{display:flex;align-items:center;gap:13px;padding:16px 20px;color:#fff;background:var(--ink);border-bottom:7px solid var(--magenta)}
+.mark{width:42px;height:42px;display:grid;place-items:center;background:var(--yellow);color:var(--ink);flex:none;font-size:22px}
+.brand-title{font-weight:800;font-size:16px}
+.brand-sub{font:600 11px/1.2 "JetBrains Mono",monospace;color:#d6d0c8;letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+main{max-width:920px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:clamp(34px,7vw,64px);line-height:.98;letter-spacing:-.045em;margin:0 0 14px}
+.lede{font-size:17px;line-height:1.6;max-width:640px;margin:0 0 34px;color:#39342e}
+.hero{display:block;padding:26px;margin-bottom:34px;text-decoration:none;color:#fff;background:var(--magenta);
+ border:2px solid var(--ink);box-shadow:8px 8px 0 var(--ink);transition:.14s}
+.hero:hover{transform:translate(2px,2px);box-shadow:6px 6px 0 var(--ink)}
+.hero-kicker{font:700 11px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.hero-title{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:-.03em;margin:10px 0 8px}
+.hero-sub{font-size:14px;line-height:1.55;opacity:.94;max-width:560px}
+h2{font-size:13px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.1em;
+ color:var(--magenta);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:36px}
+.card{padding:16px;background:var(--paper);border:1px solid var(--ink);box-shadow:5px 5px 0 rgba(20,20,20,.09)}
+.card h3{margin:0 0 6px;font-size:15px}
+.card p{margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:7px}
+.links a{display:inline-block;padding:6px 10px;border:1px solid var(--ink);background:var(--cream);
+ color:var(--ink);text-decoration:none;font:700 11px/1 "JetBrains Mono",monospace}
+.links a:hover{background:var(--yellow)}
+.setup{padding:20px;background:var(--ink);color:#f4ead6;border:2px solid var(--ink)}
+.setup h2{color:var(--yellow);margin-bottom:12px}
+.setup p{font-size:13px;line-height:1.6;margin:0 0 12px;color:#ded4c2}
+pre{margin:0;padding:14px;background:#0d0d0d;overflow-x:auto;font:500 12px/1.7 "JetBrains Mono",monospace;color:#f8ead3}
+footer{padding:0 20px 50px;max-width:920px;margin:0 auto;font-size:12px;color:var(--muted);line-height:1.6}
+footer a{color:var(--blue)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="mark">&#9727;</div>
+  <div>
+    <div class="brand-title">Drone Camp</div>
+    <div class="brand-sub">iCode Redmond</div>
+  </div>
+</header>
+
+<main>
+  <h1>Drone Camp</h1>
+  <p class="lede">Starter files, daily guides, and the Python practice site. Everything you need for the week is here.</p>
+
+  <a class="hero" href="https://icode-redmond.github.io/python-problem-bank/">
+    <div class="hero-kicker">Practice Python &rarr;</div>
+    <div class="hero-title">Python Problem Bank</div>
+    <div class="hero-sub">169 problems that run right in your browser &mdash; nothing to install. Warmups, strings, lists, logic, and drone missions, plus a Learn tab when you get stuck.</div>
+  </a>
+
+  <h2>Daily materials</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Day 1 &mdash; Setup</h3>
+      <p>Get Python and EasyTello installed, connect to the drone.</p>
+      <div class="links"><a href="day1/main.py">main.py</a></div>
+    </div>
+    <div class="card">
+      <h3>Day 2 &mdash; First Flights</h3>
+      <p>Takeoff, landing, and basic movement commands.</p>
+      <div class="links">
+        <a href="day2/main.py">main.py</a>
+        <a href="day2/Drone_Camp_Day_2_EasyTello_Guide_Refined.pdf">Guide (PDF)</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Day 3 &mdash; Control Flow</h3>
+      <p>Loops and conditionals to build repeatable flight patterns.</p>
+      <div class="links">
+        <a href="day3/main.py">main.py</a>
+        <a href="day3/Drone_Camp_Day_3_EasyTello_Control_Flow_Extended.pdf">Guide (PDF)</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Day 4 &mdash; Flight System</h3>
+      <p>Put the pieces together into a full flight program.</p>
+      <div class="links">
+        <a href="day4/main.py">main.py</a>
+        <a href="day4/Drone_Camp_Day_4_Flight_System.pdf">Guide (PDF)</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Day 5 &mdash; Mission Briefings</h3>
+      <p>Python challenges and the obstacle course finale.</p>
+      <div class="links">
+        <a href="day5/main.py">main.py</a>
+        <a href="day5/Drone_Camp_Day_5_Python_Mission_Briefings.pdf">Briefings (PDF)</a>
+        <a href="https://icode-redmond.github.io/python-problem-bank/">Practice site</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="setup">
+    <h2>Windows setup</h2>
+    <p>Open <strong>PowerShell</strong>, <code>cd</code> into the project folder, then paste this. The first line lets the virtual environment activate (Windows blocks it by default).</p>
+<pre>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
+
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+pip install -r requirements.txt</pre>
+    <p style="margin:12px 0 0">Then run a day's script, for example <code>python day1\main.py</code></p>
+  </div>
+</main>
+
+<footer>
+  Source: <a href="https://github.com/iCode-Redmond/dronecampv2">dronecampv2</a> &middot;
+  Practice site source: <a href="https://github.com/iCode-Redmond/python-problem-bank">python-problem-bank</a>
+</footer>
+</body>
+</html>
