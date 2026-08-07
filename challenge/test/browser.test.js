@@ -185,11 +185,17 @@ async function main() {
   check("splitter resizes the panes",
         Math.abs((await ev("return document.querySelector('.left').clientWidth;")) - before) > 80);
 
-  /* ---- progress survives a reload ---- */
+  /* ---- progress survives a reload ---- *
+   * Retry the read: evaluating against a context that is still being torn
+   * down returns undefined, which looks exactly like lost progress. */
   await ev("location.reload(); return 1;");
-  await sleep(6000);
-  check("progress persists across a reload",
-        (await ev("return Object.keys(JSON.parse(localStorage.getItem('drone-dispatch-v1')||'{}').done||{}).length;")) >= levelCount);
+  let stored;
+  for (let t = 0; t < 30; t++) {
+    await sleep(500);
+    stored = await ev("return Object.keys(JSON.parse(localStorage.getItem('drone-dispatch-v1')||'{}').done||{}).length;");
+    if (typeof stored === "number" && stored >= levelCount) break;
+  }
+  check("progress persists across a reload", stored >= levelCount, "done count = " + stored);
 
   console.log(`checks passed: ${pass}`);
   console.log(`checks failed: ${fail}`);
