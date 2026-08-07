@@ -212,16 +212,22 @@ const CHAPTERS = [
 drone.forward(distance)</pre>
 <p>That flies forward 40&nbsp;cm. Every <b>10&nbsp;cm is one tile</b> on the map, so <code>forward(40)</code> moves four tiles.</p>
 <p>The point of a variable is that you change it in one place. Change <code>distance</code> to <code>70</code> and the drone flies further &mdash; you never touch the <code>forward</code> line again.</p>
-<div class="tip">Every mission starts with <code>drone.takeoff()</code> and ends with <code>drone.land()</code>. Real Tello drones work the same way.</div>
+<div class="tip">Every mission starts with <code>drone.takeoff()</code> and ends with <code>drone.land()</code>. These are the real EasyTello commands &mdash; the same lines fly a real Tello.</div>
 <h3>Your flight commands</h3>
 <ul>
 <li><code>drone.takeoff()</code> &mdash; lift off</li>
 <li><code>drone.land()</code> &mdash; set down on the tile you are over</li>
 <li><code>drone.forward(cm)</code> / <code>drone.back(cm)</code></li>
 <li><code>drone.left(cm)</code> / <code>drone.right(cm)</code> &mdash; slide sideways</li>
-<li><code>drone.cw(90)</code> / <code>drone.ccw(90)</code> &mdash; turn</li>
+<li><code>drone.up(cm)</code> / <code>drone.down(cm)</code> &mdash; change height</li>
+<li><code>drone.cw(90)</code> / <code>drone.ccw(90)</code> &mdash; turn clockwise / counter-clockwise</li>
+<li><code>drone.flip("f")</code> &mdash; barrel roll: <code>"l"</code>, <code>"r"</code>, <code>"f"</code>, <code>"b"</code></li>
+<li><code>drone.speed(cm_per_s)</code> &mdash; 10 to 100</li>
+<li><code>drone.get_battery()</code> &mdash; ask the drone how much charge is left</li>
 <li><code>drone.deliver()</code> &mdash; drop a package on the pad below you</li>
-</ul>`
+</ul>
+<p>Only <code>deliver()</code> is made up for this game &mdash; a real Tello carries nothing. Every other name above is straight out of EasyTello.</p>
+<div class="tip"><b>Turning changes what "forward" means.</b> The drone starts facing east. After <code>drone.cw(90)</code> it faces south, so <code>forward()</code> now flies south. Watch the yellow nose on the sprite.</div>`
   },
   {
     name:"If / Else",
@@ -276,7 +282,10 @@ for distance in stops:
     drone.forward(distance)
     drone.deliver()</pre>
 <p>Each time around, <code>distance</code> becomes the next item in the list. Three items means three trips &mdash; and it still works if you add a fourth stop.</p>
-<div class="tip">Everything indented under the <code>for</code> line repeats. The moment you un-indent, you are outside the loop.</div>`
+<div class="tip">Everything indented under the <code>for</code> line repeats. The moment you un-indent, you are outside the loop.</div>
+<h3>Show off while you are at it</h3>
+<pre>drone.flip("f")</pre>
+<p>A real Tello barrel rolls on that command. The direction is one letter: <code>"l"</code> left, <code>"r"</code> right, <code>"f"</code> forward, <code>"b"</code> back. Put it inside a loop and the drone celebrates at every stop.</p>`
   },
   {
     name:"Functions",
@@ -398,7 +407,7 @@ drone.land()
 /* ---- Chapter 2 : if / else ---- */
 {
   chapter:1, title:"Battery Check",
-  brief:"Mission control reports the battery. With <b>30% or more</b> take the long run to pad <b>A</b>; below that, settle for the near pad <b>B</b>.",
+  brief:"Ask the drone for its charge with <b>drone.get_battery()</b>. With <b>30% or more</b> take the long run to pad <b>A</b>; below that, settle for the near pad <b>B</b>.",
   map:[
     "................",
     "................",
@@ -406,11 +415,10 @@ drone.land()
     "..H....B......A.",
     "................",
     "................"],
-  inject:{battery:35},
-  requires:["if"],
-  brief2:"battery = 35",
-  starter:`# mission control set this for you:
-# battery = 35
+  battery:35,
+  requires:["if","assign"],
+  starter:`battery = drone.get_battery()
+print("battery:", battery)
 
 drone.takeoff()
 
@@ -421,8 +429,10 @@ else:
 
 drone.land()
 `,
-  hint:"The battery is 35, so the if-branch is the one that runs. Pad A is 12 tiles east, pad B is 5.",
-  solution:`drone.takeoff()
+  hint:"drone.get_battery() reports 35, so the if-branch is the one that runs. Pad A is 12 tiles east, pad B is 5.",
+  solution:`battery = drone.get_battery()
+
+drone.takeoff()
 
 if battery >= 30:
     drone.forward(120)
@@ -583,7 +593,7 @@ drone.land()
 },
 {
   chapter:3, title:"Loop the Stops",
-  brief:"Four pads, one loop. Loop <b>over the list</b> &mdash; no indexes needed.",
+  brief:"Four pads, one loop. Deliver at each and celebrate with <b>drone.flip(\"f\")</b> &mdash; loop <b>over the list</b>, no indexes needed.",
   map:[
     "................",
     "................",
@@ -600,7 +610,7 @@ for distance in stops:
 
 drone.land()
 `,
-  hint:"Inside the loop: fly forward(distance), then deliver(). The loop variable is a new value each time around.",
+  hint:'Inside the loop: forward(distance), then deliver(), then flip("f"). All three lines repeat because they are all indented under the for.',
   solution:`stops = [30, 30, 30, 30]
 
 drone.takeoff()
@@ -608,11 +618,17 @@ drone.takeoff()
 for distance in stops:
     drone.forward(distance)
     drone.deliver()
+    drone.flip("f")
 
 drone.land()
 `,
-  goal:s => ["A","B","C","D"].every(p => s.delivered.includes(p))
-        ? ok() : fail("Deliver on all four pads. So far: " + (s.delivered.join(", ") || "none") + ".")
+  goal:s => {
+    if(!["A","B","C","D"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on all four pads. So far: " + (s.delivered.join(", ") || "none") + ".");
+    if(s.flips.length < 4)
+      return fail("All four delivered — now add drone.flip(\"f\") inside the loop so it celebrates at every pad. Flips so far: " + s.flips.length + ".");
+    return ok();
+  }
 },
 
 /* ---- Chapter 5 : functions ---- */
@@ -853,18 +869,30 @@ def _watchdog(frame, event, arg):
     return _watchdog
 
 class Drone:
+    """Mirrors the easytello Tello API, so anything a camper writes here is
+    the same call they would send to a real drone. deliver() is the one
+    exception -- that is the game's own verb, since a Tello carries nothing."""
     LIMIT = 600
-    def __init__(self):
+    FLIPS = {"l": "left", "r": "right", "f": "forward", "b": "back"}
+
+    def __init__(self, battery=87):
         self.log = []
-    def _rec(self, name, *vals):
+        self._battery = int(battery)
+
+    def _push(self, row):
         if len(self.log) >= self.LIMIT:
             raise RuntimeError("That is more than 600 drone commands. Something is repeating forever.")
+        self.log.append(row)
+
+    def _rec(self, name, *vals):
         row = [name]
         for v in vals:
-            if not isinstance(v, (int, float)) or isinstance(v, bool):
+            if isinstance(v, bool) or not isinstance(v, (int, float)):
                 raise TypeError("drone.%s() needs a number, got %r" % (name, v))
             row.append(int(v))
-        self.log.append(row)
+        self._push(row)
+
+    # --- flight ---
     def takeoff(self):        self._rec("takeoff")
     def land(self):           self._rec("land")
     def forward(self, cm):    self._rec("forward", cm)
@@ -875,6 +903,31 @@ class Drone:
     def down(self, cm):       self._rec("down", cm)
     def cw(self, deg):        self._rec("cw", deg)
     def ccw(self, deg):       self._rec("ccw", deg)
+
+    def flip(self, direction):
+        d = str(direction).strip().lower()
+        if d not in self.FLIPS:
+            raise ValueError(
+                "drone.flip() takes 'l', 'r', 'f' or 'b' (left, right, forward, back), got %r" % (direction,))
+        self._push(["flip", d])
+
+    def speed(self, cm_per_s):
+        if isinstance(cm_per_s, bool) or not isinstance(cm_per_s, (int, float)):
+            raise TypeError("drone.speed() needs a number, got %r" % (cm_per_s,))
+        if not 10 <= cm_per_s <= 100:
+            raise ValueError("drone.speed() takes 10 to 100 cm/s, got %r" % (cm_per_s,))
+        self._rec("speed", cm_per_s)
+
+    def emergency(self):      self._rec("emergency")
+
+    # --- telemetry and video, same names easytello uses ---
+    def get_battery(self):    return self._battery
+    def get_speed(self):      return 30
+    def get_time(self):       return len(self.log)
+    def streamon(self):       self._rec("streamon")
+    def streamoff(self):      self._rec("streamoff")
+
+    # --- the game's own verb ---
     def deliver(self):        self._rec("deliver")
     def wait(self, s=1):      self._rec("wait", s)
 
@@ -906,7 +959,7 @@ def run_mission(src, level_json):
         return json.dumps({"ok": False, "log": [], "stdout": "", "features": {},
                            "error": "SyntaxError on line %s: %s" % (e.lineno, e.msg)})
     feats = _features(tree)
-    d = Drone()
+    d = Drone(battery=data.get("battery", 87))
     ns = {"drone": d, "__name__": "__mission__"}
     ns.update(data.get("inject", {}))
     out = io.StringIO()
@@ -947,14 +1000,18 @@ function parseMap(rows){
 function simulate(log, map){
   const st = {
     x: map.start.x, y: map.start.y, heading: 0, flying: false,
-    delivered: [], landedOn: "H", waypoints: 0, crashed: null
+    delivered: [], landedOn: "H", waypoints: 0, crashed: null,
+    flips: [], speed: 30
   };
   const seenWp = new Set();
-  const frames = [{x:st.x, y:st.y, heading:0, flying:false, event:null}];
-  const push = ev => frames.push({x:st.x, y:st.y, heading:st.heading, flying:st.flying, event:ev});
+  const frames = [{x:st.x, y:st.y, heading:0, flying:false, event:null, speed:30, roll:0}];
+  const push = (ev, extra) => frames.push(Object.assign(
+    {x:st.x, y:st.y, heading:st.heading, flying:st.flying, event:ev, speed:st.speed, roll:0}, extra || {}));
 
   const padAt = (x,y) => Object.keys(map.pads).find(k => map.pads[k].x===x && map.pads[k].y===y) || null;
-  const stop = (msg) => { st.crashed = msg; push("crash"); return st; };
+  // Every early exit runs through here, so it must attach the frames the
+  // animation needs — returning without them leaves the UI stuck mid-flight.
+  const stop = (msg) => { st.crashed = msg; push("crash"); st.frames = frames; return st; };
 
   for(const cmd of log){
     const [name, arg] = cmd;
@@ -979,7 +1036,21 @@ function simulate(log, map){
       st.heading = ((st.heading + quarters) % 4 + 4) % 4;
       push("turn"); continue;
     }
-    if(name === "up" || name === "down" || name === "wait"){ push(null); continue; }
+    if(name === "flip"){
+      if(!st.flying) return stop("The drone has to be in the air to flip. Call drone.takeoff() first.");
+      st.flips.push(arg);
+      // four frames of roll so the sprite visibly completes the barrel roll
+      for(let j = 1; j <= 4; j++) push("flip", {roll: j / 4, dir: arg});
+      continue;
+    }
+    if(name === "speed"){ st.speed = Math.max(10, Math.min(100, arg || 30)); push(null); continue; }
+    if(name === "emergency"){
+      // motors cut — the drone stops where it is, exactly like the real command
+      if(!st.flying) continue;
+      st.flying = false; st.landedOn = padAt(st.x, st.y); push("land"); continue;
+    }
+    if(name === "up" || name === "down" || name === "wait" ||
+       name === "streamon" || name === "streamoff"){ push(null); continue; }
 
     // movement
     const offset = {forward:0, right:1, back:2, left:3}[name];
@@ -1107,23 +1178,33 @@ function drawWaypoint(gx,gy,hit){
   px(gx+5, gy+10, 14, 4, c);
   px(gx+8, gy+8, 8, 8, c);
 }
-function drawDrone(cx,cy,heading,flying){
+/* The sprite is drawn once, nose east, then rotated into its heading.
+   `roll` (0..1) is a flip in progress and spins it a full extra turn. */
+function drawDrone(cx,cy,heading,flying,roll){
   const s = TILE;
-  const x = cx - s/2, y = cy - s/2;
-  if(flying){ ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.fillRect(x+5, y+s-3, s-10, 4); }
+  if(flying){
+    ctx.fillStyle = "rgba(0,0,0,.35)";
+    ctx.fillRect(cx - s/2 + 5, cy + s/2 - 3, s - 10, 4);
+  }
+  ctx.save();
+  ctx.translate(Math.round(cx), Math.round(cy));
+  ctx.rotate(heading * Math.PI/2 + (roll || 0) * Math.PI*2);
+  // a flip squashes the silhouette as it goes over the top
+  if(roll) ctx.scale(1, Math.max(.35, Math.abs(Math.cos(roll * Math.PI*2))));
+  const h = s/2;
   // rotors
-  px(x+2, y+4, 6, 3, "#cfd4e0");
-  px(x+s-8, y+4, 6, 3, "#cfd4e0");
-  px(x+2, y+s-8, 6, 3, "#cfd4e0");
-  px(x+s-8, y+s-8, 6, 3, "#cfd4e0");
+  px(-h+2, -h+4, 6, 3, "#cfd4e0");
+  px( h-8, -h+4, 6, 3, "#cfd4e0");
+  px(-h+2,  h-7, 6, 3, "#cfd4e0");
+  px( h-8,  h-7, 6, 3, "#cfd4e0");
   // body, with a dark outline so it stays readable over bright turf
-  px(x+6, y+6, s-12, s-12, "#3d0a1e");
-  px(x+7, y+7, s-14, s-14, "#e8246f");
-  px(x+9, y+9, s-18, 3, "#ffffff");
-  // nose marker points the way the drone faces
-  const [dx,dy] = DIRS[heading];
-  px(cx + dx*7 - 3, cy + dy*7 - 3, 6, 6, "#2a1206");
-  px(cx + dx*7 - 2, cy + dy*7 - 2, 4, 4, "#ffd21f");
+  px(-h+6, -h+6, s-12, s-12, "#3d0a1e");
+  px(-h+7, -h+7, s-14, s-14, "#e8246f");
+  px(-h+9, -h+9, s-18, 3, "#ffffff");
+  // nose marker, always at the front of the canonical sprite
+  px(h-10, -3, 6, 6, "#2a1206");
+  px(h-9,  -2, 4, 4, "#ffd21f");
+  ctx.restore();
 }
 
 function render(map, state, deliveredSet){
@@ -1139,39 +1220,46 @@ function render(map, state, deliveredSet){
     else if(c === "*") drawWaypoint(gx,gy, hitWp.has(x+","+y));
     else if(/[A-G]/.test(c)) drawPad(gx,gy,c, deliveredSet && deliveredSet.has(c));
   }
-  if(state) drawDrone(state.px, state.py, state.heading, state.flying);
+  if(state) drawDrone(state.px, state.py, state.heading, state.flying, state.roll);
 }
 
 function staticView(map){
-  render(map, {px:(map.start.x+.5)*TILE, py:(map.start.y+.5)*TILE, heading:0, flying:false, hitWaypoints:new Set()}, new Set());
+  render(map, {px:(map.start.x+.5)*TILE, py:(map.start.y+.5)*TILE, heading:0, flying:false, roll:0, hitWaypoints:new Set()}, new Set());
 }
 
 /* Steps through the frame list, interpolating between tiles. */
 function animate(map, frames, onDone){
   cancelAnimate();
+  if(!frames || !frames.length){ onDone && onDone(); return; }
   const delivered = new Set(), hitWp = new Set();
   let i = 0, t = 0;
-  const STEP_MS = 130;
   let last = performance.now();
+  // drone.speed() is real easytello, so it drives the playback rate too
+  const stepFor = f => Math.max(45, Math.min(360, 130 * (30 / (f.speed || 30))));
 
   function frame(now){
     const dt = now - last; last = now;
     t += dt;
-    while(t >= STEP_MS && i < frames.length - 1){
-      t -= STEP_MS; i++;
+    let step = stepFor(frames[i]);
+    while(t >= step && i < frames.length - 1){
+      t -= step; i++;
       const f = frames[i];
       if(f.event === "deliver"){
         const pad = Object.keys(map.pads).find(k => map.pads[k].x===f.x && map.pads[k].y===f.y);
         if(pad) delivered.add(pad);
       }
       if(map.grid[f.y][f.x] === "*") hitWp.add(f.x + "," + f.y);
+      step = stepFor(f);
     }
     const a = frames[i], b = frames[Math.min(i+1, frames.length-1)];
-    const k = (i < frames.length-1) ? Math.min(t/STEP_MS, 1) : 0;
+    const k = (i < frames.length-1) ? Math.min(t/step, 1) : 0;
     render(map, {
       px:((a.x + (b.x-a.x)*k) + .5) * TILE,
       py:((a.y + (b.y-a.y)*k) + .5) * TILE,
-      heading:b.heading, flying:a.flying, hitWaypoints:hitWp
+      heading:b.heading, flying:a.flying, hitWaypoints:hitWp,
+      // a roll only ever winds forward; 1 and 0 are the same pose
+      roll:(() => { const ra = a.roll || 0, rb = (b.roll || 0) < ra ? 1 : (b.roll || 0);
+                    return ra + (rb - ra) * k; })()
     }, delivered);
 
     if(i < frames.length - 1) anim = requestAnimationFrame(frame);
@@ -1289,10 +1377,10 @@ async function run(){
   let res;
   try{
     pyodide.globals.set("STUDENT_SRC", src);
-    pyodide.globals.set("LEVEL_JSON", JSON.stringify({inject: L.inject || {}}));
+    pyodide.globals.set("LEVEL_JSON", JSON.stringify({inject: L.inject || {}, battery: L.battery == null ? 87 : L.battery}));
     res = JSON.parse(pyodide.runPython("run_mission(STUDENT_SRC, LEVEL_JSON)"));
   }catch(e){
-    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    finishRun();
     say("Something went wrong running your code:\n" + esc(e.message || e), "bad");
     return;
   }
@@ -1300,43 +1388,58 @@ async function run(){
   const out = res.stdout ? esc(res.stdout).replace(/\n$/, "") + "\n" : "";
 
   if(!res.ok){
-    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    finishRun();
     say(out + '<span class="bad">' + esc(res.error) + "</span>");
     return;
   }
   if(!res.log.length){
-    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    finishRun();
     say(out + '<span class="note">Your code ran, but it never told the drone to do anything. Start with drone.takeoff().</span>');
     return;
   }
 
-  const sim = simulate(res.log, currentMap);
+  let sim;
+  try{
+    sim = simulate(res.log, currentMap);
+  }catch(e){
+    finishRun();
+    say(out + '<span class="bad">The flight simulator hit a problem: ' + esc(e.message || e) + "</span>");
+    return;
+  }
   lastFrames = sim.frames;
 
   animate(currentMap, sim.frames, () => {
-    $("runBtn").disabled = false;
-    $("status").textContent = "Python ready";
+    // whatever the verdict, the run has to end with a usable page
+    finishRun();
+    try{
+      if(sim.crashed){ say(out + '<span class="bad">' + esc(sim.crashed) + "</span>"); return; }
 
-    if(sim.crashed){ say(out + '<span class="bad">' + esc(sim.crashed) + "</span>"); return; }
+      // required language features, checked on the parsed code
+      const missing = (L.requires || []).filter(f => !res.features[f]);
+      if(missing.length){
+        say(out + '<span class="bad">The flight looks right, but this level asks you to use ' +
+            missing.map(f => FEATURE_LABEL[f] || f).join(" and ") + ".</span>");
+        return;
+      }
 
-    // required language features, checked on the parsed code
-    const missing = (L.requires || []).filter(f => !res.features[f]);
-    if(missing.length){
-      say(out + '<span class="bad">The flight looks right, but this level asks you to use ' +
-          missing.map(f => FEATURE_LABEL[f] || f).join(" and ") + ".</span>");
-      return;
-    }
-
-    const verdict = L.goal(sim);
-    if(verdict.pass){
-      store.done[idx] = true; saveState(store);
-      renderChrome();
-      say(out + '<span class="ok">Mission complete.</span>');
-      celebrate();
-    }else{
-      say(out + '<span class="bad">' + esc(verdict.msg) + "</span>");
+      const verdict = L.goal(sim);
+      if(verdict.pass){
+        store.done[idx] = true; saveState(store);
+        renderChrome();
+        say(out + '<span class="ok">Mission complete.</span>');
+        celebrate();
+      }else{
+        say(out + '<span class="bad">' + esc(verdict.msg) + "</span>");
+      }
+    }catch(e){
+      say(out + '<span class="bad">The mission checker hit a problem: ' + esc(e.message || e) + "</span>");
     }
   });
+}
+
+function finishRun(){
+  $("runBtn").disabled = false;
+  $("status").textContent = "Python ready";
 }
 
 /* ---------------------------- modals ---------------------------- */
