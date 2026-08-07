@@ -1046,46 +1046,63 @@ function px(x,y,w,h,color){ ctx.fillStyle = color; ctx.fillRect(x,y,w,h); }
 
 function drawTileBase(x,y){
   const gx = x*TILE, gy = y*TILE;
-  const shade = ((x + y) % 2 === 0) ? "#26301c" : "#232d1a";
-  px(gx, gy, TILE, TILE, shade);
+  // bright/dark checkerboard turf, with a few deterministic darker blades so
+  // the grass reads as ground rather than as flat squares
+  const light = ((x + y) % 2 === 0);
+  px(gx, gy, TILE, TILE, light ? "#57a33e" : "#437f30");
+  const speck = light ? "#4c9436" : "#3a7229";
+  const seed = (x * 7 + y * 13) % 4;
+  px(gx + 3 + seed * 3, gy + 5 + ((x + y) % 3) * 5, 3, 2, speck);
+  px(gx + 13 - seed * 2, gy + 15 - ((x * 3 + y) % 3) * 4, 2, 3, speck);
+  // dusk shading along the south-east of each tile
+  px(gx, gy + TILE - 2, TILE, 2, "rgba(20,40,15,.18)");
+  px(gx + TILE - 2, gy, 2, TILE, "rgba(20,40,15,.12)");
 }
 
 function drawBuilding(gx,gy){
-  px(gx+2, gy+3, TILE-4, TILE-5, "#4a4a52");
-  px(gx+2, gy+3, TILE-4, 3, "#63636d");
+  px(gx+1, gy+4, TILE-2, TILE-4, "rgba(18,34,14,.35)");   // shadow on the turf
+  px(gx+2, gy+3, TILE-4, TILE-5, "#6b6f7d");
+  px(gx+2, gy+3, TILE-4, 3, "#8d92a1");
+  px(gx+2, gy+3, 2, TILE-5, "#7d8291");
   for(let i=0;i<2;i++) for(let j=0;j<2;j++)
-    px(gx+6+i*7, gy+8+j*6, 4, 4, "#f0d27a");
+    px(gx+6+i*7, gy+8+j*6, 4, 4, "#ffe08a");             // lit windows at dusk
 }
 function drawTree(gx,gy){
-  px(gx+10, gy+14, 4, 7, "#5a4026");
-  px(gx+5, gy+4, 14, 12, "#3f7a34");
-  px(gx+7, gy+2, 10, 5, "#4c8f3e");
-  px(gx+8, gy+6, 4, 4, "#5aa049");
+  px(gx+4, gy+17, 16, 5, "rgba(14,28,10,.34)");
+  px(gx+9, gy+14, 6, 8, "#3a2410");                  // trunk, outlined
+  px(gx+10, gy+14, 4, 7, "#7d5424");
+  px(gx+3, gy+2, 18, 15, "#173d13");                 // canopy outline
+  px(gx+4, gy+3, 16, 13, "#2b7825");
+  px(gx+6, gy+4, 9, 6, "#4aab39");                   // sunlit top-left
+  px(gx+15, gy+8, 4, 4, "#4aab39");
+  px(gx+8, gy+12, 4, 3, "#1f5c1a");                  // shaded underside
 }
 function drawStorm(gx,gy){
-  px(gx, gy, TILE, TILE, "#2f3550");
-  px(gx+3, gy+6, 18, 8, "#59607f");
-  px(gx+7, gy+3, 11, 6, "#6b7291");
+  px(gx, gy, TILE, TILE, "#333a5c");
+  px(gx+3, gy+6, 18, 8, "#6a7398");
+  px(gx+7, gy+3, 11, 6, "#828bb0");
   px(gx+9, gy+14, 3, 5, "#f0d54a");
   px(gx+11, gy+17, 3, 4, "#f0d54a");
   px(gx+15, gy+15, 3, 5, "#f0d54a");
 }
 function drawPad(gx,gy,label,delivered){
-  px(gx+2, gy+2, TILE-4, TILE-4, delivered ? "#3d6b2c" : "#5a4a2a");
-  px(gx+4, gy+4, TILE-8, TILE-8, delivered ? "#6fae4a" : "#c8a24a");
+  px(gx+1, gy+1, TILE-2, TILE-2, delivered ? "#1f5a1a" : "#6b5320");
+  px(gx+2, gy+2, TILE-4, TILE-4, delivered ? "#3f9b2c" : "#a37f2c");
+  px(gx+4, gy+4, TILE-8, TILE-8, delivered ? "#8ada54" : "#f5c94e");
   ctx.fillStyle = "#1b1c19";
   ctx.font = "700 11px " + "JetBrains Mono, monospace";
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.fillText(label, gx + TILE/2, gy + TILE/2 + 1);
 }
 function drawHome(gx,gy){
-  px(gx+2, gy+2, TILE-4, TILE-4, "#33465e");
-  px(gx+4, gy+4, TILE-8, TILE-8, "#4d7aa8");
-  px(gx+9, gy+7, 6, 10, "#dfe7f2");
-  px(gx+7, gy+9, 10, 6, "#dfe7f2");
+  px(gx+1, gy+1, TILE-2, TILE-2, "#20344b");
+  px(gx+2, gy+2, TILE-4, TILE-4, "#3f6a96");
+  px(gx+4, gy+4, TILE-8, TILE-8, "#5b9ad2");
+  px(gx+9, gy+7, 6, 10, "#f2f7ff");
+  px(gx+7, gy+9, 10, 6, "#f2f7ff");
 }
 function drawWaypoint(gx,gy,hit){
-  const c = hit ? "#7cc242" : "#f0b90b";
+  const c = hit ? "#a6f05a" : "#ffcc1f";
   px(gx+10, gy+5, 4, 14, c);
   px(gx+5, gy+10, 14, 4, c);
   px(gx+8, gy+8, 8, 8, c);
@@ -1095,16 +1112,18 @@ function drawDrone(cx,cy,heading,flying){
   const x = cx - s/2, y = cy - s/2;
   if(flying){ ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.fillRect(x+5, y+s-3, s-10, 4); }
   // rotors
-  px(x+2, y+4, 6, 3, "#8f95a3");
-  px(x+s-8, y+4, 6, 3, "#8f95a3");
-  px(x+2, y+s-8, 6, 3, "#8f95a3");
-  px(x+s-8, y+s-8, 6, 3, "#8f95a3");
-  // body
-  px(x+7, y+7, s-14, s-14, "#c3195d");
-  px(x+9, y+9, s-18, 3, "#f2f0ea");
+  px(x+2, y+4, 6, 3, "#cfd4e0");
+  px(x+s-8, y+4, 6, 3, "#cfd4e0");
+  px(x+2, y+s-8, 6, 3, "#cfd4e0");
+  px(x+s-8, y+s-8, 6, 3, "#cfd4e0");
+  // body, with a dark outline so it stays readable over bright turf
+  px(x+6, y+6, s-12, s-12, "#3d0a1e");
+  px(x+7, y+7, s-14, s-14, "#e8246f");
+  px(x+9, y+9, s-18, 3, "#ffffff");
   // nose marker points the way the drone faces
   const [dx,dy] = DIRS[heading];
-  px(cx + dx*7 - 2, cy + dy*7 - 2, 4, 4, "#f0b90b");
+  px(cx + dx*7 - 3, cy + dy*7 - 3, 6, 6, "#2a1206");
+  px(cx + dx*7 - 2, cy + dy*7 - 2, 4, 4, "#ffd21f");
 }
 
 function render(map, state, deliveredSet){
