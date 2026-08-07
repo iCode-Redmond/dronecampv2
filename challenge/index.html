@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Drone Dispatch — learn Python variables, if/else, lists, loops, functions, and dictionaries by flying a delivery drone.">
+<title>Drone Dispatch | Drone Camp Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.3/src-min-noconflict/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.3/src-min-noconflict/mode-python.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.3/src-min-noconflict/theme-tomorrow_night_eighties.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.3/full/pyodide.js"></script>
+<style>
+:root{
+ --bg:#1b1c19;--panel:#232420;--panel2:#2b2c27;--line:#3a3b34;--ink:#e9e6dc;--dim:#9a978c;
+ --green:#7cc242;--green-d:#4f8a24;--magenta:#c3195d;--yellow:#f0b90b;--blue:#4aa3df;--red:#e0533d;
+ --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Open Sans",Arial,sans-serif;overflow:hidden}
+button{font-family:var(--mono);cursor:pointer}
+
+/* ---------- shell ---------- */
+.shell{height:100vh;display:grid;grid-template-columns:var(--col-left,46%) 7px 1fr}
+.left{min-width:0;display:grid;grid-template-rows:auto auto 1fr;background:var(--panel);border-right:0}
+.right{min-width:0;display:grid;grid-template-rows:auto 1fr;background:#141511}
+.gutter{background:var(--line);cursor:col-resize;touch-action:none;display:grid;place-items:center;transition:background .12s}
+.gutter::after{content:"";width:3px;height:34px;border-radius:2px;background:rgba(255,255,255,.35)}
+.gutter:hover,.gutter.dragging{background:var(--magenta)}
+body.resizing{cursor:col-resize;user-select:none}
+
+/* ---------- chapter bar ---------- */
+.chapbar{padding:12px 16px 14px;border-bottom:1px solid var(--line);text-align:center;position:relative}
+.course{font:700 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.chaprow{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.chaptitle{font:700 13px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.navbtn{background:transparent;color:var(--dim);border:1px solid var(--line);padding:7px 11px;font:700 11px/1 var(--mono);
+ letter-spacing:.1em;text-transform:uppercase;border-radius:3px}
+.navbtn:hover:not(:disabled){color:var(--ink);border-color:var(--dim)}
+.navbtn:disabled{opacity:.35;cursor:not-allowed}
+.navbtn.next{color:var(--green);border-color:var(--green-d)}
+.navbtn.next:hover:not(:disabled){background:rgba(124,194,66,.12)}
+.pips{display:flex;justify-content:center;gap:7px;margin-top:12px;flex-wrap:wrap}
+.pip{width:22px;height:22px;border:1px solid var(--line);background:var(--panel2);border-radius:3px;padding:0;
+ font:700 10px/1 var(--mono);color:var(--dim)}
+.pip:hover{border-color:var(--dim);color:var(--ink)}
+.pip.done{background:var(--green-d);border-color:var(--green);color:#fff}
+.pip.current{outline:2px solid var(--yellow);outline-offset:1px;color:var(--ink)}
+
+/* ---------- lesson / learn header ---------- */
+.lessonbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.lesson-id{font:700 12px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.lesson-sub{font:400 11px/1.3 var(--mono);color:var(--dim);margin-top:4px;text-transform:uppercase;letter-spacing:.08em}
+.toggle{background:transparent;border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:3px;
+ font:700 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.toggle:hover{border-color:var(--green);color:var(--green)}
+
+/* ---------- panes ---------- */
+.pane{min-height:0;overflow:auto}
+.learn{padding:20px 18px 40px;font-size:14.5px;line-height:1.68;color:#dcd8cc}
+.learn h3{margin:0 0 12px;font:700 15px/1.3 "Open Sans";color:#fff}
+.learn p{margin:0 0 14px}
+.learn code{font:600 13px/1 var(--mono);background:#15160f;border:1px solid var(--line);padding:2px 5px;border-radius:3px;color:var(--yellow)}
+.learn pre{margin:0 0 16px;padding:13px 14px;background:#15160f;border:1px solid var(--line);border-radius:4px;
+ overflow-x:auto;font:500 12.5px/1.65 var(--mono);color:#cfe8b5;white-space:pre}
+.learn ul{margin:0 0 14px;padding-left:20px}
+.learn li{margin-bottom:6px}
+.learn .tip{border-left:3px solid var(--yellow);background:rgba(240,185,11,.07);padding:11px 13px;margin:0 0 16px;font-size:13.5px}
+
+.code{display:grid;grid-template-rows:auto auto 1fr auto;min-height:0}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 16px}
+.run{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#10210a;border:0;padding:10px 16px;border-radius:3px;
+ font:800 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.run:hover{background:#8ad14e}
+.run:disabled{opacity:.55;cursor:not-allowed}
+.tool{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:8px 11px;border-radius:3px;
+ font:700 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.tool:hover{border-color:var(--dim)}
+.spacer{flex:1}
+.status{font:600 11px/1 var(--mono);color:var(--dim);letter-spacing:.06em}
+.brief{margin:0 16px 10px;padding:11px 13px;background:#1f2b16;border:1px solid #33461f;border-radius:4px;
+ font-size:13px;line-height:1.55;color:#d5e8c1}
+.brief b{color:var(--green)}
+#editor{width:100%;height:100%;min-height:0}
+.console{border-top:1px solid var(--line);background:#15160f;max-height:34vh;overflow:auto;padding:11px 14px;
+ font:500 12px/1.6 var(--mono);white-space:pre-wrap;color:#c9c6ba;display:none}
+.console.show{display:block}
+.console .ok{color:var(--green)}
+.console .bad{color:var(--red)}
+.console .note{color:var(--dim)}
+
+/* ---------- map ---------- */
+.maptools{display:flex;align-items:center;gap:8px;padding:12px 16px}
+.mapwrap{display:grid;place-items:center;align-content:center;padding:0 16px 20px;min-height:0}
+canvas{image-rendering:pixelated;display:block;border:1px solid #2c2e25;border-radius:4px;background:#0f100c}
+.legend{flex:1;display:flex;gap:14px;flex-wrap:wrap;font:600 10px/1.6 var(--mono);color:var(--dim);
+ letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
+.right{position:relative}
+
+/* ---------- modal ---------- */
+.scrim{position:fixed;inset:0;background:rgba(10,10,8,.72);display:none;place-items:center;z-index:40;padding:20px}
+.scrim.show{display:grid}
+.modal{width:min(460px,100%);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:26px 24px;text-align:center;
+ box-shadow:0 18px 50px rgba(0,0,0,.5)}
+.modal h2{margin:0 0 6px;font:800 26px/1.1 "Open Sans";letter-spacing:-.02em;color:var(--green)}
+.modal .lvl{font:700 12px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+.modal p{margin:0 0 20px;font-size:14px;line-height:1.6;color:#d6d2c6}
+.modal .pips{margin:0 0 20px}
+.mrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.modal.help{text-align:left}
+.modal.help h2{font-size:18px;color:var(--yellow);margin-bottom:14px}
+.modal.help p{font-size:13.5px}
+
+@media (max-width:860px){
+ body{overflow:auto}
+ .shell{grid-template-columns:1fr;grid-template-rows:auto auto auto;height:auto}
+ .gutter{display:none}
+ .left{border-right:0;border-bottom:1px solid var(--line)}
+ #editor{height:320px}
+ .mapwrap{padding-bottom:30px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell" id="shell">
+  <section class="left">
+    <div class="chapbar">
+      <div class="course">Drone Dispatch &middot; Python Flight Course</div>
+      <div class="chaprow">
+        <button class="navbtn" id="prevBtn">&laquo; Back</button>
+        <div class="chaptitle" id="chapTitle">Chapter 1 &gt; Level 1</div>
+        <button class="navbtn next" id="nextBtn">Next &raquo;</button>
+      </div>
+      <div class="pips" id="pips"></div>
+    </div>
+
+    <div class="lessonbar">
+      <div>
+        <div class="lesson-id" id="lessonTitle">Variables</div>
+        <div class="lesson-sub" id="lessonSub">Starting out</div>
+      </div>
+      <button class="toggle" id="modeToggle">&lt;&gt; Back to coding</button>
+    </div>
+
+    <div class="pane" id="learnPane">
+      <div class="learn" id="learnBody"></div>
+    </div>
+
+    <div class="pane code" id="codePane" hidden>
+      <div class="toolbar">
+        <button class="run" id="runBtn">&#9654; Run code</button>
+        <button class="tool" id="resetBtn">&#8635; Reset</button>
+        <button class="tool" id="saveBtn">&#128190; Save</button>
+        <button class="tool" id="loadBtn">&#8593; Load</button>
+        <button class="tool" id="helpBtn">?</button>
+        <span class="spacer"></span>
+        <span class="status" id="status">Loading Python&hellip;</span>
+      </div>
+      <div class="brief" id="brief"></div>
+      <div style="min-height:0;position:relative"><div id="editor"></div></div>
+      <div class="console" id="console"></div>
+    </div>
+  </section>
+
+  <div class="gutter" id="gutter" role="separator" aria-orientation="vertical" tabindex="0" aria-label="Resize panels"></div>
+
+  <section class="right">
+    <div class="maptools">
+      <div class="legend" id="legend"></div>
+      <button class="tool" id="mapInfoBtn">&#9432; Map info</button>
+      <button class="tool" id="replayBtn">&#9654; Replay</button>
+    </div>
+    <div class="mapwrap"><canvas id="map" width="640" height="440"></canvas></div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+/* =====================================================================
+   Drone Dispatch — a split-screen Python game for Drone Camp.
+   Left: Learn / Code.  Right: a pixel tile map the code actually flies.
+   Student code runs in Pyodide, records drone commands, and the recorded
+   commands are then simulated and animated on the canvas.
+   ===================================================================== */
+
+const TILE = 24;                       // canvas pixels per map tile
+const STORAGE = "drone-dispatch-v1";
+
+/* ---------------------------------------------------------------------
+   Map legend used by every level string map:
+     .  empty sky        #  building (blocked)     T  tree (blocked)
+     W  storm cell (blocked)                       H  home pad (start + land)
+     A B C D  landing pads, named                  *  waypoint marker
+   The drone always starts on H facing east.
+   ------------------------------------------------------------------ */
+
+const CHAPTERS = [
+  {
+    name:"Variables",
+    sub:"Chapter 1",
+    learn:`<h3>Variables hold a number you can change</h3>
+<p>A <b>variable</b> is a name for a value. You make one with <code>=</code>. The name goes on the left, the value on the right.</p>
+<pre>distance = 40
+drone.forward(distance)</pre>
+<p>That flies forward 40&nbsp;cm. Every <b>10&nbsp;cm is one tile</b> on the map, so <code>forward(40)</code> moves four tiles.</p>
+<p>The point of a variable is that you change it in one place. Change <code>distance</code> to <code>70</code> and the drone flies further &mdash; you never touch the <code>forward</code> line again.</p>
+<div class="tip">Every mission starts with <code>drone.takeoff()</code> and ends with <code>drone.land()</code>. Real Tello drones work the same way.</div>
+<h3>Your flight commands</h3>
+<ul>
+<li><code>drone.takeoff()</code> &mdash; lift off</li>
+<li><code>drone.land()</code> &mdash; set down on the tile you are over</li>
+<li><code>drone.forward(cm)</code> / <code>drone.back(cm)</code></li>
+<li><code>drone.left(cm)</code> / <code>drone.right(cm)</code> &mdash; slide sideways</li>
+<li><code>drone.cw(90)</code> / <code>drone.ccw(90)</code> &mdash; turn</li>
+<li><code>drone.deliver()</code> &mdash; drop a package on the pad below you</li>
+</ul>`
+  },
+  {
+    name:"If / Else",
+    sub:"Chapter 2",
+    learn:`<h3>Let the drone decide</h3>
+<p>An <b>if statement</b> runs code only when something is true. The <code>else</code> block runs when it is not.</p>
+<pre>battery = 35
+
+if battery >= 30:
+    drone.forward(90)
+else:
+    drone.forward(30)</pre>
+<p>The indented lines belong to the branch above them. Python uses that indentation to know which lines are inside the <code>if</code>.</p>
+<h3>Comparisons</h3>
+<ul>
+<li><code>==</code> equal &nbsp; <code>!=</code> not equal</li>
+<li><code>&gt;</code> &nbsp; <code>&lt;</code> &nbsp; <code>&gt;=</code> &nbsp; <code>&lt;=</code></li>
+</ul>
+<p>Comparing text uses quotes: <code>if weather == "storm":</code></p>
+<div class="tip">Mission control hands you data at the top of the level, like <code>battery</code> or <code>weather</code>. Read it &mdash; do not change it &mdash; and branch on it.</div>`
+  },
+  {
+    name:"Lists",
+    sub:"Chapter 3",
+    learn:`<h3>One name, many values</h3>
+<p>A <b>list</b> stores several values in order, inside square brackets:</p>
+<pre>stops = [40, 30, 40]</pre>
+<p>You reach an item by its <b>index</b>, and indexes start at <b>0</b>:</p>
+<pre>stops[0]   # 40  (first)
+stops[1]   # 30  (second)
+stops[2]   # 40  (third)</pre>
+<p><code>len(stops)</code> tells you how many items there are &mdash; here, 3. The last index is always <code>len(stops) - 1</code>.</p>
+<pre>drone.forward(stops[0])
+drone.deliver()
+drone.forward(stops[1])
+drone.deliver()</pre>
+<div class="tip">Asking for <code>stops[3]</code> in a 3-item list crashes with <code>IndexError</code>. Counting from zero trips up everybody at first.</div>`
+  },
+  {
+    name:"For Loops",
+    sub:"Chapter 4",
+    learn:`<h3>Repeat without retyping</h3>
+<p>A <b>for loop</b> runs the same block once per item. To repeat a fixed number of times, loop over <code>range</code>:</p>
+<pre>for i in range(4):
+    drone.forward(40)
+    drone.cw(90)</pre>
+<p>That is a square: fly, turn right, four times. <code>range(4)</code> counts 0, 1, 2, 3.</p>
+<h3>Looping over a list</h3>
+<pre>stops = [40, 30, 40]
+
+for distance in stops:
+    drone.forward(distance)
+    drone.deliver()</pre>
+<p>Each time around, <code>distance</code> becomes the next item in the list. Three items means three trips &mdash; and it still works if you add a fourth stop.</p>
+<div class="tip">Everything indented under the <code>for</code> line repeats. The moment you un-indent, you are outside the loop.</div>`
+  },
+  {
+    name:"Functions",
+    sub:"Chapter 5",
+    learn:`<h3>Name a routine once, reuse it</h3>
+<p>A <b>function</b> is a block of code with a name. You <code>def</code>ine it once, then call it as often as you like:</p>
+<pre>def hop(distance):
+    drone.forward(distance)
+    drone.deliver()
+
+hop(40)
+hop(30)</pre>
+<p>The word in the parentheses is a <b>parameter</b> &mdash; a variable that gets its value when you call the function. <code>hop(40)</code> runs the body with <code>distance</code> set to 40.</p>
+<p>Defining a function does not run it. Nothing happens until a line calls it by name.</p>
+<div class="tip">A function can hold a loop, and a loop can call a function. That is how a long mission stays short and readable.</div>`
+  },
+  {
+    name:"Dictionaries",
+    sub:"Chapter 6",
+    learn:`<h3>Look things up by name</h3>
+<p>A list finds items by position. A <b>dictionary</b> finds them by <b>key</b>:</p>
+<pre>mission = {"distance": 40, "priority": 1}
+
+mission["distance"]   # 40
+mission["priority"]   # 1</pre>
+<p>Dictionaries nest, which is how real mission data looks:</p>
+<pre>MISSIONS = {
+    "school":  {"distance": 40, "priority": 1},
+    "clinic":  {"distance": 70, "priority": 2},
+}
+
+drone.forward(MISSIONS["school"]["distance"])</pre>
+<h3>Looping over one</h3>
+<pre>for name in MISSIONS:
+    stop = MISSIONS[name]
+    if stop["priority"] == 1:
+        drone.forward(stop["distance"])</pre>
+<div class="tip">A missing key raises <code>KeyError</code>. Keys are case sensitive: <code>"School"</code> is not <code>"school"</code>.</div>`
+  },
+  {
+    name:"Final Mission",
+    sub:"Chapter 7",
+    learn:`<h3>Everything at once</h3>
+<p>This is the culminator. No new ideas &mdash; you combine the six you already have:</p>
+<ul>
+<li>a <b>variable</b> for something you might tune</li>
+<li>an <b>if</b> to react to the weather</li>
+<li>a <b>list</b> of the stops to make</li>
+<li>a <b>for loop</b> to visit them all</li>
+<li>a <b>function</b> for the routine you repeat</li>
+<li>a <b>dictionary</b> holding each stop's data</li>
+</ul>
+<p>The mission checker does not compare your code to one right answer. It looks at what the drone actually did on the map, and confirms you used all six tools to get there.</p>
+<div class="tip">Build it one stop at a time. Run early, run often &mdash; a half-finished flight that runs beats a whole one that does not.</div>`
+  }
+];
+
+/* --------------------------- the levels ---------------------------- */
+
+const LEVELS = [
+/* ---- Chapter 1 : variables ---- */
+{
+  chapter:0, title:"First Delivery",
+  brief:"Change <b>distance</b> until the drone reaches pad <b>A</b>, then land on it.",
+  map:[
+    "................",
+    "......TT........",
+    "................",
+    "..H........A....",
+    "................",
+    ".....TT.....T...",
+    "................"],
+  starter:`distance = 10
+
+drone.takeoff()
+drone.forward(distance)
+drone.land()
+`,
+  hint:"Each tile is 10 cm. Count the tiles between the home pad and pad A, then multiply by 10.",
+  solution:`distance = 90
+
+drone.takeoff()
+drone.forward(distance)
+drone.land()
+`,
+  goal:s => s.landedOn === "A" ? ok() : fail("Land on pad A. Right now the drone finished at " + where(s) + ".")
+},
+{
+  chapter:0, title:"Two Legs",
+  brief:"Pad <b>A</b> is east <i>and</i> north. Use two variables, then land on it.",
+  map:[
+    "................",
+    "................",
+    "..........#A....",
+    "..........#.....",
+    "......T.........",
+    "..H.............",
+    "................"],
+  starter:`east = 10
+north = 10
+
+drone.takeoff()
+drone.forward(east)
+drone.left(north)
+drone.land()
+`,
+  hint:"forward() flies east, left() slides north. Count tiles for each leg separately — 9 east, 3 north.",
+  solution:`east = 90
+north = 30
+
+drone.takeoff()
+drone.forward(east)
+drone.left(north)
+drone.land()
+`,
+  goal:s => s.landedOn === "A" ? ok() : fail("Land on pad A. The drone finished at " + where(s) + ".")
+},
+
+/* ---- Chapter 2 : if / else ---- */
+{
+  chapter:1, title:"Battery Check",
+  brief:"Mission control reports the battery. With <b>30% or more</b> take the long run to pad <b>A</b>; below that, settle for the near pad <b>B</b>.",
+  map:[
+    "................",
+    "................",
+    "................",
+    "..H....B......A.",
+    "................",
+    "................"],
+  inject:{battery:35},
+  requires:["if"],
+  brief2:"battery = 35",
+  starter:`# mission control set this for you:
+# battery = 35
+
+drone.takeoff()
+
+if battery >= 30:
+    drone.forward(10)
+else:
+    drone.forward(10)
+
+drone.land()
+`,
+  hint:"The battery is 35, so the if-branch is the one that runs. Pad A is 12 tiles east, pad B is 5.",
+  solution:`drone.takeoff()
+
+if battery >= 30:
+    drone.forward(120)
+else:
+    drone.forward(50)
+
+drone.land()
+`,
+  goal:s => s.landedOn === "A" ? ok() : fail("With a battery of 35 the drone should reach pad A. It finished at " + where(s) + ".")
+},
+{
+  chapter:1, title:"Storm Ahead",
+  brief:"A storm is blocking the direct lane. Read <b>weather</b> and pick the safe route to pad <b>A</b>.",
+  map:[
+    "................",
+    "................",
+    "......WWWW......",
+    "..H...WWWW....A.",
+    "......WWWW......",
+    "................",
+    "................"],
+  inject:{weather:"storm"},
+  requires:["if"],
+  starter:`# mission control set this for you:
+# weather = "storm"
+
+drone.takeoff()
+
+if weather == "storm":
+    # fly around the south side
+    pass
+else:
+    drone.forward(120)
+
+drone.land()
+`,
+  hint:"Go south first with right(), then east past the storm, then north again with left(). The storm block is 3 tiles tall.",
+  solution:`drone.takeoff()
+
+if weather == "storm":
+    drone.right(30)
+    drone.forward(120)
+    drone.left(30)
+else:
+    drone.forward(120)
+
+drone.land()
+`,
+  goal:s => s.landedOn === "A" ? ok() : fail("Reach pad A without flying into the storm. The drone finished at " + where(s) + ".")
+},
+
+/* ---- Chapter 3 : lists ---- */
+{
+  chapter:2, title:"Three Stops",
+  brief:"The three hops are already in the list <b>stops</b>. Deliver on pads <b>A</b>, <b>B</b> and <b>C</b>, then land.",
+  map:[
+    "................",
+    "................",
+    "..H..A..B...C...",
+    "................",
+    "................"],
+  requires:["list"],
+  starter:`stops = [30, 30, 40]
+
+drone.takeoff()
+drone.forward(stops[0])
+drone.deliver()
+# two more stops to go
+
+drone.land()
+`,
+  hint:"stops[1] is the second hop and stops[2] the third. Fly, then deliver, then fly again.",
+  solution:`stops = [30, 30, 40]
+
+drone.takeoff()
+drone.forward(stops[0])
+drone.deliver()
+drone.forward(stops[1])
+drone.deliver()
+drone.forward(stops[2])
+drone.deliver()
+drone.land()
+`,
+  goal:s => s.delivered.length >= 3 && ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on all three pads. So far: " + (s.delivered.join(", ") || "none") + ".")
+},
+{
+  chapter:2, title:"Zigzag Run",
+  brief:"Same idea, but the pads are not in a line. Use <b>east</b> and <b>north</b> by index.",
+  map:[
+    "................",
+    ".........B......",
+    "................",
+    "..H...A.....C...",
+    "................",
+    "................"],
+  requires:["list"],
+  starter:`east = [40, 30, 30]
+north = [0, 20, -20]
+
+drone.takeoff()
+# use east[0] and north[0] for the first pad,
+# then index 1, then index 2
+
+drone.land()
+`,
+  hint:"north[1] is 20, so left(20). north[2] is -20 — sliding left by a negative amount is the same as right(20).",
+  solution:`east = [40, 30, 30]
+north = [0, 20, -20]
+
+drone.takeoff()
+drone.forward(east[0])
+drone.deliver()
+drone.forward(east[1])
+drone.left(north[1])
+drone.deliver()
+drone.forward(east[2])
+drone.right(north[1])
+drone.deliver()
+drone.land()
+`,
+  goal:s => ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on A, B and C. So far: " + (s.delivered.join(", ") || "none") + ".")
+},
+
+/* ---- Chapter 4 : for loops ---- */
+{
+  chapter:3, title:"Square Patrol",
+  brief:"Fly a square patrol that touches every <b>&#10022;</b> waypoint and comes home. Use a <b>for loop</b> &mdash; four sides, one block of code.",
+  map:[
+    "................",
+    "................",
+    "..H...*.........",
+    "................",
+    "................",
+    "..*...*.........",
+    "................"],
+  requires:["for"],
+  starter:`drone.takeoff()
+
+for i in range(4):
+    # one side, then a turn
+    pass
+
+drone.land()
+`,
+  hint:"Each side is 4 tiles: forward(40) then cw(90). Four times around brings you back to the home pad facing east.",
+  solution:`drone.takeoff()
+
+for i in range(4):
+    drone.forward(40)
+    drone.cw(90)
+
+drone.land()
+`,
+  goal:s => s.waypoints >= 3 && s.landedOn === "H"
+        ? ok() : fail("Touch every waypoint and land back home. Waypoints hit: " + s.waypoints + "/3, landed at " + where(s) + ".")
+},
+{
+  chapter:3, title:"Loop the Stops",
+  brief:"Four pads, one loop. Loop <b>over the list</b> &mdash; no indexes needed.",
+  map:[
+    "................",
+    "................",
+    "..H..A..B..C..D.",
+    "................",
+    "................"],
+  requires:["for","list"],
+  starter:`stops = [30, 30, 30, 30]
+
+drone.takeoff()
+
+for distance in stops:
+    pass
+
+drone.land()
+`,
+  hint:"Inside the loop: fly forward(distance), then deliver(). The loop variable is a new value each time around.",
+  solution:`stops = [30, 30, 30, 30]
+
+drone.takeoff()
+
+for distance in stops:
+    drone.forward(distance)
+    drone.deliver()
+
+drone.land()
+`,
+  goal:s => ["A","B","C","D"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on all four pads. So far: " + (s.delivered.join(", ") || "none") + ".")
+},
+
+/* ---- Chapter 5 : functions ---- */
+{
+  chapter:4, title:"Write a Routine",
+  brief:"Define a function <b>hop(distance)</b> that flies and delivers, then call it for each pad.",
+  map:[
+    "................",
+    "................",
+    "..H...A....B..C.",
+    "................",
+    "................"],
+  requires:["def"],
+  starter:`def hop(distance):
+    pass
+
+drone.takeoff()
+hop(40)
+
+drone.land()
+`,
+  hint:"Put forward(distance) and deliver() inside the function, then call hop three times: 40, 50 and 30.",
+  solution:`def hop(distance):
+    drone.forward(distance)
+    drone.deliver()
+
+drone.takeoff()
+hop(40)
+hop(50)
+hop(30)
+drone.land()
+`,
+  goal:s => ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on A, B and C using your function. So far: " + (s.delivered.join(", ") || "none") + ".")
+},
+{
+  chapter:4, title:"Functions and Loops",
+  brief:"Write <b>patrol(size)</b> that flies a square using a loop, then patrol twice &mdash; once small, once after moving east.",
+  map:[
+    "................",
+    "................",
+    "..H......*......",
+    "................",
+    "................",
+    "..*......*......",
+    "................"],
+  requires:["def","for"],
+  starter:`def patrol(size):
+    for i in range(4):
+        pass
+
+drone.takeoff()
+patrol(30)
+
+drone.land()
+`,
+  hint:"patrol(30) flies a 3-tile square from home. Then forward(70) and patrol(30) again covers the second pair of waypoints.",
+  solution:`def patrol(size):
+    for i in range(4):
+        drone.forward(size)
+        drone.cw(90)
+
+drone.takeoff()
+patrol(30)
+drone.forward(70)
+patrol(30)
+drone.land()
+`,
+  goal:s => s.waypoints >= 3
+        ? ok() : fail("Both patrols should touch their waypoints. Hit " + s.waypoints + " of 3.")
+},
+
+/* ---- Chapter 6 : dictionaries ---- */
+{
+  chapter:5, title:"Mission Data",
+  brief:"<b>MISSIONS</b> holds each stop's distance. Look up <b>school</b> and <b>clinic</b> by name and deliver to both.",
+  map:[
+    "................",
+    "................",
+    "..H...A......B..",
+    "................",
+    "................"],
+  inject:{MISSIONS:{school:{distance:40,priority:1},clinic:{distance:70,priority:2}}},
+  requires:["dict"],
+  starter:`# mission control sent this:
+# MISSIONS = {
+#   "school": {"distance": 40, "priority": 1},
+#   "clinic": {"distance": 70, "priority": 2},
+# }
+
+drone.takeoff()
+drone.forward(MISSIONS["school"]["distance"])
+drone.deliver()
+# now the clinic
+
+drone.land()
+`,
+  hint:'MISSIONS["clinic"]["distance"] is 70. The distances are measured from the stop before, not from home.',
+  solution:`drone.takeoff()
+drone.forward(MISSIONS["school"]["distance"])
+drone.deliver()
+drone.forward(MISSIONS["clinic"]["distance"])
+drone.deliver()
+drone.land()
+`,
+  goal:s => ["A","B"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver to the school (A) and the clinic (B). So far: " + (s.delivered.join(", ") || "none") + ".")
+},
+{
+  chapter:5, title:"Priority Run",
+  brief:"Loop over <b>MISSIONS</b> and deliver only where <b>priority is 1</b>. Fly past the rest.",
+  map:[
+    "................",
+    "................",
+    "..H..A..B..C....",
+    "................",
+    "................"],
+  inject:{MISSIONS:{alpha:{distance:30,priority:1},bravo:{distance:30,priority:2},charlie:{distance:30,priority:1}}},
+  requires:["dict","for","if"],
+  starter:`# alpha: 30cm, priority 1   -> pad A
+# bravo: 30cm, priority 2   -> pad B
+# charlie: 30cm, priority 1 -> pad C
+
+drone.takeoff()
+
+for name in MISSIONS:
+    stop = MISSIONS[name]
+    # always fly the distance, but only deliver on priority 1
+
+drone.land()
+`,
+  hint:'Move forward(stop["distance"]) every time around the loop. Put the deliver() inside an if that checks stop["priority"] == 1.',
+  solution:`drone.takeoff()
+
+for name in MISSIONS:
+    stop = MISSIONS[name]
+    drone.forward(stop["distance"])
+    if stop["priority"] == 1:
+        drone.deliver()
+
+drone.land()
+`,
+  goal:s => (s.delivered.includes("A") && s.delivered.includes("C") && !s.delivered.includes("B"))
+        ? ok() : fail("Deliver on A and C only — B is priority 2. Delivered: " + (s.delivered.join(", ") || "none") + ".")
+},
+
+/* ---- Chapter 7 : culminator ---- */
+{
+  chapter:6, title:"Full Dispatch",
+  brief:"Final mission. Deliver to <b>A</b>, <b>B</b> and <b>C</b>, dodge the storm, and land back on <b>H</b>. You must use a variable, an if, a list, a for loop, a function and a dictionary.",
+  map:[
+    "................",
+    "....WWW.........",
+    "..H.WWW.........",
+    "....WWW.........",
+    "......A..B...C..",
+    "................",
+    "................"],
+  inject:{weather:"storm", DEPOTS:{a:{distance:40,priority:1},b:{distance:30,priority:1},c:{distance:40,priority:1}}},
+  requires:["def","for","if","list","dict","assign"],
+  starter:`# weather = "storm"
+# DEPOTS  = {"a": {"distance": 40, "priority": 1},
+#            "b": {"distance": 30, "priority": 1},
+#            "c": {"distance": 40, "priority": 1}}
+
+def hop(distance):
+    drone.forward(distance)
+    drone.deliver()
+
+route = ["a", "b", "c"]
+detour = 20
+
+drone.takeoff()
+
+if weather == "storm":
+    # drop into the southern lane before heading east
+    pass
+
+for name in route:
+    pass
+
+# then bring it home and land on H
+
+drone.land()
+`,
+  hint:"Slide south with right(20) to clear the storm, then fly the route — each DEPOTS distance is measured from the stop before. After the last delivery, back(110) and left(20) puts you over H.",
+  solution:`def hop(distance):
+    drone.forward(distance)
+    drone.deliver()
+
+route = ["a", "b", "c"]
+detour = 20
+
+drone.takeoff()
+
+if weather == "storm":
+    drone.right(detour)
+
+for name in route:
+    stop = DEPOTS[name]
+    if stop["priority"] == 1:
+        hop(stop["distance"])
+
+drone.back(110)
+drone.left(detour)
+drone.land()
+`,
+  goal:s => {
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on A, B and C. So far: " + (s.delivered.join(", ") || "none") + ".");
+    if(s.landedOn !== "H") return fail("All three delivered — now bring it home and land on H. Landed at " + where(s) + ".");
+    return ok();
+  }
+}
+];
+
+function ok(){ return {pass:true}; }
+function fail(msg){ return {pass:false, msg}; }
+function where(s){ return s.landedOn ? "pad " + s.landedOn : (s.flying ? "still in the air at (" + s.x + ", " + s.y + ")" : "(" + s.x + ", " + s.y + ")"); }
+
+const FEATURE_LABEL = {
+  "if":"an if statement", "for":"a for loop", "def":"a function definition",
+  "list":"a list", "dict":"a dictionary lookup", "assign":"a variable"
+};
+
+/* ==================== Python side ==================== */
+
+const PRELUDE = `
+import sys, time, ast, json, io
+from contextlib import redirect_stdout
+
+GUARD_SECONDS = 5.0
+_deadline = [0.0]
+
+def _watchdog(frame, event, arg):
+    if time.time() > _deadline[0]:
+        raise TimeoutError("Your code ran too long (over 5 seconds). Look for a loop that never stops.")
+    return _watchdog
+
+class Drone:
+    LIMIT = 600
+    def __init__(self):
+        self.log = []
+    def _rec(self, name, *vals):
+        if len(self.log) >= self.LIMIT:
+            raise RuntimeError("That is more than 600 drone commands. Something is repeating forever.")
+        row = [name]
+        for v in vals:
+            if not isinstance(v, (int, float)) or isinstance(v, bool):
+                raise TypeError("drone.%s() needs a number, got %r" % (name, v))
+            row.append(int(v))
+        self.log.append(row)
+    def takeoff(self):        self._rec("takeoff")
+    def land(self):           self._rec("land")
+    def forward(self, cm):    self._rec("forward", cm)
+    def back(self, cm):       self._rec("back", cm)
+    def left(self, cm):       self._rec("left", cm)
+    def right(self, cm):      self._rec("right", cm)
+    def up(self, cm):         self._rec("up", cm)
+    def down(self, cm):       self._rec("down", cm)
+    def cw(self, deg):        self._rec("cw", deg)
+    def ccw(self, deg):       self._rec("ccw", deg)
+    def deliver(self):        self._rec("deliver")
+    def wait(self, s=1):      self._rec("wait", s)
+
+def _features(tree):
+    f = {"if": False, "for": False, "def": False, "list": False,
+         "dict": False, "assign": False, "while": False}
+    for n in ast.walk(tree):
+        if isinstance(n, ast.If):                       f["if"] = True
+        elif isinstance(n, (ast.For, ast.comprehension)): f["for"] = True
+        elif isinstance(n, ast.While):                  f["while"] = True
+        elif isinstance(n, (ast.FunctionDef,)):         f["def"] = True
+        elif isinstance(n, ast.List):                   f["list"] = True
+        elif isinstance(n, ast.Dict):                   f["dict"] = True
+        elif isinstance(n, (ast.Assign, ast.AugAssign)): f["assign"] = True
+        elif isinstance(n, ast.Subscript):
+            # a string key means a dictionary lookup; a number means a list index
+            sl = n.slice
+            if isinstance(sl, ast.Constant) and isinstance(sl.value, str):
+                f["dict"] = True
+            else:
+                f["list"] = True
+    return f
+
+def run_mission(src, level_json):
+    data = json.loads(level_json)
+    try:
+        tree = ast.parse(src)
+    except SyntaxError as e:
+        return json.dumps({"ok": False, "log": [], "stdout": "", "features": {},
+                           "error": "SyntaxError on line %s: %s" % (e.lineno, e.msg)})
+    feats = _features(tree)
+    d = Drone()
+    ns = {"drone": d, "__name__": "__mission__"}
+    ns.update(data.get("inject", {}))
+    out = io.StringIO()
+    err = None
+    _deadline[0] = time.time() + GUARD_SECONDS
+    sys.settrace(_watchdog)
+    try:
+        with redirect_stdout(out):
+            exec(compile(tree, "<mission>", "exec"), ns)
+    except Exception as e:
+        err = "%s: %s" % (type(e).__name__, e)
+    finally:
+        sys.settrace(None)
+    return json.dumps({"ok": err is None, "error": err, "log": d.log,
+                       "stdout": out.getvalue(), "features": feats})
+`;
+
+/* ==================== simulation ==================== */
+
+const DIRS = [[1,0],[0,1],[-1,0],[0,-1]];   // 0 E, 1 S, 2 W, 3 N
+const BLOCKED = new Set(["#","T","W"]);
+
+function parseMap(rows){
+  const grid = rows.map(r => r.split(""));
+  const h = grid.length, w = grid[0].length;
+  let start = null; const pads = {}; const waypoints = [];
+  for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+    const c = grid[y][x];
+    if(c === "H"){ start = {x,y}; pads["H"] = {x,y}; }
+    else if(/[A-G]/.test(c)) pads[c] = {x,y};
+    else if(c === "*") waypoints.push({x,y});
+  }
+  return {grid, w, h, start, pads, waypoints};
+}
+
+/* Replays the recorded command log against the map and returns both the
+   final state and the frame list the canvas animates. */
+function simulate(log, map){
+  const st = {
+    x: map.start.x, y: map.start.y, heading: 0, flying: false,
+    delivered: [], landedOn: "H", waypoints: 0, crashed: null
+  };
+  const seenWp = new Set();
+  const frames = [{x:st.x, y:st.y, heading:0, flying:false, event:null}];
+  const push = ev => frames.push({x:st.x, y:st.y, heading:st.heading, flying:st.flying, event:ev});
+
+  const padAt = (x,y) => Object.keys(map.pads).find(k => map.pads[k].x===x && map.pads[k].y===y) || null;
+  const stop = (msg) => { st.crashed = msg; push("crash"); return st; };
+
+  for(const cmd of log){
+    const [name, arg] = cmd;
+
+    if(name === "takeoff"){
+      if(st.flying) continue;
+      st.flying = true; st.landedOn = null; push("takeoff"); continue;
+    }
+    if(name === "land"){
+      if(!st.flying){ continue; }
+      st.flying = false; st.landedOn = padAt(st.x, st.y); push("land"); continue;
+    }
+    if(name === "deliver"){
+      if(!st.flying) return stop("The drone tried to deliver while sitting on the ground. Take off first.");
+      const pad = padAt(st.x, st.y);
+      if(!pad || pad === "H") return stop("Nothing to deliver to at (" + st.x + ", " + st.y + ") — the drone is not over a landing pad.");
+      if(!st.delivered.includes(pad)) st.delivered.push(pad);
+      push("deliver"); continue;
+    }
+    if(name === "cw" || name === "ccw"){
+      const quarters = Math.round((arg || 0) / 90) * (name === "cw" ? 1 : -1);
+      st.heading = ((st.heading + quarters) % 4 + 4) % 4;
+      push("turn"); continue;
+    }
+    if(name === "up" || name === "down" || name === "wait"){ push(null); continue; }
+
+    // movement
+    const offset = {forward:0, right:1, back:2, left:3}[name];
+    if(offset === undefined) continue;
+    if(!st.flying) return stop("The drone is still on the ground. Call drone.takeoff() before moving.");
+
+    let tiles = Math.round((arg || 0) / 10);
+    let dir = (st.heading + offset) % 4;
+    if(tiles < 0){ tiles = -tiles; dir = (dir + 2) % 4; }   // negative distance = opposite way
+    const [dx, dy] = DIRS[dir];
+
+    for(let i=0;i<tiles;i++){
+      const nx = st.x + dx, ny = st.y + dy;
+      if(nx < 0 || ny < 0 || nx >= map.w || ny >= map.h)
+        return stop("The drone flew off the edge of the map.");
+      const cell = map.grid[ny][nx];
+      if(BLOCKED.has(cell))
+        return stop(cell === "W"
+          ? "The drone flew straight into the storm at (" + nx + ", " + ny + ")."
+          : "The drone crashed into an obstacle at (" + nx + ", " + ny + ").");
+      st.x = nx; st.y = ny;
+      if(map.grid[ny][nx] === "*"){
+        const key = nx + "," + ny;
+        if(!seenWp.has(key)){ seenWp.add(key); st.waypoints++; }
+      }
+      push("move");
+    }
+  }
+  st.frames = frames;
+  return st;
+}
+
+/* ==================== rendering ==================== */
+
+const PALETTE = {
+  ".":null, "#":"building", "T":"tree", "W":"storm", "H":"home", "*":"waypoint"
+};
+
+const canvas = document.getElementById("map");
+const ctx = canvas.getContext("2d");
+let currentMap = null, anim = null;
+
+function fitCanvas(map){
+  canvas.width = map.w * TILE;
+  canvas.height = map.h * TILE;
+}
+
+/* The canvas draws at one pixel-art resolution and is scaled up with CSS.
+   Whole-number scales keep the pixels square instead of smearing them. */
+function layoutCanvas(){
+  if(!currentMap) return;
+  const wrap = canvas.parentElement;
+  const availW = wrap.clientWidth, availH = wrap.clientHeight;
+  if(availW < 40 || availH < 40) return;
+  const natW = currentMap.w * TILE, natH = currentMap.h * TILE;
+  const raw = Math.min(availW / natW, availH / natH);
+  const scale = raw >= 1 ? Math.floor(raw) : raw;
+  canvas.style.width  = Math.floor(natW * scale) + "px";
+  canvas.style.height = Math.floor(natH * scale) + "px";
+}
+window.addEventListener("resize", layoutCanvas);
+
+function px(x,y,w,h,color){ ctx.fillStyle = color; ctx.fillRect(x,y,w,h); }
+
+function drawTileBase(x,y){
+  const gx = x*TILE, gy = y*TILE;
+  const shade = ((x + y) % 2 === 0) ? "#26301c" : "#232d1a";
+  px(gx, gy, TILE, TILE, shade);
+}
+
+function drawBuilding(gx,gy){
+  px(gx+2, gy+3, TILE-4, TILE-5, "#4a4a52");
+  px(gx+2, gy+3, TILE-4, 3, "#63636d");
+  for(let i=0;i<2;i++) for(let j=0;j<2;j++)
+    px(gx+6+i*7, gy+8+j*6, 4, 4, "#f0d27a");
+}
+function drawTree(gx,gy){
+  px(gx+10, gy+14, 4, 7, "#5a4026");
+  px(gx+5, gy+4, 14, 12, "#3f7a34");
+  px(gx+7, gy+2, 10, 5, "#4c8f3e");
+  px(gx+8, gy+6, 4, 4, "#5aa049");
+}
+function drawStorm(gx,gy){
+  px(gx, gy, TILE, TILE, "#2f3550");
+  px(gx+3, gy+6, 18, 8, "#59607f");
+  px(gx+7, gy+3, 11, 6, "#6b7291");
+  px(gx+9, gy+14, 3, 5, "#f0d54a");
+  px(gx+11, gy+17, 3, 4, "#f0d54a");
+  px(gx+15, gy+15, 3, 5, "#f0d54a");
+}
+function drawPad(gx,gy,label,delivered){
+  px(gx+2, gy+2, TILE-4, TILE-4, delivered ? "#3d6b2c" : "#5a4a2a");
+  px(gx+4, gy+4, TILE-8, TILE-8, delivered ? "#6fae4a" : "#c8a24a");
+  ctx.fillStyle = "#1b1c19";
+  ctx.font = "700 11px " + "JetBrains Mono, monospace";
+  ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText(label, gx + TILE/2, gy + TILE/2 + 1);
+}
+function drawHome(gx,gy){
+  px(gx+2, gy+2, TILE-4, TILE-4, "#33465e");
+  px(gx+4, gy+4, TILE-8, TILE-8, "#4d7aa8");
+  px(gx+9, gy+7, 6, 10, "#dfe7f2");
+  px(gx+7, gy+9, 10, 6, "#dfe7f2");
+}
+function drawWaypoint(gx,gy,hit){
+  const c = hit ? "#7cc242" : "#f0b90b";
+  px(gx+10, gy+5, 4, 14, c);
+  px(gx+5, gy+10, 14, 4, c);
+  px(gx+8, gy+8, 8, 8, c);
+}
+function drawDrone(cx,cy,heading,flying){
+  const s = TILE;
+  const x = cx - s/2, y = cy - s/2;
+  if(flying){ ctx.fillStyle = "rgba(0,0,0,.35)"; ctx.fillRect(x+5, y+s-3, s-10, 4); }
+  // rotors
+  px(x+2, y+4, 6, 3, "#8f95a3");
+  px(x+s-8, y+4, 6, 3, "#8f95a3");
+  px(x+2, y+s-8, 6, 3, "#8f95a3");
+  px(x+s-8, y+s-8, 6, 3, "#8f95a3");
+  // body
+  px(x+7, y+7, s-14, s-14, "#c3195d");
+  px(x+9, y+9, s-18, 3, "#f2f0ea");
+  // nose marker points the way the drone faces
+  const [dx,dy] = DIRS[heading];
+  px(cx + dx*7 - 2, cy + dy*7 - 2, 4, 4, "#f0b90b");
+}
+
+function render(map, state, deliveredSet){
+  fitCanvas(map);
+  for(let y=0;y<map.h;y++) for(let x=0;x<map.w;x++) drawTileBase(x,y);
+  const hitWp = state && state.hitWaypoints ? state.hitWaypoints : new Set();
+  for(let y=0;y<map.h;y++) for(let x=0;x<map.w;x++){
+    const c = map.grid[y][x], gx = x*TILE, gy = y*TILE;
+    if(c === "#") drawBuilding(gx,gy);
+    else if(c === "T") drawTree(gx,gy);
+    else if(c === "W") drawStorm(gx,gy);
+    else if(c === "H") drawHome(gx,gy);
+    else if(c === "*") drawWaypoint(gx,gy, hitWp.has(x+","+y));
+    else if(/[A-G]/.test(c)) drawPad(gx,gy,c, deliveredSet && deliveredSet.has(c));
+  }
+  if(state) drawDrone(state.px, state.py, state.heading, state.flying);
+}
+
+function staticView(map){
+  render(map, {px:(map.start.x+.5)*TILE, py:(map.start.y+.5)*TILE, heading:0, flying:false, hitWaypoints:new Set()}, new Set());
+}
+
+/* Steps through the frame list, interpolating between tiles. */
+function animate(map, frames, onDone){
+  cancelAnimate();
+  const delivered = new Set(), hitWp = new Set();
+  let i = 0, t = 0;
+  const STEP_MS = 130;
+  let last = performance.now();
+
+  function frame(now){
+    const dt = now - last; last = now;
+    t += dt;
+    while(t >= STEP_MS && i < frames.length - 1){
+      t -= STEP_MS; i++;
+      const f = frames[i];
+      if(f.event === "deliver"){
+        const pad = Object.keys(map.pads).find(k => map.pads[k].x===f.x && map.pads[k].y===f.y);
+        if(pad) delivered.add(pad);
+      }
+      if(map.grid[f.y][f.x] === "*") hitWp.add(f.x + "," + f.y);
+    }
+    const a = frames[i], b = frames[Math.min(i+1, frames.length-1)];
+    const k = (i < frames.length-1) ? Math.min(t/STEP_MS, 1) : 0;
+    render(map, {
+      px:((a.x + (b.x-a.x)*k) + .5) * TILE,
+      py:((a.y + (b.y-a.y)*k) + .5) * TILE,
+      heading:b.heading, flying:a.flying, hitWaypoints:hitWp
+    }, delivered);
+
+    if(i < frames.length - 1) anim = requestAnimationFrame(frame);
+    else { anim = null; onDone && onDone(); }
+  }
+  anim = requestAnimationFrame(frame);
+}
+function cancelAnimate(){ if(anim){ cancelAnimationFrame(anim); anim = null; } }
+
+/* ==================== app state ==================== */
+
+const $ = id => document.getElementById(id);
+let editor, pyodide = null, pyReady = false, idx = 0, mode = "learn", lastFrames = null;
+
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE)) || {}; }catch(e){ return {}; }
+}
+function saveState(s){
+  try{ localStorage.setItem(STORAGE, JSON.stringify(s)); }catch(e){}
+}
+let store = loadState();
+store.done = store.done || {};
+store.code = store.code || {};
+store.layout = store.layout || {};
+
+/* ---------------------------- UI ---------------------------- */
+
+function level(){ return LEVELS[idx]; }
+function chapter(){ return CHAPTERS[level().chapter]; }
+function levelNumberInChapter(){
+  return LEVELS.slice(0, idx+1).filter(l => l.chapter === level().chapter).length;
+}
+
+function renderChrome(){
+  const L = level(), C = chapter();
+  $("chapTitle").textContent = "Chapter " + (L.chapter+1) + " > Level " + levelNumberInChapter();
+  $("lessonTitle").textContent = C.name;
+  $("lessonSub").textContent = L.title;
+  $("prevBtn").disabled = idx === 0;
+  $("nextBtn").disabled = idx === LEVELS.length - 1;
+  $("brief").innerHTML = L.brief;
+  $("learnBody").innerHTML = C.learn;
+
+  const pips = $("pips"); pips.innerHTML = "";
+  LEVELS.forEach((l, i) => {
+    const b = document.createElement("button");
+    b.className = "pip" + (store.done[i] ? " done" : "") + (i === idx ? " current" : "");
+    b.textContent = i + 1;
+    b.title = "Chapter " + (l.chapter+1) + " — " + l.title;
+    b.onclick = () => go(i);
+    pips.appendChild(b);
+  });
+
+  $("legend").textContent = "";
+  const bits = ["H home", "A-D pads", "# building", "T tree"];
+  if(L.map.join("").includes("W")) bits.push("W storm");
+  if(L.map.join("").includes("*")) bits.push("✦ waypoint");
+  $("legend").textContent = bits.join("   ");
+}
+
+function setMode(m){
+  mode = m;
+  $("learnPane").hidden = (m !== "learn");
+  $("codePane").hidden  = (m !== "code");
+  $("modeToggle").innerHTML = (m === "learn") ? "&lt;&gt; Back to coding" : "&#9662; Learn";
+  if(m === "code" && editor) setTimeout(() => editor.resize(), 0);
+}
+
+function go(i){
+  if(i < 0 || i >= LEVELS.length) return;
+  idx = i;
+  store.last = i; saveState(store);
+  cancelAnimate();
+  currentMap = parseMap(level().map);
+  renderChrome();
+  editor.setValue(store.code[i] != null ? store.code[i] : level().starter, -1);
+  staticView(currentMap);
+  layoutCanvas();
+  say("");
+  $("console").classList.remove("show");
+  setMode(store.done[i] ? "code" : "learn");
+  lastFrames = null;
+}
+
+function say(html, cls){
+  const c = $("console");
+  if(!html){ c.innerHTML = ""; c.classList.remove("show"); return; }
+  c.innerHTML = cls ? '<span class="' + cls + '">' + html + "</span>" : html;
+  c.classList.add("show");
+}
+function esc(s){ return String(s).replace(/[&<>]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+/* ---------------------------- run ---------------------------- */
+
+async function boot(){
+  $("status").textContent = "Loading Python…";
+  pyodide = await loadPyodide({ indexURL:"https://cdn.jsdelivr.net/pyodide/v314.0.3/full/" });
+  pyodide.runPython(PRELUDE);
+  pyReady = true;
+  $("status").textContent = "Python ready";
+  $("runBtn").disabled = false;
+}
+
+async function run(){
+  if(!pyReady){ say("Python is still loading — give it a second.", "note"); return; }
+  const L = level();
+  cancelAnimate();
+  $("runBtn").disabled = true;
+  $("status").textContent = "Flying…";
+  say("Running your code…", "note");
+
+  const src = editor.getValue();
+  store.code[idx] = src; saveState(store);
+
+  let res;
+  try{
+    pyodide.globals.set("STUDENT_SRC", src);
+    pyodide.globals.set("LEVEL_JSON", JSON.stringify({inject: L.inject || {}}));
+    res = JSON.parse(pyodide.runPython("run_mission(STUDENT_SRC, LEVEL_JSON)"));
+  }catch(e){
+    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    say("Something went wrong running your code:\n" + esc(e.message || e), "bad");
+    return;
+  }
+
+  const out = res.stdout ? esc(res.stdout).replace(/\n$/, "") + "\n" : "";
+
+  if(!res.ok){
+    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    say(out + '<span class="bad">' + esc(res.error) + "</span>");
+    return;
+  }
+  if(!res.log.length){
+    $("runBtn").disabled = false; $("status").textContent = "Python ready";
+    say(out + '<span class="note">Your code ran, but it never told the drone to do anything. Start with drone.takeoff().</span>');
+    return;
+  }
+
+  const sim = simulate(res.log, currentMap);
+  lastFrames = sim.frames;
+
+  animate(currentMap, sim.frames, () => {
+    $("runBtn").disabled = false;
+    $("status").textContent = "Python ready";
+
+    if(sim.crashed){ say(out + '<span class="bad">' + esc(sim.crashed) + "</span>"); return; }
+
+    // required language features, checked on the parsed code
+    const missing = (L.requires || []).filter(f => !res.features[f]);
+    if(missing.length){
+      say(out + '<span class="bad">The flight looks right, but this level asks you to use ' +
+          missing.map(f => FEATURE_LABEL[f] || f).join(" and ") + ".</span>");
+      return;
+    }
+
+    const verdict = L.goal(sim);
+    if(verdict.pass){
+      store.done[idx] = true; saveState(store);
+      renderChrome();
+      say(out + '<span class="ok">Mission complete.</span>');
+      celebrate();
+    }else{
+      say(out + '<span class="bad">' + esc(verdict.msg) + "</span>");
+    }
+  });
+}
+
+/* ---------------------------- modals ---------------------------- */
+
+function showModal(html){
+  $("modal").innerHTML = html;
+  $("modal").className = "modal";
+  $("scrim").classList.add("show");
+}
+function showHelpModal(html){
+  $("modal").innerHTML = html;
+  $("modal").className = "modal help";
+  $("scrim").classList.add("show");
+}
+function closeModal(){ $("scrim").classList.remove("show"); }
+$("scrim").onclick = e => { if(e.target === $("scrim")) closeModal(); };
+
+function celebrate(){
+  const done = Object.keys(store.done).filter(k => store.done[k]).length;
+  const last = idx === LEVELS.length - 1;
+  showModal(
+    "<h2>" + (last ? "Dispatch complete!" : "You made it!") + "</h2>" +
+    '<div class="lvl">Chapter ' + (level().chapter+1) + " &middot; " + esc(level().title) + "</div>" +
+    "<p>" + (last
+      ? "That was the full mission — variables, branching, lists, loops, functions and dictionaries, all in one flight. Take it to a real Tello."
+      : "Level cleared. " + done + " of " + LEVELS.length + " missions done.") + "</p>" +
+    '<div class="mrow">' +
+      '<button class="tool" onclick="closeModal()">Stay here</button>' +
+      (last ? "" : '<button class="run" onclick="closeModal();go(' + (idx+1) + ')">Continue &raquo;</button>') +
+    "</div>"
+  );
+}
+
+function showHint(){
+  const L = level();
+  showHelpModal(
+    "<h2>Hint</h2><p>" + esc(L.hint) + "</p>" +
+    '<div class="mrow">' +
+      '<button class="tool" onclick="closeModal()">Close</button>' +
+      '<button class="tool" onclick="revealSolution()">Show a working answer</button>' +
+    "</div>"
+  );
+}
+function revealSolution(){
+  editor.setValue(level().solution, -1);
+  store.code[idx] = level().solution; saveState(store);
+  closeModal();
+  setMode("code");
+  say("One working answer loaded. Read it, run it, then try to rewrite it yourself.", "note");
+}
+function mapInfo(){
+  const L = level();
+  const inj = L.inject ? Object.keys(L.inject).map(k =>
+    "<code>" + esc(k) + " = " + esc(JSON.stringify(L.inject[k])) + "</code>").join("<br>") : "";
+  showHelpModal(
+    "<h2>Map info</h2>" +
+    "<p><b>" + esc(L.title) + "</b> &mdash; " + L.brief + "</p>" +
+    "<p>Every tile is <b>10&nbsp;cm</b>. <code>H</code> is home, letters are landing pads, " +
+    "<code>#</code> and <code>T</code> are solid, <code>W</code> is storm, <b>&#10022;</b> is a waypoint to fly over.</p>" +
+    (inj ? "<p>Mission control gave you:<br>" + inj + "</p>" : "") +
+    '<div class="mrow"><button class="tool" onclick="closeModal()">Close</button></div>'
+  );
+}
+
+/* ---------------------------- splitter ---------------------------- */
+
+function setupSplitter(){
+  const shell = $("shell"), gutter = $("gutter");
+  const MIN_LEFT = 320, MIN_RIGHT = 300;
+  if(store.layout.col) shell.style.setProperty("--col-left", store.layout.col);
+
+  function setCol(pxWidth){
+    const total = shell.clientWidth;
+    const clamped = Math.max(MIN_LEFT, Math.min(pxWidth, total - MIN_RIGHT - 7));
+    const pct = (clamped / total * 100).toFixed(2) + "%";
+    shell.style.setProperty("--col-left", pct);
+    store.layout.col = pct; saveState(store);
+    layoutCanvas();
+  }
+  gutter.addEventListener("pointerdown", e => {
+    gutter.setPointerCapture(e.pointerId);
+    gutter.classList.add("dragging"); document.body.classList.add("resizing");
+  });
+  gutter.addEventListener("pointermove", e => {
+    if(!gutter.classList.contains("dragging")) return;
+    setCol(e.clientX - shell.getBoundingClientRect().left);
+  });
+  const end = e => {
+    if(!gutter.classList.contains("dragging")) return;
+    gutter.classList.remove("dragging"); document.body.classList.remove("resizing");
+    try{ gutter.releasePointerCapture(e.pointerId); }catch(_){}
+    if(editor) editor.resize();
+  };
+  gutter.addEventListener("pointerup", end);
+  gutter.addEventListener("pointercancel", end);
+  gutter.addEventListener("dblclick", () => {
+    shell.style.setProperty("--col-left", "46%");
+    store.layout.col = "46%"; saveState(store);
+    if(editor) editor.resize();
+    layoutCanvas();
+  });
+  gutter.addEventListener("keydown", e => {
+    if(e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    setCol($("shell").querySelector(".left").clientWidth + (e.key === "ArrowLeft" ? -24 : 24));
+    if(editor) editor.resize();
+  });
+}
+
+/* ---------------------------- wiring ---------------------------- */
+
+function init(){
+  editor = ace.edit("editor", {
+    mode:"ace/mode/python",
+    theme:"ace/theme/tomorrow_night_eighties",
+    fontSize:14,
+    showPrintMargin:false,
+    tabSize:4,
+    useSoftTabs:true,
+    highlightActiveLine:true
+  });
+  editor.session.on("change", () => { store.code[idx] = editor.getValue(); });
+
+  $("runBtn").disabled = true;
+  $("runBtn").onclick = run;
+  $("resetBtn").onclick = () => {
+    editor.setValue(level().starter, -1);
+    delete store.code[idx]; saveState(store);
+    cancelAnimate(); staticView(currentMap); say("Back to the starter code.", "note");
+  };
+  $("saveBtn").onclick = () => {
+    store.code[idx] = editor.getValue(); saveState(store);
+    say("Saved to this browser.", "note");
+  };
+  $("loadBtn").onclick = () => {
+    const fresh = loadState();
+    if(fresh.code && fresh.code[idx] != null){
+      editor.setValue(fresh.code[idx], -1); say("Loaded your saved code.", "note");
+    }else{
+      say("Nothing saved for this level yet.", "note");
+    }
+  };
+  $("helpBtn").onclick = showHint;
+  $("mapInfoBtn").onclick = mapInfo;
+  $("replayBtn").onclick = () => {
+    if(lastFrames) animate(currentMap, lastFrames);
+    else say("Run your code first — then Replay plays the flight again.", "note");
+  };
+  $("modeToggle").onclick = () => setMode(mode === "learn" ? "code" : "learn");
+  $("prevBtn").onclick = () => go(idx - 1);
+  $("nextBtn").onclick = () => go(idx + 1);
+  document.addEventListener("keydown", e => { if(e.key === "Escape") closeModal(); });
+
+  setupSplitter();
+  go(Number.isInteger(store.last) && LEVELS[store.last] ? store.last : 0);
+  boot();
+}
+
+window.closeModal = closeModal;
+window.revealSolution = revealSolution;
+window.go = go;
+init();
+</script>
+</body>
+</html>
