@@ -33,9 +33,18 @@ python day1\main.py
 
 ## Drone Dispatch — the challenge game
 
-Write Python, watch a drone fly it. Thirteen levels across seven chapters:
-variables, if/else, lists, for loops, functions, dictionaries, and a final
-mission that needs all six.
+Write Python, watch a drone fly it. Twenty-eight levels across fifteen chapters.
+
+- **Core course (chapters 1–7):** variables, if/else, lists, for loops,
+  functions, dictionaries, and a mission that needs all six.
+- **Advanced track (chapters 8–15):** while loops, elif and `and`/`or`,
+  return values, nested loops, `try`/`except`, classes, comprehensions and
+  sorting, and a grand finale that combines them.
+
+Some advanced levels fly your code more than once with different data (the
+`cases` field on a level), so a solution has to handle every input rather
+than one hard-coded answer. A few starters crash on purpose
+(`starterRaises`), because seeing the error is the lesson.
 **https://icode-redmond.github.io/dronecampv2/challenge/**
 
 The commands are the real EasyTello API — `takeoff`, `land`, `forward`, `cw`,

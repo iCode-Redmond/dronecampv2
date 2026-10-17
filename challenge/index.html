@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Drone Dispatch — learn Python variables, if/else, lists, loops, functions, and dictionaries by flying a delivery drone.">
+<meta name="description" content="Drone Dispatch — learn Python by flying a delivery drone: variables, if/else, lists, loops and functions, then while loops, return values, error handling, classes and sorting.">
 <title>Drone Dispatch | Drone Camp Challenge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -329,7 +329,7 @@ drone.forward(MISSIONS["school"]["distance"])</pre>
     name:"Final Mission",
     sub:"Chapter 7",
     learn:`<h3>Everything at once</h3>
-<p>This is the culminator. No new ideas &mdash; you combine the six you already have:</p>
+<p>This closes the core course. No new ideas &mdash; you combine the six you already have:</p>
 <ul>
 <li>a <b>variable</b> for something you might tune</li>
 <li>an <b>if</b> to react to the weather</li>
@@ -339,7 +339,169 @@ drone.forward(MISSIONS["school"]["distance"])</pre>
 <li>a <b>dictionary</b> holding each stop's data</li>
 </ul>
 <p>The mission checker does not compare your code to one right answer. It looks at what the drone actually did on the map, and confirms you used all six tools to get there.</p>
-<div class="tip">Build it one stop at a time. Run early, run often &mdash; a half-finished flight that runs beats a whole one that does not.</div>`
+<div class="tip">Build it one stop at a time. Run early, run often &mdash; a half-finished flight that runs beats a whole one that does not.</div>
+<p>Clear it and the <b>advanced track</b> opens: eight more chapters, each one harder than the last.</p>`
+  },
+
+  /* ---------------- advanced track ---------------- */
+  {
+    name:"While Loops",
+    sub:"Chapter 8",
+    learn:`<h3>Repeat until something changes</h3>
+<p>A <code>for</code> loop runs a set number of times. A <b>while loop</b> keeps going <i>as long as</i> a condition is true:</p>
+<pre>packages = 3
+
+while packages > 0:
+    drone.forward(20)
+    drone.deliver()
+    packages -= 1</pre>
+<p><code>packages -= 1</code> is short for <code>packages = packages - 1</code>. Each time around, the count drops: 3, 2, 1, 0 &mdash; and at 0 the condition is false, so the loop stops.</p>
+<div class="tip"><b>The classic bug:</b> forget to change the variable and the condition never turns false. The loop runs forever. The game stops your code after 600 drone commands or 5 seconds &mdash; a real drone would just keep flying.</div>
+<h3>Working through a list</h3>
+<p><code>.pop(0)</code> removes the first item of a list and hands it to you. An empty list counts as false, so this runs until the list is used up:</p>
+<pre>queue = [40, 30, 40]
+
+while queue:
+    distance = queue.pop(0)
+    drone.forward(distance)</pre>`
+  },
+  {
+    name:"Elif and Logic",
+    sub:"Chapter 9",
+    learn:`<h3>More than two choices</h3>
+<p><code>if</code>/<code>else</code> picks between two paths. <code>elif</code> (&ldquo;else if&rdquo;) adds as many as you need. Python checks them top to bottom and runs the <b>first</b> one that is true:</p>
+<pre>if weather == "clear":
+    drone.forward(120)
+elif weather == "wind":
+    drone.forward(50)
+else:
+    print("too dangerous")</pre>
+<div class="tip">From here on, some levels fly your code <b>more than once</b>, with different data each time. Code that only works for one forecast will not pass &mdash; just like real software is tested against many inputs.</div>
+<h3>Combining conditions</h3>
+<ul>
+<li><code>a and b</code> &mdash; true only if <b>both</b> are true</li>
+<li><code>a or b</code> &mdash; true if <b>either</b> is true</li>
+<li><code>not a</code> &mdash; flips true and false</li>
+</ul>
+<pre>if wind &lt; 20 and pad_open:
+    drone.deliver()</pre>
+<p>Python's true and false are spelled <code>True</code> and <code>False</code>, with a capital letter.</p>`
+  },
+  {
+    name:"Return Values",
+    sub:"Chapter 10",
+    learn:`<h3>Functions that answer back</h3>
+<p>The functions so far <i>did</i> something. A function can also <b>work something out</b> and hand the answer back with <code>return</code>:</p>
+<pre>def to_cm(tiles):
+    return tiles * 10
+
+distance = to_cm(4)     # distance is now 40
+drone.forward(distance)</pre>
+<p>The call <code>to_cm(4)</code> is replaced by whatever the function returns. You can store it, print it, or pass it straight into another call: <code>drone.forward(to_cm(4))</code>.</p>
+<h3>Adding things up</h3>
+<pre>def total(hops):
+    flown = 0
+    for hop in hops:
+        flown += hop
+    return flown</pre>
+<p>That pattern &mdash; start at zero, add each item, return the result &mdash; is called an <b>accumulator</b>. Python has it built in as <code>sum(hops)</code>, but now you know what it does inside.</p>
+<div class="tip"><code>print</code> shows a value to <i>you</i>. <code>return</code> gives it to <i>the code</i>. A function with no <code>return</code> hands back <code>None</code>.</div>`
+  },
+  {
+    name:"Nested Loops",
+    sub:"Chapter 11",
+    learn:`<h3>A loop inside a loop</h3>
+<p>Put one loop inside another and the inner one runs <b>completely</b> for every single turn of the outer one:</p>
+<pre>for row in range(3):
+    for step in range(4):
+        drone.forward(10)
+    drone.right(20)</pre>
+<p>That flies 4 steps, slides over, and repeats &mdash; 3 rows of 4 steps, 12 moves from 5 lines.</p>
+<h3>Lists of lists</h3>
+<p>A list can hold other lists. That is how you store a grid or a set of routes:</p>
+<pre>STREETS = [
+    [30, 30],       # STREETS[0]
+    [20, 40, 30],   # STREETS[1]
+]
+
+for street in STREETS:
+    for hop in street:
+        drone.forward(hop)</pre>
+<h3>Even or odd? Use %</h3>
+<p><code>%</code> gives the remainder after dividing. <code>row % 2</code> is <code>0</code> for even rows and <code>1</code> for odd ones &mdash; perfect for zig-zagging back and forth.</p>`
+  },
+  {
+    name:"Handling Errors",
+    sub:"Chapter 12",
+    learn:`<h3>When things go wrong</h3>
+<p>Real data is messy. A radio glitch turns <code>"30"</code> into <code>"3O"</code>, and <code>int("3O")</code> crashes with a <code>ValueError</code>. A missing name in a dictionary crashes with a <code>KeyError</code>.</p>
+<p><code>try</code>/<code>except</code> lets you <b>catch</b> the crash and decide what to do instead:</p>
+<pre>try:
+    distance = int(text)
+except ValueError:
+    print("bad reading:", text)
+    distance = 30          # a safe default</pre>
+<p>Python runs the <code>try</code> block. If it raises the error you named, it jumps to <code>except</code> instead of stopping your whole program.</p>
+<h3>Checking first</h3>
+<p>Sometimes it is cleaner to check before you leap:</p>
+<pre>if name in ADDRESSES:
+    drone.forward(ADDRESSES[name])</pre>
+<div class="tip">Name the error you expect: <code>except ValueError:</code>. A bare <code>except:</code> also hides typos and real bugs, which makes them much harder to find.</div>`
+  },
+  {
+    name:"Classes",
+    sub:"Chapter 13",
+    learn:`<h3>Bundle data and behaviour together</h3>
+<p>A <b>class</b> is a blueprint. Each <b>object</b> made from it carries its own data (<b>attributes</b>) and its own functions (<b>methods</b>):</p>
+<pre>class Package:
+    def __init__(self, distance, fragile):
+        self.distance = distance
+        self.fragile = fragile
+
+    def drop(self):
+        drone.forward(self.distance)
+        drone.deliver()
+
+box = Package(40, False)   # runs __init__
+box.drop()                 # runs drop with self = box</pre>
+<ul>
+<li><code>__init__</code> runs once, when the object is created, to set it up.</li>
+<li><code>self</code> is the object itself. <code>self.distance</code> is <i>this</i> package's distance.</li>
+<li>Every method takes <code>self</code> first, but you never pass it &mdash; Python does.</li>
+</ul>
+<div class="tip">Objects remember. Change <code>self.flown</code> inside a method and the new value is still there the next time you call it. That is what makes them useful for keeping track of state.</div>`
+  },
+  {
+    name:"Sorting and Comprehensions",
+    sub:"Chapter 14",
+    learn:`<h3>Build a list in one line</h3>
+<p>A <b>list comprehension</b> makes a new list from an old one:</p>
+<pre>tiles = [3, 4, 2]
+cm = [t * 10 for t in tiles]          # [30, 40, 20]</pre>
+<p>Add an <code>if</code> on the end to <b>filter</b> as you go:</p>
+<pre>good = [t * 10 for t in tiles if t > 2]   # [30, 40]</pre>
+<h3>Put things in order</h3>
+<p><code>sorted(...)</code> returns a new, sorted list. <code>my_list.sort()</code> sorts a list in place.</p>
+<pre>sorted([90, 30, 60])      # [30, 60, 90]</pre>
+<p>To sort by something other than the items themselves, give it a <code>key</code>. A <b>lambda</b> is a tiny one-line function:</p>
+<pre>STOPS = {"bank": 90, "zoo": 30}
+sorted(STOPS, key=lambda name: STOPS[name])   # ["zoo", "bank"]</pre>
+<div class="tip">Sorting a dictionary gives you its <b>keys</b>, in alphabetical order unless you pass a <code>key</code>. Alphabetical is rarely the order a drone wants.</div>`
+  },
+  {
+    name:"Grand Finale",
+    sub:"Chapter 15",
+    learn:`<h3>The night shift</h3>
+<p>The last mission uses the advanced tools together:</p>
+<ul>
+<li>a <b>function that returns</b> a clean number from messy text</li>
+<li><b>try / except</b> to survive a garbled reading</li>
+<li><b>sorting</b> to plan the shortest route</li>
+<li>a <b>while loop</b> to work through the queue</li>
+<li>an <b>if</b> to dodge the storm</li>
+</ul>
+<p>Plan it before you code it. Write the steps as comments first, then fill them in one at a time and run after each.</p>
+<div class="tip">The distances in this mission are measured from <b>home</b>, not from the last stop. If you are at 40 and the next stop is at 90, you fly <code>90 - 40</code>.</div>`
   }
 ];
 
@@ -841,6 +1003,752 @@ drone.land()
       return fail("Deliver on A, B and C. So far: " + (s.delivered.join(", ") || "none") + ".");
     if(s.landedOn !== "H") return fail("All three delivered — now bring it home and land on H. Landed at " + where(s) + ".");
     return ok();
+  },
+  milestone:"Core course complete — variables, branching, lists, loops, functions and dictionaries, all in one flight. The advanced track starts next: while loops, logic, return values, nested loops, errors, classes and sorting."
+},
+
+/* ================= advanced track ================= *
+ * Goals below all start with the crash guard: a crashed flight never wins,
+ * even when the state left behind would otherwise satisfy the goal.        */
+
+/* ---- Chapter 8 : while loops ---- */
+{
+  chapter:7, title:"Package Countdown",
+  brief:"Run the starter first &mdash; it never stops. Fix the <b>while</b> loop so it counts <b>packages</b> down and delivers to <b>A</b>, <b>B</b>, <b>C</b> and <b>D</b>.",
+  map:[
+    "................",
+    "...T.....T......",
+    "..H.A.B.C.D.....",
+    "................",
+    "......T....T....",
+    "................"],
+  requires:["while"],
+  starterRaises:"RuntimeError",
+  starter:`packages = 4
+
+drone.takeoff()
+
+while packages > 0:
+    drone.forward(20)
+    drone.deliver()
+    # nothing here ever changes packages...
+
+drone.land()
+`,
+  hint:"Add packages -= 1 as the last line inside the loop. Then the count goes 4, 3, 2, 1, 0 and the loop stops after the fourth pad.",
+  solution:`packages = 4
+
+drone.takeoff()
+
+while packages > 0:
+    drone.forward(20)
+    drone.deliver()
+    packages -= 1
+
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C","D"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on all four pads. So far: " + soFar(s) + ".")
+},
+{
+  chapter:7, title:"Work the Queue",
+  brief:"Use <b>while queue:</b> and <b>queue.pop(0)</b> to take each distance off the list. Deliver, turn right, repeat &mdash; then fly the last side and land on <b>H</b>.",
+  map:[
+    "................",
+    "..H...A.........",
+    "....T...........",
+    "................",
+    "..C...B.........",
+    "..........##....",
+    "................"],
+  requires:["while"],
+  starter:`queue = [40, 30, 40]
+
+drone.takeoff()
+
+while len(queue) > 0:
+    distance = queue.pop(0)
+    # fly the distance, deliver, then turn right with cw(90)
+
+drone.land()
+`,
+  hint:"Inside the loop: forward(distance), deliver(), cw(90). After the loop the drone faces north at C — forward(30) brings it over H.",
+  solution:`queue = [40, 30, 40]
+
+drone.takeoff()
+
+while queue:
+    distance = queue.pop(0)
+    drone.forward(distance)
+    drone.deliver()
+    drone.cw(90)
+
+drone.forward(30)
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on A, B and C. So far: " + soFar(s) + ".");
+    if(s.landedOn !== "H") return fail("All three delivered — now close the loop and land on H. Landed at " + where(s) + ".");
+    return ok();
+  }
+},
+
+/* ---- Chapter 9 : elif and logic ---- */
+{
+  chapter:8, title:"Three Forecasts",
+  brief:"Your code is flown <b>three times</b>: <b>clear</b> &rarr; deliver to far pad <b>A</b>. <b>wind</b> &rarr; deliver to near pad <b>B</b>. <b>storm</b> &rarr; deliver nothing and land on <b>H</b>.",
+  map:[
+    "................",
+    "....T.......T...",
+    "..H....B......A.",
+    "................",
+    "......T.........",
+    "................"],
+  cases:[
+    {label:'weather = "clear"', inject:{weather:"clear"}},
+    {label:'weather = "wind"',  inject:{weather:"wind"}},
+    {label:'weather = "storm"', inject:{weather:"storm"}}],
+  requires:["elif"],
+  starter:`# mission control sets weather to "clear", "wind" or "storm"
+# and flies your code once for EACH of them.
+
+drone.takeoff()
+
+if weather == "clear":
+    drone.forward(120)
+    drone.deliver()
+
+drone.land()
+`,
+  hint:'Add an elif weather == "wind": branch that flies forward(50) and delivers at B. For the storm, an else: that only prints is enough — the drone lands back where it started.',
+  solution:`drone.takeoff()
+
+if weather == "clear":
+    drone.forward(120)
+    drone.deliver()
+elif weather == "wind":
+    drone.forward(50)
+    drone.deliver()
+else:
+    print("storm - staying home")
+
+drone.land()
+`,
+  goal:(s, c) => {
+    if(s.crashed) return fail(s.crashed);
+    const w = c && c.inject ? c.inject.weather : null;
+    if(w === "storm")
+      return s.delivered.length === 0 && s.landedOn === "H"
+        ? ok() : fail("In a storm, deliver nothing and land back on H. Delivered: " + soFar(s) + ", landed at " + where(s) + ".");
+    const want = w === "clear" ? "A" : "B";
+    return s.delivered.length === 1 && s.delivered[0] === want
+      ? ok() : fail('With weather "' + w + '" deliver to pad ' + want + " only. Delivered: " + soFar(s) + ".");
+  }
+},
+{
+  chapter:8, title:"Go / No-Go",
+  brief:"Fly past every stop in <b>STOPS</b>, but deliver only where the wind is <b>under 20</b> <i>and</i> the pad is <b>open</b>.",
+  map:[
+    "................",
+    ".....#..#..#..#.",
+    "..H..A..B..C..D.",
+    "................",
+    "...T......T.....",
+    "................"],
+  inject:{STOPS:[
+    {distance:30, wind:5,  open:true},
+    {distance:30, wind:25, open:true},
+    {distance:30, wind:5,  open:false},
+    {distance:30, wind:10, open:true}]},
+  requires:["boolop","for"],
+  starter:`# STOPS = [
+#   {"distance": 30, "wind": 5,  "open": True},    # A
+#   {"distance": 30, "wind": 25, "open": True},    # B
+#   {"distance": 30, "wind": 5,  "open": False},   # C
+#   {"distance": 30, "wind": 10, "open": True},    # D
+# ]
+
+drone.takeoff()
+
+for stop in STOPS:
+    drone.forward(stop["distance"])
+    if stop["wind"] < 20:
+        drone.deliver()
+
+drone.land()
+`,
+  hint:'The starter delivers to closed pad C. Join the two checks with and: if stop["wind"] < 20 and stop["open"]:',
+  solution:`drone.takeoff()
+
+for stop in STOPS:
+    drone.forward(stop["distance"])
+    if stop["wind"] < 20 and stop["open"]:
+        drone.deliver()
+
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    const right = s.delivered.includes("A") && s.delivered.includes("D") &&
+                  !s.delivered.includes("B") && !s.delivered.includes("C");
+    return right ? ok() : fail("Deliver on A and D only — B is too windy and C is closed. Delivered: " + soFar(s) + ".");
+  }
+},
+
+/* ---- Chapter 10 : return values ---- */
+{
+  chapter:9, title:"Tiles to Centimetres",
+  brief:"<b>HOPS</b> gives each hop in <b>tiles</b>, but the drone flies in cm. Make <b>to_cm(tiles)</b> <b>return</b> the right number, then deliver to <b>A</b>, <b>B</b> and <b>C</b>.",
+  map:[
+    "................",
+    "....#.....#.....",
+    "..H...A..B....C.",
+    "................",
+    ".......T....T...",
+    "................"],
+  inject:{HOPS:{A:4, B:3, C:5}},
+  requires:["def","return"],
+  starter:`# HOPS = {"A": 4, "B": 3, "C": 5}   (tiles from the stop before)
+
+def to_cm(tiles):
+    # give back the distance in centimetres
+    return 0
+
+drone.takeoff()
+for pad in ["A", "B", "C"]:
+    drone.forward(to_cm(HOPS[pad]))
+    drone.deliver()
+drone.land()
+`,
+  hint:"One tile is 10 cm, so the function should return tiles * 10. Right now it returns 0, so the drone never leaves home.",
+  solution:`def to_cm(tiles):
+    return tiles * 10
+
+drone.takeoff()
+for pad in ["A", "B", "C"]:
+    drone.forward(to_cm(HOPS[pad]))
+    drone.deliver()
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on A, B and C. So far: " + soFar(s) + ".")
+},
+{
+  chapter:9, title:"Round Trip",
+  brief:"Deliver to <b>A</b>, <b>B</b> and <b>C</b>, then fly home in one move. Finish <b>total(hops)</b> so it adds up the route and <b>returns</b> the sum.",
+  map:[
+    "................",
+    "...T......T.....",
+    "..H..A...B..C...",
+    "................",
+    "....#....#......",
+    "................"],
+  requires:["def","return"],
+  starter:`route = [30, 40, 30]
+
+def total(hops):
+    flown = 0
+    # add every hop to flown
+    return flown
+
+drone.takeoff()
+for hop in route:
+    drone.forward(hop)
+    drone.deliver()
+
+drone.back(total(route))
+drone.land()
+`,
+  hint:"Inside total, loop over hops and do flown += hop. The route adds up to 100, so back(100) lands you on H.",
+  solution:`route = [30, 40, 30]
+
+def total(hops):
+    flown = 0
+    for hop in hops:
+        flown += hop
+    return flown
+
+drone.takeoff()
+for hop in route:
+    drone.forward(hop)
+    drone.deliver()
+
+drone.back(total(route))
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on A, B and C. So far: " + soFar(s) + ".");
+    if(s.landedOn !== "H") return fail("All delivered — total(route) should bring you back to H. Landed at " + where(s) + ".");
+    return ok();
+  }
+},
+
+/* ---- Chapter 11 : nested loops ---- */
+{
+  chapter:10, title:"Street by Street",
+  brief:"<b>STREETS</b> is a list of lists. Use a loop <b>inside</b> a loop to deliver every pad on a street, fly back to the start, slide 3 tiles south, and do the next street.",
+  map:[
+    "................",
+    "..H..A..B..C....",
+    "...#....#.......",
+    "................",
+    "....D...E..F....",
+    "...T.....T......",
+    "................",
+    "................"],
+  requires:["nested"],
+  starter:`STREETS = [
+    [30, 30, 30],   # top street:    A, B, C
+    [20, 40, 30],   # bottom street: D, E, F
+]
+
+drone.takeoff()
+
+for street in STREETS:
+    print("next street:", street)
+    # inner loop: fly each hop and deliver
+    # then fly back to the start of the street and slide south 3 tiles
+
+drone.land()
+`,
+  hint:"Inside the outer loop: for hop in street: forward(hop) and deliver(). After the inner loop: back(sum(street)) and right(30).",
+  solution:`STREETS = [
+    [30, 30, 30],
+    [20, 40, 30],
+]
+
+drone.takeoff()
+
+for street in STREETS:
+    for hop in street:
+        drone.forward(hop)
+        drone.deliver()
+    drone.back(sum(street))
+    drone.right(30)
+
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C","D","E","F"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on all six pads, A to F. So far: " + soFar(s) + ".")
+},
+{
+  chapter:10, title:"Lawnmower Sweep",
+  brief:"Sweep the field in rows to touch all six <b>&#10022;</b> waypoints: 8 tiles east, slide south 2, 8 tiles west, slide, 8 east. Use nested loops and <b>row % 2</b> to pick the direction.",
+  map:[
+    "................",
+    "..H...*...*.....",
+    "................",
+    "....*...*.......",
+    "................",
+    "......*...*.....",
+    "................",
+    "............T..."],
+  requires:["nested"],
+  starter:`drone.takeoff()
+
+for row in range(3):
+    # sweep 8 tiles, one step at a time:
+    # east (forward) on even rows, west (back) on odd rows
+    drone.right(20)
+
+drone.land()
+`,
+  hint:"Inside the row loop: for step in range(8): then if row % 2 == 0: forward(10) else: back(10). Keep the right(20) after the inner loop.",
+  solution:`drone.takeoff()
+
+for row in range(3):
+    for step in range(8):
+        if row % 2 == 0:
+            drone.forward(10)
+        else:
+            drone.back(10)
+    drone.right(20)
+
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : s.waypoints >= 6 ? ok()
+        : fail("Touch all six waypoints. Hit " + s.waypoints + " of 6.")
+},
+
+/* ---- Chapter 12 : handling errors ---- */
+{
+  chapter:11, title:"Garbled Manifest",
+  brief:"The radio sends distances as text, and one is garbled. Run the starter to see the crash, then use <b>try / except ValueError</b> to fall back to <b>30</b> and deliver to all four pads.",
+  map:[
+    "........",
+    "...H....",
+    ".T......",
+    "........",
+    "...A..T.",
+    "........",
+    "......#.",
+    "...B....",
+    ".T......",
+    "........",
+    "...C....",
+    "......T.",
+    "........",
+    "...D....",
+    "........"],
+  inject:{READINGS:["30", "30", "3O", "30"]},
+  requires:["try"],
+  starterRaises:"ValueError",
+  starter:`# READINGS = ["30", "30", "3O", "30"]   <- look closely at the third one
+
+drone.takeoff()
+drone.cw(90)          # face south
+
+for text in READINGS:
+    distance = int(text)
+    drone.forward(distance)
+    drone.deliver()
+
+drone.land()
+`,
+  hint:"Wrap distance = int(text) in try:, and under except ValueError: set distance = 30. The rest of the loop stays the same.",
+  solution:`drone.takeoff()
+drone.cw(90)
+
+for text in READINGS:
+    try:
+        distance = int(text)
+    except ValueError:
+        print("bad reading:", text, "- using 30")
+        distance = 30
+    drone.forward(distance)
+    drone.deliver()
+
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C","D"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on all four pads. So far: " + soFar(s) + ".")
+},
+{
+  chapter:11, title:"Unknown Address",
+  brief:"One order is for a customer that is not in <b>ADDRESSES</b>. Skip it &mdash; with <b>try / except KeyError</b> or an <b>in</b> check &mdash; and deliver the other three.",
+  map:[
+    "................",
+    "....#...#...#...",
+    "..H..A...B..C...",
+    "................",
+    "......T....T....",
+    "................"],
+  inject:{
+    ORDERS:["cafe", "library", "bakery", "garage"],
+    ADDRESSES:{cafe:30, library:40, garage:30}},
+  starterRaises:"KeyError",
+  starter:`# ORDERS    = ["cafe", "library", "bakery", "garage"]
+# ADDRESSES = {"cafe": 30, "library": 40, "garage": 30}
+#   (each distance is from the stop before)
+
+drone.takeoff()
+
+for name in ORDERS:
+    drone.forward(ADDRESSES[name])
+    drone.deliver()
+
+drone.land()
+`,
+  hint:'"bakery" is not a key, so ADDRESSES["bakery"] raises KeyError. Either wrap the two lines in try / except KeyError and print a message, or put them under if name in ADDRESSES:.',
+  solution:`drone.takeoff()
+
+for name in ORDERS:
+    try:
+        distance = ADDRESSES[name]
+    except KeyError:
+        print("no address for", name, "- skipping")
+        continue
+    drone.forward(distance)
+    drone.deliver()
+
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver to the cafe (A), library (B) and garage (C). So far: " + soFar(s) + ".")
+},
+
+/* ---- Chapter 13 : classes ---- */
+{
+  chapter:12, title:"Package Objects",
+  brief:"Finish the <b>drop</b> method: fly <b>self.distance</b>, deliver, and celebrate with a flip &mdash; <b>unless</b> the package is <b>fragile</b>. Pad <b>B</b> gets the fragile one.",
+  map:[
+    "................",
+    ".....#..#...#...",
+    "..H..A..B...C...",
+    "................",
+    "....T......T....",
+    "................"],
+  requires:["class"],
+  starter:`class Package:
+    def __init__(self, distance, fragile):
+        self.distance = distance
+        self.fragile = fragile
+
+    def drop(self):
+        # fly self.distance, deliver,
+        # then flip -- but only if it is NOT fragile
+        pass
+
+load = [Package(30, False), Package(30, True), Package(40, False)]
+
+drone.takeoff()
+for package in load:
+    package.drop()
+drone.land()
+`,
+  hint:'In drop: drone.forward(self.distance), drone.deliver(), then if not self.fragile: drone.flip("f").',
+  solution:`class Package:
+    def __init__(self, distance, fragile):
+        self.distance = distance
+        self.fragile = fragile
+
+    def drop(self):
+        drone.forward(self.distance)
+        drone.deliver()
+        if not self.fragile:
+            drone.flip("f")
+
+load = [Package(30, False), Package(30, True), Package(40, False)]
+
+drone.takeoff()
+for package in load:
+    package.drop()
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on A, B and C. So far: " + soFar(s) + ".");
+    if(s.flipPads.includes("B")) return fail("Pad B got the fragile package — no flip there!");
+    if(!s.flipPads.includes("A") || !s.flipPads.includes("C"))
+      return fail("Flip after delivering the sturdy packages at A and C.");
+    return ok();
+  }
+},
+{
+  chapter:12, title:"The Courier",
+  brief:"A <b>Courier</b> object keeps track of its own route and how far it has flown. Deliver while it <b>has_stops()</b>, then fly home using <b>courier.flown</b> and land on <b>H</b>.",
+  map:[
+    "................",
+    "....T.....T.....",
+    "..H..A..B...C...",
+    "................",
+    "......#....#....",
+    "................"],
+  requires:["class","while"],
+  starter:`class Courier:
+    def __init__(self, route):
+        self.route = route
+        self.flown = 0
+
+    def has_stops(self):
+        return len(self.route) > 0
+
+    def next_stop(self):
+        distance = self.route.pop(0)
+        drone.forward(distance)
+        drone.deliver()
+        # remember how far we have flown in total
+
+courier = Courier([30, 30, 40])
+
+drone.takeoff()
+# keep calling courier.next_stop() while courier.has_stops()
+# then fly home with drone.back(courier.flown)
+
+drone.land()
+`,
+  hint:"Add self.flown += distance at the end of next_stop. Then: while courier.has_stops(): courier.next_stop(), and after the loop drone.back(courier.flown).",
+  solution:`class Courier:
+    def __init__(self, route):
+        self.route = route
+        self.flown = 0
+
+    def has_stops(self):
+        return len(self.route) > 0
+
+    def next_stop(self):
+        distance = self.route.pop(0)
+        drone.forward(distance)
+        drone.deliver()
+        self.flown += distance
+
+courier = Courier([30, 30, 40])
+
+drone.takeoff()
+while courier.has_stops():
+    courier.next_stop()
+
+drone.back(courier.flown)
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver on A, B and C. So far: " + soFar(s) + ".");
+    if(s.landedOn !== "H") return fail("All delivered — courier.flown should bring you back to H. Landed at " + where(s) + ".");
+    return ok();
+  }
+},
+
+/* ---- Chapter 14 : sorting and comprehensions ---- */
+{
+  chapter:13, title:"One-Line Lists",
+  brief:"<b>TILES</b> is in tiles and <b>-1</b> means a cancelled stop. Use a <b>list comprehension</b> to turn it into centimetres and drop the cancelled ones, then deliver to <b>A</b>, <b>B</b> and <b>C</b>.",
+  map:[
+    "................",
+    "...T....#....#..",
+    "..H...A.B....C..",
+    "................",
+    ".....T.....T....",
+    "................"],
+  inject:{TILES:[4, -1, 2, -1, 5]},
+  requires:["comp"],
+  starter:`# TILES = [4, -1, 2, -1, 5]   (-1 = cancelled)
+
+hops = [t for t in TILES]    # turn tiles into cm, and skip the -1s
+
+drone.takeoff()
+for hop in hops:
+    drone.forward(hop)
+    drone.deliver()
+drone.land()
+`,
+  hint:"Multiply each tile by 10 and filter with an if on the end: hops = [t * 10 for t in TILES if t > 0].",
+  solution:`hops = [t * 10 for t in TILES if t > 0]
+
+drone.takeoff()
+for hop in hops:
+    drone.forward(hop)
+    drone.deliver()
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : ["A","B","C"].every(p => s.delivered.includes(p))
+        ? ok() : fail("Deliver on A, B and C. So far: " + soFar(s) + ".")
+},
+{
+  chapter:13, title:"Sort the Route",
+  brief:"Each stop in <b>STOPS</b> is measured from <b>home</b>, but they are listed in a muddled order. <b>Sort</b> them nearest-first and deliver in order: <b>A</b>, <b>B</b>, <b>C</b>, <b>D</b>.",
+  map:[
+    "................",
+    "....#..#..#..#..",
+    "..H..A..B..C..D.",
+    "................",
+    "..T......T......",
+    "................"],
+  inject:{STOPS:{bank:90, zoo:30, farm:120, mall:60}},
+  requires:["sort"],
+  starter:`# STOPS = {"bank": 90, "zoo": 30, "farm": 120, "mall": 60}
+#   each number is how far that stop is from HOME, in cm
+
+here = 0
+
+drone.takeoff()
+for name in STOPS:            # this visits them in the wrong order!
+    distance = STOPS[name]
+    drone.forward(distance - here)
+    here = distance
+    drone.deliver()
+drone.land()
+`,
+  hint:"Loop over sorted(STOPS, key=lambda name: STOPS[name]) instead of STOPS. Sorting by name alone gives bank, farm, mall, zoo — not the order you want.",
+  solution:`here = 0
+
+drone.takeoff()
+for name in sorted(STOPS, key=lambda name: STOPS[name]):
+    distance = STOPS[name]
+    drone.forward(distance - here)
+    here = distance
+    drone.deliver()
+drone.land()
+`,
+  goal:s => s.crashed ? fail(s.crashed)
+        : s.delivered.join("") === "ABCD"
+        ? ok() : fail("Deliver nearest-first: A, B, C, D. Your order: " + soFar(s) + ".")
+},
+
+/* ---- Chapter 15 : grand finale ---- */
+{
+  chapter:14, title:"Night Shift",
+  brief:"The storm blocks the top lane. Read the text distances in <b>ORDERS</b> (skip the garbled one), visit the stops <b>nearest-first</b> along the south lane, then land back on <b>H</b>. Use a function that <b>returns</b>, <b>try / except</b>, <b>sorting</b>, a <b>while</b> loop and an <b>if</b>.",
+  map:[
+    "....WWW...........",
+    "..H.WWW......#....",
+    "....WWW...........",
+    "..........T.......",
+    "......A....B...C..",
+    "........T.........",
+    ".................."],
+  inject:{weather:"storm", ORDERS:{clinic:"130", farm:"40", school:"??", market:"90"}},
+  requires:["return","try","sort","while","if"],
+  starter:`# weather = "storm"
+# ORDERS  = {"clinic": "130", "farm": "40", "school": "??", "market": "90"}
+#   each value is TEXT: how far the stop is from home along the
+#   south lane (3 tiles below H), in cm
+#
+# 1. turn each reading into a number -- skip the garbled one
+# 2. sort the stops nearest-first
+# 3. dodge the storm, deliver in a while loop, and land back on H
+
+def to_cm(text):
+    return int(text)
+
+drone.takeoff()
+
+drone.land()
+`,
+  hint:"to_cm should try int(text) and return None on ValueError. Collect the good numbers, queue = sorted(stops), right(30) for the storm, then while queue: pop, forward(target - here), deliver. Finish with back(here) and left(30).",
+  solution:`def to_cm(text):
+    try:
+        return int(text)
+    except ValueError:
+        print("garbled reading:", text)
+        return None
+
+stops = []
+for name in ORDERS:
+    cm = to_cm(ORDERS[name])
+    if cm is not None:
+        stops.append(cm)
+
+queue = sorted(stops)
+here = 0
+lane = 30
+
+drone.takeoff()
+if weather == "storm":
+    drone.right(lane)
+
+while queue:
+    target = queue.pop(0)
+    drone.forward(target - here)
+    drone.deliver()
+    here = target
+
+drone.back(here)
+if weather == "storm":
+    drone.left(lane)
+drone.land()
+`,
+  goal:s => {
+    if(s.crashed) return fail(s.crashed);
+    if(!["A","B","C"].every(p => s.delivered.includes(p)))
+      return fail("Deliver to the farm (A), market (B) and clinic (C). So far: " + soFar(s) + ".");
+    if(s.delivered.join("") !== "ABC")
+      return fail("All three delivered, but not nearest-first. Your order: " + soFar(s) + ".");
+    if(s.landedOn !== "H") return fail("Night shift done — now land back on H. Landed at " + where(s) + ".");
+    return ok();
   }
 }
 ];
@@ -848,11 +1756,33 @@ drone.land()
 function ok(){ return {pass:true}; }
 function fail(msg){ return {pass:false, msg}; }
 function where(s){ return s.landedOn ? "pad " + s.landedOn : (s.flying ? "still in the air at (" + s.x + ", " + s.y + ")" : "(" + s.x + ", " + s.y + ")"); }
+function soFar(s){ return s.delivered.join(", ") || "none"; }
 
 const FEATURE_LABEL = {
   "if":"an if statement", "for":"a for loop", "def":"a function definition",
-  "list":"a list", "dict":"a dictionary lookup", "assign":"a variable"
+  "list":"a list", "dict":"a dictionary lookup", "assign":"a variable",
+  "while":"a while loop", "elif":"an elif branch", "boolop":"and / or",
+  "return":"a function that returns a value", "nested":"a loop inside a loop",
+  "try":"try / except", "class":"a class", "sort":"sorted() or .sort()",
+  "comp":"a list comprehension"
 };
+
+/* A level is flown once per case. Most levels have a single implicit case
+   built from their own inject/battery; a level with `cases` is flown once
+   for each, and only passes when every case does. */
+function levelCases(L){
+  return L.cases || [{inject: L.inject || {}, battery: L.battery}];
+}
+
+/* One verdict for one flight: crash, then missing features, then the goal. */
+function grade(L, res, sim, c){
+  if(sim.crashed) return fail(sim.crashed);
+  const missing = (L.requires || []).filter(f => !res.features[f]);
+  if(missing.length)
+    return fail("The flight looks right, but this level asks you to use " +
+                missing.map(f => FEATURE_LABEL[f] || f).join(" and ") + ".");
+  return L.goal(sim, c);
+}
 
 /* ==================== Python side ==================== */
 
@@ -931,10 +1861,33 @@ class Drone:
     def deliver(self):        self._rec("deliver")
     def wait(self, s=1):      self._rec("wait", s)
 
+_LOOPS = (ast.For, ast.While)
+_TRIES = (ast.Try, ast.TryStar) if hasattr(ast, "TryStar") else (ast.Try,)
+
 def _features(tree):
     f = {"if": False, "for": False, "def": False, "list": False,
-         "dict": False, "assign": False, "while": False}
+         "dict": False, "assign": False, "while": False,
+         "elif": False, "boolop": False, "return": False, "nested": False,
+         "try": False, "class": False, "sort": False, "comp": False}
     for n in ast.walk(tree):
+        # advanced-track constructs; independent of the chain below
+        # a real elif sits at its parent's column; else: + nested if is indented
+        if (isinstance(n, ast.If) and len(n.orelse) == 1 and isinstance(n.orelse[0], ast.If)
+                and n.orelse[0].col_offset == n.col_offset):
+            f["elif"] = True
+        if isinstance(n, ast.BoolOp):                    f["boolop"] = True
+        if isinstance(n, ast.Return) and n.value is not None: f["return"] = True
+        if isinstance(n, _TRIES) and n.handlers:         f["try"] = True
+        if isinstance(n, ast.ClassDef):                  f["class"] = True
+        if isinstance(n, ast.ListComp):                  f["comp"] = True
+        if isinstance(n, ast.Call) and (
+                (isinstance(n.func, ast.Name) and n.func.id == "sorted") or
+                (isinstance(n.func, ast.Attribute) and n.func.attr == "sort")):
+            f["sort"] = True
+        if isinstance(n, _LOOPS) and any(
+                isinstance(m, _LOOPS) for stmt in n.body for m in ast.walk(stmt)):
+            f["nested"] = True
+
         if isinstance(n, ast.If):                       f["if"] = True
         elif isinstance(n, (ast.For, ast.comprehension)): f["for"] = True
         elif isinstance(n, ast.While):                  f["while"] = True
@@ -1001,7 +1954,7 @@ function simulate(log, map){
   const st = {
     x: map.start.x, y: map.start.y, heading: 0, flying: false,
     delivered: [], landedOn: "H", waypoints: 0, crashed: null,
-    flips: [], speed: 30
+    flips: [], flipPads: [], speed: 30
   };
   const seenWp = new Set();
   const frames = [{x:st.x, y:st.y, heading:0, flying:false, event:null, speed:30, roll:0}];
@@ -1039,6 +1992,7 @@ function simulate(log, map){
     if(name === "flip"){
       if(!st.flying) return stop("The drone has to be in the air to flip. Call drone.takeoff() first.");
       st.flips.push(arg);
+      st.flipPads.push(padAt(st.x, st.y));   // where it flipped, for goals that care
       // four frames of roll so the sprite visibly completes the barrel roll
       for(let j = 1; j <= 4; j++) push("flip", {roll: j / 4, dir: arg});
       continue;
@@ -1314,7 +2268,10 @@ function renderChrome(){
   });
 
   $("legend").textContent = "";
-  const bits = ["H home", "A-D pads", "# building", "T tree"];
+  const pads = Object.keys(currentMap.pads).filter(p => p !== "H").sort();
+  const bits = ["H home"];
+  if(pads.length) bits.push(pads.length > 1 ? pads[0] + "-" + pads[pads.length-1] + " pads" : pads[0] + " pad");
+  bits.push("# building", "T tree");
   if(L.map.join("").includes("W")) bits.push("W storm");
   if(L.map.join("").includes("*")) bits.push("✦ waypoint");
   $("legend").textContent = bits.join("   ");
@@ -1374,65 +2331,70 @@ async function run(){
   const src = editor.getValue();
   store.code[idx] = src; saveState(store);
 
-  let res;
-  try{
-    pyodide.globals.set("STUDENT_SRC", src);
-    pyodide.globals.set("LEVEL_JSON", JSON.stringify({inject: L.inject || {}, battery: L.battery == null ? 87 : L.battery}));
-    res = JSON.parse(pyodide.runPython("run_mission(STUDENT_SRC, LEVEL_JSON)"));
-  }catch(e){
-    finishRun();
-    say("Something went wrong running your code:\n" + esc(e.message || e), "bad");
-    return;
-  }
+  // Fly every case; stop at the first one that fails so that is the flight
+  // the camper watches. If all pass, the last case is the one animated.
+  const cases = levelCases(L);
+  const multi = cases.length > 1;
+  let shown = null;
+  for(let n = 0; n < cases.length; n++){
+    const c = cases[n];
+    const tag = multi ? '<span class="note">[' + (n+1) + "/" + cases.length + "] " + esc(c.label || "case " + (n+1)) + "</span>\n" : "";
 
-  const out = res.stdout ? esc(res.stdout).replace(/\n$/, "") + "\n" : "";
+    let res;
+    try{
+      pyodide.globals.set("STUDENT_SRC", src);
+      pyodide.globals.set("LEVEL_JSON", JSON.stringify({inject: c.inject || {}, battery: c.battery == null ? 87 : c.battery}));
+      res = JSON.parse(pyodide.runPython("run_mission(STUDENT_SRC, LEVEL_JSON)"));
+    }catch(e){
+      finishRun();
+      say(tag + "Something went wrong running your code:\n" + esc(e.message || e), "bad");
+      return;
+    }
 
-  if(!res.ok){
-    finishRun();
-    say(out + '<span class="bad">' + esc(res.error) + "</span>");
-    return;
-  }
-  if(!res.log.length){
-    finishRun();
-    say(out + '<span class="note">Your code ran, but it never told the drone to do anything. Start with drone.takeoff().</span>');
-    return;
-  }
+    const out = tag + (res.stdout ? esc(res.stdout).replace(/\n$/, "") + "\n" : "");
 
-  let sim;
-  try{
-    sim = simulate(res.log, currentMap);
-  }catch(e){
-    finishRun();
-    say(out + '<span class="bad">The flight simulator hit a problem: ' + esc(e.message || e) + "</span>");
-    return;
-  }
-  lastFrames = sim.frames;
+    if(!res.ok){
+      finishRun();
+      say(out + '<span class="bad">' + esc(res.error) + "</span>");
+      return;
+    }
+    // with several cases, doing nothing can be the right call for one of them
+    if(!res.log.length && !multi){
+      finishRun();
+      say(out + '<span class="note">Your code ran, but it never told the drone to do anything. Start with drone.takeoff().</span>');
+      return;
+    }
 
-  animate(currentMap, sim.frames, () => {
+    let sim, verdict;
+    try{
+      sim = simulate(res.log, currentMap);
+    }catch(e){
+      finishRun();
+      say(out + '<span class="bad">The flight simulator hit a problem: ' + esc(e.message || e) + "</span>");
+      return;
+    }
+    try{
+      verdict = grade(L, res, sim, c);
+    }catch(e){
+      verdict = {pass:false, msg:"The mission checker hit a problem: " + (e.message || e)};
+    }
+    // on a full pass, show the busiest flight rather than whichever came last
+    if(!verdict.pass || !shown || res.log.length > shown.size) shown = {sim, out, verdict, size: res.log.length};
+    if(!verdict.pass) break;
+  }
+  lastFrames = shown.sim.frames;
+
+  animate(currentMap, shown.sim.frames, () => {
     // whatever the verdict, the run has to end with a usable page
     finishRun();
-    try{
-      if(sim.crashed){ say(out + '<span class="bad">' + esc(sim.crashed) + "</span>"); return; }
-
-      // required language features, checked on the parsed code
-      const missing = (L.requires || []).filter(f => !res.features[f]);
-      if(missing.length){
-        say(out + '<span class="bad">The flight looks right, but this level asks you to use ' +
-            missing.map(f => FEATURE_LABEL[f] || f).join(" and ") + ".</span>");
-        return;
-      }
-
-      const verdict = L.goal(sim);
-      if(verdict.pass){
-        store.done[idx] = true; saveState(store);
-        renderChrome();
-        say(out + '<span class="ok">Mission complete.</span>');
-        celebrate();
-      }else{
-        say(out + '<span class="bad">' + esc(verdict.msg) + "</span>");
-      }
-    }catch(e){
-      say(out + '<span class="bad">The mission checker hit a problem: ' + esc(e.message || e) + "</span>");
+    if(shown.verdict.pass){
+      store.done[idx] = true; saveState(store);
+      renderChrome();
+      say(shown.out + '<span class="ok">Mission complete' +
+          (multi ? " — passed all " + cases.length + " cases." : ".") + "</span>");
+      celebrate();
+    }else{
+      say(shown.out + '<span class="bad">' + esc(shown.verdict.msg) + "</span>");
     }
   });
 }
@@ -1464,8 +2426,9 @@ function celebrate(){
     "<h2>" + (last ? "Dispatch complete!" : "You made it!") + "</h2>" +
     '<div class="lvl">Chapter ' + (level().chapter+1) + " &middot; " + esc(level().title) + "</div>" +
     "<p>" + (last
-      ? "That was the full mission — variables, branching, lists, loops, functions and dictionaries, all in one flight. Take it to a real Tello."
-      : "Level cleared. " + done + " of " + LEVELS.length + " missions done.") + "</p>" +
+      ? "Every chapter cleared — from your first variable to classes, error handling and sorting. That is real Python. Take it to a real Tello."
+      : esc(level().milestone ? level().milestone + " " : "") +
+        "Level cleared. " + done + " of " + LEVELS.length + " missions done.") + "</p>" +
     '<div class="mrow">' +
       '<button class="tool" onclick="closeModal()">Stay here</button>' +
       (last ? "" : '<button class="run" onclick="closeModal();go(' + (idx+1) + ')">Continue &raquo;</button>') +
@@ -1492,8 +2455,11 @@ function revealSolution(){
 }
 function mapInfo(){
   const L = level();
-  const inj = L.inject ? Object.keys(L.inject).map(k =>
-    "<code>" + esc(k) + " = " + esc(JSON.stringify(L.inject[k])) + "</code>").join("<br>") : "";
+  const fmt = obj => Object.keys(obj).map(k =>
+    "<code>" + esc(k) + " = " + esc(JSON.stringify(obj[k])) + "</code>").join("<br>");
+  const inj = L.cases
+    ? "Your code is flown once for each of these:<br>" + L.cases.map(c => fmt(c.inject || {})).join("<br>")
+    : (L.inject ? fmt(L.inject) : "");
   showHelpModal(
     "<h2>Map info</h2>" +
     "<p><b>" + esc(L.title) + "</b> &mdash; " + L.brief + "</p>" +

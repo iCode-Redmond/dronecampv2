@@ -31,8 +31,8 @@ const PRELUDE = js.match(/const PRELUDE = `([\s\S]*?)`;/)[1];
 const logic =
   slice("const CHAPTERS = [", "/* ==================== Python side") +
   slice("const DIRS =", "/* ==================== rendering");
-const { LEVELS, simulate, parseMap, FEATURE_LABEL, CHAPTERS } =
-  new Function(logic + "\nreturn {LEVELS, simulate, parseMap, FEATURE_LABEL, CHAPTERS};")();
+const { LEVELS, simulate, parseMap, FEATURE_LABEL, CHAPTERS, levelCases, grade } =
+  new Function(logic + "\nreturn {LEVELS, simulate, parseMap, FEATURE_LABEL, CHAPTERS, levelCases, grade};")();
 
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "dispatch-"));
 const runnerPath = path.join(tmp, "runner.py");
@@ -41,8 +41,9 @@ import sys, json
 print(run_mission(json.loads(sys.argv[1]), sys.argv[2]))
 `);
 
-function runPython(src, L) {
-  const payload = { inject: (L && L.inject) || {}, battery: (L && L.battery) == null ? 87 : L.battery };
+/* `c` is one flight case: {inject, battery}. A level's cases come from levelCases(). */
+function runPython(src, c) {
+  const payload = { inject: (c && c.inject) || {}, battery: (c && c.battery) == null ? 87 : c.battery };
   const out = execFileSync("python3",
     [runnerPath, JSON.stringify(src), JSON.stringify(payload)],
     { encoding: "utf8" });
@@ -128,7 +129,7 @@ function makeFuzz(seed, n) {
 }
 
 /* the invariant: a simulation result must always be animatable and checkable */
-function assertUsable(label, L, map, res) {
+function assertUsable(label, L, map, res, c) {
   if (!res.ok) return;                      // python raised; the UI reports it and stops
   if (!res.log.length) return;              // nothing to animate; the UI says so
   let sim;
@@ -153,7 +154,7 @@ function assertUsable(label, L, map, res) {
 
   // the goal function must survive any state the simulator can produce
   try {
-    const v = L.goal(sim);
+    const v = L.goal(sim, c);
     check(label + ": goal returns a verdict",
           v && typeof v.pass === "boolean" && (v.pass || typeof v.msg === "string"),
           JSON.stringify(v));
@@ -200,6 +201,29 @@ const EASYTELLO = ["takeoff", "land", "forward", "back", "left", "right", "up", 
   check("get_battery has a default", /^\d+$/.test(defBattery.stdout.trim()), defBattery.stdout);
 }
 
+/* ---- the advanced-track feature detectors: each fires on its construct only ---- */
+{
+  const FEATURE_PROBES = [
+    ["elif",   "if x:\n    pass\nelif y:\n    pass\n", "if x:\n    pass\nelse:\n    pass\n"],
+    ["elif",   "def f():\n    if x:\n        pass\n    elif y:\n        pass\n", "if x:\n    pass\nelse:\n    if y:\n        pass\n"],
+    ["try",    "try:\n    pass\nexcept ValueError:\n    pass\n", "try:\n    pass\nfinally:\n    pass\n"],
+    ["boolop", "z = x and y\n",                           "z = x == y\n"],
+    ["return", "def f():\n    return 1\n",               "def f():\n    return\n"],
+    ["nested", "for a in b:\n    while c:\n        pass\n", "for a in b:\n    pass\nfor c in d:\n    pass\n"],
+    ["try",    "try:\n    pass\nexcept ValueError:\n    pass\n", "pass\n"],
+    ["class",  "class P:\n    pass\n",                   "def P():\n    pass\n"],
+    ["sort",   "y = sorted(x)\n",                         "y = list(x)\n"],
+    ["sort",   "x.sort()\n",                              "x.reverse()\n"],
+    ["comp",   "y = [a for a in b]\n",                    "y = sum(a for a in b)\n"],
+    ["while",  "while x:\n    pass\n",                   "for x in y:\n    pass\n"],
+  ];
+  FEATURE_PROBES.forEach(([f, yes, no]) => {
+    const hit = runPython(yes, null), miss = runPython(no, null);
+    check(`feature ${f} detected`, hit.features[f] === true, yes);
+    check(`feature ${f} not falsely detected`, miss.features[f] === false, no);
+  });
+}
+
 LEVELS.forEach((L, i) => {
   const tag = `L${i + 1} (ch${L.chapter + 1} ${L.title})`;
   const map = parseMap(L.map);
@@ -220,71 +244,116 @@ LEVELS.forEach((L, i) => {
   check(`${tag} has an objective on the map`,
         padsOnMap.length > 0 || map.waypoints.length > 0);
 
+  const cases = levelCases(L);
+  check(`${tag} has at least one case`, cases.length > 0);
+  if (L.cases) check(`${tag} every case is labelled`, L.cases.every(c => typeof c.label === "string" && c.label));
+
+  /* fly `src` once per case; the level only counts as won if every case wins */
+  const flyAll = src => cases.map(c => {
+    const res = runPython(src, c);
+    if (!res.ok) return { c, res, sim: null, v: { pass: false } };
+    const sim = simulate(res.log, map);
+    return { c, res, sim, v: grade(L, res, sim, c) };
+  });
+  const wins = runs => runs.every(r => r.v.pass);
+
   /* ---- starter code ---- */
-  const st = runPython(L.starter, L);
-  check(`${tag} starter parses`, !(st.error || "").startsWith("SyntaxError"), st.error);
-  check(`${tag} starter does not raise`, st.ok, st.error);
-  assertUsable(`${tag} starter`, L, map, st);
-  check(`${tag} starter does not already pass`, (() => {
-    if (!st.ok || !st.log.length) return true;
-    const sim = simulate(st.log, map);
-    const missing = (L.requires || []).filter(f => !st.features[f]);
-    return !(missing.length === 0 && !sim.crashed && L.goal(sim).pass);
-  })(), "the starter code solves the level as given");
+  const starts = flyAll(L.starter);
+  starts.forEach(({ c, res: st }, n) => {
+    const ct = cases.length > 1 ? `${tag} case ${n + 1}` : tag;
+    check(`${ct} starter parses`, !(st.error || "").startsWith("SyntaxError"), st.error);
+    if (L.starterRaises) {
+      // these starters crash on purpose: the crash IS the lesson
+      check(`${ct} starter raises ${L.starterRaises}`,
+            !st.ok && (st.error || "").startsWith(L.starterRaises), st.error || "it ran clean");
+    } else {
+      check(`${ct} starter does not raise`, st.ok, st.error);
+    }
+    assertUsable(`${ct} starter`, L, map, st, c);
+  });
+  check(`${tag} starter does not already pass`, !wins(starts), "the starter code solves the level as given");
 
   /* ---- reference solution ---- */
-  const sol = runPython(L.solution, L);
-  if (check(`${tag} solution runs clean`, sol.ok, sol.error)) {
-    const sim = simulate(sol.log, map);
-    check(`${tag} solution does not crash`, !sim.crashed, sim.crashed);
+  const sols = flyAll(L.solution);
+  sols.forEach(({ c, res: sol, sim, v }, n) => {
+    const ct = cases.length > 1 ? `${tag} case ${n + 1}` : tag;
+    if (!check(`${ct} solution runs clean`, sol.ok, sol.error)) return;
+    check(`${ct} solution does not crash`, !sim.crashed, sim.crashed);
     const missing = (L.requires || []).filter(f => !sol.features[f]);
-    check(`${tag} solution uses required features`, missing.length === 0, JSON.stringify(missing));
-    if (!sim.crashed) {
-      const v = L.goal(sim);
-      check(`${tag} solution satisfies the goal`, v.pass, v.msg);
-    }
-    check(`${tag} solution lands`, sol.log.some(c => c[0] === "land"));
-    assertUsable(`${tag} solution`, L, map, sol);
-  }
+    check(`${ct} solution uses required features`, missing.length === 0, JSON.stringify(missing));
+    check(`${ct} solution satisfies the goal`, v.pass, v.msg);
+    check(`${ct} solution lands`, sol.log.some(r => r[0] === "land"));
+    assertUsable(`${ct} solution`, L, map, sol, c);
+  });
 
   /* ---- negative controls ---- */
-  const nul = runPython("drone.takeoff()\ndrone.land()\n", L);
-  const nsim = simulate(nul.log, map);
-  const nmissing = (L.requires || []).filter(f => !nul.features[f]);
-  check(`${tag} takeoff+land alone is rejected`,
-        nmissing.length > 0 || nsim.crashed || !L.goal(nsim).pass);
+  check(`${tag} takeoff+land alone is rejected`, !wins(flyAll("drone.takeoff()\ndrone.land()\n")));
 
   /* dropping each required construct must also be rejected */
   (L.requires || []).forEach(f => {
-    const fake = { ...sol.features, [f]: false };
-    const missing = (L.requires || []).filter(k => !fake[k]);
-    check(`${tag} rejects a solution without ${FEATURE_LABEL[f]}`, missing.includes(f));
+    const s0 = sols[0];
+    if (!s0.sim) return;
+    const v = grade(L, { features: { ...s0.res.features, [f]: false } }, s0.sim, s0.c);
+    check(`${tag} rejects a solution without ${FEATURE_LABEL[f]}`, !v.pass, "grade() still passed");
   });
 
   /* ---- adversarial programs ---- */
   ADVERSARIAL.forEach(([name, src]) => {
-    let res;
-    try { res = runPython(src, L); }
+    let runs;
+    try { runs = flyAll(src); }
     catch (e) { check(`${tag} ${name}: python runner survives`, false, e.message); return; }
-    check(`${tag} ${name}: reports ok or an error string`,
-          res.ok === true || typeof res.error === "string", JSON.stringify(res).slice(0, 120));
-    check(`${tag} ${name}: command flood is capped`,
-          !res.log || res.log.length <= 600, res.log && res.log.length);
-    assertUsable(`${tag} ${name}`, L, map, res);
+    runs.forEach(({ c, res }) => {
+      check(`${tag} ${name}: reports ok or an error string`,
+            res.ok === true || typeof res.error === "string", JSON.stringify(res).slice(0, 120));
+      check(`${tag} ${name}: command flood is capped`,
+            !res.log || res.log.length <= 600, res.log && res.log.length);
+      assertUsable(`${tag} ${name}`, L, map, res, c);
+    });
     // none of these may be graded as a win
-    if (res.ok && res.log.length) {
-      const sim = simulate(res.log, map);
-      const missing = (L.requires || []).filter(k => !res.features[k]);
-      const won = !sim.crashed && missing.length === 0 && L.goal(sim).pass;
-      check(`${tag} ${name}: does not pass the level`, !won, "adversarial program cleared the level");
-    }
+    check(`${tag} ${name}: does not pass the level`, !wins(runs), "adversarial program cleared the level");
   });
 
   /* ---- fuzz ---- */
   for (let seed = 1; seed <= 12; seed++) {
-    const res = runPython(makeFuzz(seed * (i + 7), 25), L);
-    assertUsable(`${tag} fuzz#${seed}`, L, map, res);
+    const c = cases[seed % cases.length];
+    const res = runPython(makeFuzz(seed * (i + 7), 25), c);
+    assertUsable(`${tag} fuzz#${seed}`, L, map, res, c);
   }
+});
+
+/* ------------------------------------------------------------------ *
+ * Plausible wrong answers: the mistakes campers actually make on the
+ * advanced levels. Each must be rejected, not just the random junk above.
+ * ------------------------------------------------------------------ */
+const WRONG = [
+  ["Three Forecasts", "only handles clear and storm",
+   'drone.takeoff()\nif weather == "clear":\n    drone.forward(120)\n    drone.deliver()\nelif weather == "storm":\n    pass\ndrone.land()\n'],
+  ["Three Forecasts", "else-if instead of elif",
+   'drone.takeoff()\nif weather == "clear":\n    drone.forward(120)\n    drone.deliver()\nelse:\n    if weather == "wind":\n        drone.forward(50)\n        drone.deliver()\ndrone.land()\n'],
+  ["Go / No-Go", "or instead of and",
+   'drone.takeoff()\nfor stop in STOPS:\n    drone.forward(stop["distance"])\n    if stop["wind"] < 20 or stop["open"]:\n        drone.deliver()\ndrone.land()\n'],
+  ["Sort the Route", "sorts names alphabetically",
+   'here = 0\ndrone.takeoff()\nfor name in sorted(STOPS):\n    d = STOPS[name]\n    drone.forward(d - here)\n    here = d\n    drone.deliver()\ndrone.land()\n'],
+  ["Package Objects", "flips at every pad",
+   'class Package:\n    def __init__(self, d, f):\n        self.d = d\n        self.f = f\n    def drop(self):\n        drone.forward(self.d)\n        drone.deliver()\n        drone.flip("f")\nload = [Package(30, False), Package(30, True), Package(40, False)]\ndrone.takeoff()\nfor p in load:\n    p.drop()\ndrone.land()\n'],
+  ["One-Line Lists", "converts but does not filter",
+   'hops = [t * 10 for t in TILES]\ndrone.takeoff()\nfor h in hops:\n    drone.forward(h)\n    drone.deliver()\ndrone.land()\n'],
+  ["Garbled Manifest", "skips the garbled reading",
+   'drone.takeoff()\ndrone.cw(90)\nfor t in READINGS:\n    try:\n        d = int(t)\n    except ValueError:\n        continue\n    drone.forward(d)\n    drone.deliver()\ndrone.land()\n'],
+  ["Round Trip", "never flies home",
+   'route = [30, 40, 30]\ndef total(h):\n    return sum(h)\ndrone.takeoff()\nfor h in route:\n    drone.forward(h)\n    drone.deliver()\ndrone.land()\n'],
+  ["Night Shift", "discards the sorted() result",
+   'def to_cm(t):\n    try:\n        return int(t)\n    except ValueError:\n        return None\nq = [to_cm(ORDERS[n]) for n in ORDERS if to_cm(ORDERS[n]) is not None]\nsorted(q)\nhere = 0\ndrone.takeoff()\nif weather == "storm":\n    drone.right(30)\nwhile q:\n    t = q.pop(0)\n    drone.forward(t - here)\n    drone.deliver()\n    here = t\ndrone.back(here)\ndrone.left(30)\ndrone.land()\n'],
+];
+WRONG.forEach(([title, why, src]) => {
+  const L = LEVELS.find(l => l.title === title);
+  if (!check(`wrong answer targets a real level: ${title}`, !!L)) return;
+  const map = parseMap(L.map);
+  const won = levelCases(L).every(c => {
+    const res = runPython(src, c);
+    return res.ok && grade(L, res, simulate(res.log, map), c).pass;
+  });
+  check(`${title} rejects: ${why}`, !won, "a wrong answer cleared the level");
 });
 
 console.log(`checks passed: ${pass}`);
